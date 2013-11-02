@@ -1,0 +1,20 @@
+.ban {
+    @extend .endpoint;
+    
+    & > .details {
+        padding: .5em;
+    }
+}
+
+.ban-term {
+    color: $muted-color;
+}
+
+.ban-notes {
+    color: #a00;
+    margin: 1em 1em 0 0;
+}
+
+textarea[name=Notes] {
+    font-family: $mono-font;
+}

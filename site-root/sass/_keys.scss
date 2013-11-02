@@ -1,0 +1,9 @@
+.key {
+    @extend .endpoint;
+}
+
+.key-string {
+    border: 1px solid rgba(black, .1);
+    font-family: $mono-font;
+    padding: .25em .25em 0;
+}

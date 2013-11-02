@@ -1,0 +1,84 @@
+.endpoint {
+    background: rgba(white, .8);
+    border: 1px solid rgba(black, .2);
+    @include box-shadow(0 .5em .5em -.5em rgba(black, .2));
+    @include display-box;
+    margin: 1em 0;
+    padding: 1em;
+    
+    .title {
+        margin-bottom: 0.25em;
+    }
+    
+    & > .details {
+        @include box-flex(1);
+        padding: 1em;
+    }
+    
+    & > footer {
+        @include box-align(stretch);
+        @include box-pack(start);
+        @include box-orient(vertical);
+        @include display-box;
+        
+        .button {
+            display: block;
+            margin-bottom: .25em;
+        }
+    }
+}
+
+.key-metric {
+    background: rgba(black, .1);
+    @include box-orient(vertical);
+    @include box-pack(center);
+    @include display-box;
+    font-size: large;
+    line-height: 1;
+    margin-right: 1em;
+    text-align: center;
+    width: 10em;
+
+    strong {
+        display: block;
+        font-size: x-large;
+    }
+    
+    @mixin tint-color($color) {
+        background: rgba($color, .2);
+        color: mix($text-color, $color, 60%);
+    }
+    
+    &.good { @include tint-color(lime); }
+    &.mid  { @include tint-color(yellow); }
+    &.bad  { @include tint-color(red); }
+}
+
+.endpoint-urls {
+    margin: 0;
+
+    dt {
+        color: $muted-color;
+        float: left;
+        width: 4em;
+    }
+}
+
+.other-metrics {
+    color: $muted-color;
+    @include display-box;
+    line-height: 1;
+    margin: 1em 0 0;
+    padding: 0;
+    
+    & > li {
+        @include box-flex(1);
+        display: block;
+        list-style: none;
+    }
+    
+    strong {
+        color: $text-color;
+        display: block;
+    }
+}

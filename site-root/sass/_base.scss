@@ -1,0 +1,478 @@
+$base-color: #e0c7a3;
+$accent-color: #61748c;
+
+$page-bg-color: change-color($base-color, $saturation: 40, $lightness: 95);
+
+$link-color: change-color($accent-color, $saturation: 40);
+$text-color: #333;
+$muted-color: mix($text-color, $page-bg-color);
+
+$body-font: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+$heading-font: Georgia, Times, "Times New Roman", serif;
+$mono-font: Consolas, monospace;
+
+$font-size: 16px;
+$line-height: 1.5;
+
+$mq-phone: 'screen and (max-width: 568px)';
+$mq-tween: 'screen and (min-width: 569px)';
+$mq-tablet: 'screen and (min-width: 768px)';
+
+@import 'compass';
+@import 'compass/css3/box';
+@import 'normalize';
+
+@mixin clearfix { // override this because we usually don't want overflow: hidden, and typing pie- is weird
+	@include pie-clearfix;
+}
+
+@media #{$mq-phone} {
+	.mobile-hidden {
+		display: none;
+	}
+}
+
+@media #{$mq-tween} {
+	.mobile-only {
+		display: none;
+	}
+}
+
+html {
+	background: $text-color;
+}
+
+body {
+	background: $page-bg-color;
+	@include box-shadow(0 0 1.5em black);
+	color: $text-color;
+	font: normal normal 300 #{$font-size}/#{$line-height} $body-font;
+}
+
+.clearfix {
+	@include clearfix;
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.site {
+	&.header,
+	&.footer {
+		background: rgba($text-color, .1);
+		border: 1px solid rgba($text-color, .1);
+		clear: both;
+	}
+
+	&.header {
+		border-width: 0 0 1px;
+		@include box-shadow(inset 0 -1em 1em -1em rgba($text-color, .1));
+		
+		@media #{$mq-phone} {
+			@include contrasted($text-color);
+			
+			& > .inner {
+				padding: .25em 1.5em;
+			}
+		}
+	}
+
+	&.footer {
+		border-width: 1px 0 0;
+		@include box-shadow(inset 0 1em 1em -1em rgba($text-color, .1));
+	}
+
+	& > .inner {
+		margin: auto;
+		padding: 1.5em;
+
+		@media #{$mq-tablet} {
+			width: 85%;
+		}
+	}
+}
+
+.inner {
+	@include clearfix;
+}
+
+.content {
+	@media #{$mq-tablet} {
+		& > .inner {
+			@include clearfix;
+			padding-top: 3em;
+		}
+
+		.main {
+			@include float-left;
+			width: 61.8%;
+		}
+
+		.sidebar {
+			@include float-right;
+			width: 38.2%;
+
+			& > .inner {
+				padding-left: 10%;
+			}
+		}
+	}
+}
+
+#{headers(all)} {
+	font-weight: 300;
+	line-height: 1;
+	margin: 0;
+
+	img {
+		margin: 0;
+	}
+}
+
+h1 {
+	font-size: 3em;
+	margin-bottom: 0.50em;
+
+	@media #{$mq-phone} {
+		font-size: 2em;
+		margin-bottom: .75em;
+	}
+}
+
+h2 {
+	font-size: 2em;
+	margin-bottom: 0.75em;
+	
+	@media #{$mq-phone} {
+		font-size: 1.5em;
+		margin-bottom: 1em;
+	}
+}
+
+h3 {
+	font-size: 1.5em;
+	margin-bottom: 1em;
+
+	@media #{$mq-phone} {
+		font-size: 1.2em;
+		margin-bottom: 1.25em;
+	}
+}
+
+h4 {
+	font-size: 1.2em;
+	margin-bottom: 1.25em;
+
+	@media #{$mq-phone} {
+		font-size: 1em;
+		margin-bottom: 1.5em;
+	}
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+	margin-bottom: 1.5em;
+
+	@media #{$mq-phone} {
+		margin-bottom: 0;
+	}
+}
+
+h6 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+p {
+	margin: 0 0 1.5em;
+
+	.left {
+		@include float-left;
+		margin: 1.5em 1.5em 1.5em 0;
+		padding: 0;
+	}
+
+	.right {
+		@include float-right;
+		margin: 1.5em 0 1.5em 1.5em;
+		padding: 0;
+	}
+}
+
+pre {
+    font-family: $mono-font;
+}
+
+blockquote {
+	border-left: 1px solid rgba($text-color, .2);
+	margin: 1em;
+	padding: 0 1em;
+}
+
+ol {
+	list-style: decimal;
+	margin: 1em 0;
+	padding-left: 2em;
+}
+
+ul {
+	@extend ol;
+	list-style: square;
+}
+
+.lead {
+	font-size: 1.2em;
+	line-height: 1.25;
+	margin-bottom: 1.25em;
+}
+
+address {
+	font-style: inherit;
+}
+
+a {
+	@include link-colors(
+		$link-color,
+		darken($link-color, 15),
+		lighten($link-color, 10),
+		$link-color,
+		darken($link-color, 15)
+	);
+
+	text-decoration: none;
+
+	&:hover,
+	&:focus {
+		text-decoration: underline;
+	}
+}
+
+.hint {
+	@extend small;
+	color: $muted-color;
+}
+
+.muted {
+	color: $muted-color;
+}
+
+.well {
+	background: rgba($text-color, .1);
+	border: 1px solid rgba($text-color, .1);
+	border-width: 0 1px;
+	@include border-radius(.5em);
+	@include box-shadow(inset 0 .5em .5em -.4em rgba($text-color, .15), inset 0 -1px 0 rgba($text-color, .1));
+	margin: 0 0 1.5em;
+	padding: 1.5em;
+
+	& > :first-child {
+		margin-top: 0;
+	}
+
+	& > :last-child {
+		margin-bottom: 0;
+	}
+	
+	@media #{$mq-tween} {
+		&.shrink {
+			display: inline-block;
+		}
+	}
+	
+	@media #{$mq-phone} {
+		@include border-radius(0);
+		border-width: 1px 0;
+		margin: 0 -1.5em 1.5em;
+	}
+}
+
+@mixin notify-colors($color) {
+	background-color: rgba($color, .1);
+	border-color: change-color($color, $lightness: 33%, $alpha: .4);
+	color: change-color($color, $lightness: 33%);
+}
+
+.notify {
+	@include notify-colors($accent-color);
+	border: 1px solid;
+	@include border-radius(2px);
+	@include box-shadow(inset 0 1px 1px rgba(black, .1));
+	margin-bottom: 1.5em;
+	padding: .25em .5em;
+	
+	&.error {
+		@include notify-colors(red);
+	}
+}
+
+.branding {
+	a {
+		@include link-colors(inherit);
+		text-decoration: none;
+	}
+	
+	@media #{$mq-phone} {
+		float: left;
+		font-size: 1em;
+		font-weight: 100;
+		line-height: inherit;
+		margin: 0;
+	}
+}
+
+@mixin nav-link {
+	background: rgba($link-color, .1);
+	border-bottom: 1px solid rgba($link-color, .2);
+	@include border-radius(.25em);
+	display: block;
+	padding: .25em 1.5em;
+	text-decoration: none;
+	@include experimental('tap-highlight-color', rgba(black, 0));
+
+	&:hover,
+	&:focus {
+		background: rgba($link-color, .2);
+	}
+
+	&:active,
+	&.current {
+		background: $link-color;
+		border-color: darken($link-color, 10);
+		color: white;
+	}
+}
+
+.nav {
+	ul {
+		float: left;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		display: inline-block;
+		list-style: none;
+		margin-bottom: .25em;
+	}
+
+	a {
+		@include nav-link;
+	}
+	
+	.footer & {
+		float: right;
+		margin: 0 0 1em 1em;
+	}
+
+	@media #{$mq-phone} {
+		.footer & {
+			float: none;
+			margin: 0;
+		}
+
+		ul {
+			float: none;
+			margin: 0 0 1.5em;
+		}
+
+		li {
+			display: block;
+		}
+		
+		a {
+			border-radius: 0;
+			padding: .25em .75em;
+		}
+	}
+}
+
+.user-tools {
+	margin: -1.5em 0 1em;
+	@media #{$mq-tablet} {
+		text-align: right;
+	}
+
+	a {
+		@include nav-link;
+		@include border-top-radius(0);
+		display: inline-block;
+		font-size: small;
+		height: 1.5em;
+		padding: .25em .75em;
+		vertical-align: top;
+	}
+}
+
+.mini-login {
+	float: right;
+	margin: 0;
+	margin-left: 1em;
+	
+	fieldset {
+		background: none;
+		border: none;
+		@include box-shadow(none);
+		margin: 0;
+		padding: 0;
+	}
+	
+	input {
+		font-size: small;
+	}
+	
+	.button {
+		line-height: 1;
+	}
+}
+
+.nav-link-ct {
+	float: right;
+	
+	a {
+		@include link-colors($page-bg-color);
+		font-size: small;
+		text-transform: uppercase;
+	}
+}
+
+.mini-search {
+	float: right;
+	margin-top: .125em;
+	
+	@media #{$mq-phone} {
+		float: none;
+		margin: 0;
+
+		label {
+		}
+		
+		input {
+		}
+	}
+}
+
+.footer {
+	address {
+		display: inline-block;
+	}
+
+	small {
+		clear: both;
+		display: block;
+		margin: 1em 0 0;
+	}
+	
+	.mini-search {
+		margin-bottom: 1.5em;
+		
+		@media #{$mq-phone} {
+			input { width: 100%; }
+		}
+	}
+}
