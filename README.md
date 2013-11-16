@@ -11,8 +11,8 @@ it will configure services on the machine as-needed to host an instance of the a
 sites, clones, or child sites. The guides for Ubuntu and Gentoo are most up-to-date: http://emr.ge/manual/installing
 
 ## Installation via Emergence (linked child)
--  Create an emergence site that extends Nrnt1W9ER1FewOP1@gatekeeper.sandbox01.jarv.us
+-  Create an emergence site that extends http://Nrnt1W9ER1FewOP1@gatekeeper.sandbox01.jarv.us
 
 ## Installation from Git
--  Create an emergence site that extends Mw7U1bUeVZJbACka@ryon-sandbox.sites.emr.ge
+-  Create an emergence site that extends http://Mw7U1bUeVZJbACka@ryon-sandbox.sites.emr.ge
 -  Upload contents of git repository using WebDAV client (CyberDuck is the best open-source option)
