@@ -1,7 +1,7 @@
 # Jarvus GateKeeper
 
 GateKeeper is a web application designed to sit between internal API endpoints and public users.
-It provides a central facility for logging, analyzing, rate-limiting, and credentialling access.
+It provides a central facility for logging, analyzing, rate-limiting, and credentialing access.
 
 ## Requirements
 The GateKeeper application is built on the Emergence PHP framework and deployement engine, and requires an Emergence server to host it.
