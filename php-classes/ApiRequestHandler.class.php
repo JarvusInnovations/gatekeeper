@@ -52,26 +52,30 @@ class ApiRequestHandler extends RequestHandler
 		
 		
 		// drip into endpoint+user bucket first so that abusive users can't polute the global bucket
-		$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID/$userKey", function() use ($Endpoint) {
-			return array('seconds' => $Endpoint->UserRatePeriod, 'count' => $Endpoint->UserRateCount);
-		});
-		
-		if ($retryAfter) {
-			return static::throwRateError($retryAfter, 'Your rate limit for this endpoint has been exceeded');
-		}
-		
+        if ($Endpoint->UserRatePeriod && $Endpoint->UserRateCount) {
+    		$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID/$userKey", function() use ($Endpoint) {
+    			return array('seconds' => $Endpoint->UserRatePeriod, 'count' => $Endpoint->UserRateCount);
+    		});
+    		
+    		if ($retryAfter) {
+    			return static::throwRateError($retryAfter, 'Your rate limit for this endpoint has been exceeded');
+    		}
+        }
+
 		
 		// TODO: implement a per-user throttle that applies across all endpoints? Might not be useful...
 		
 		
 		// drip into endpoint bucket
-		$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
-			return array('seconds' => $Endpoint->GlobalRatePeriod, 'count' => $Endpoint->GlobalRateCount);
-		});
-		
-		if ($retryAfter) {
-			return static::throwRateError($retryAfter, 'The global rate limit for this endpoint has been exceeded');
-		}
+        if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
+    		$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
+    			return array('seconds' => $Endpoint->GlobalRatePeriod, 'count' => $Endpoint->GlobalRateCount);
+    		});
+    		
+    		if ($retryAfter) {
+    			return static::throwRateError($retryAfter, 'The global rate limit for this endpoint has been exceeded');
+    		}
+        }
 
 
 		// configure and execute internal API call
