@@ -97,7 +97,7 @@ class Key extends ActiveRecord
 	
 	public function getMetric($metricName, $forceUpdate = false)
 	{
-		$cacheKey = "metric/key/$this->ID/$metricName";
+		$cacheKey = "metrics/keys/$this->ID/$metricName";
 		
 		if (false !== ($metricValue = Cache::fetch($cacheKey))) {
 			return $metricValue;

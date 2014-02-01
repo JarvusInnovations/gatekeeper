@@ -25,6 +25,7 @@
 	</form>
 	
 	<section class="keys">
+		<p class="muted">Metrics are updated every {Key::$metricTTL} seconds.</p>
 
 		{foreach item=Key from=$data}
 			{$metrics = array(
@@ -65,5 +66,4 @@
 		{/foreach}
 
 	</section>
-
 {/block}

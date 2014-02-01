@@ -1194,6 +1194,75 @@ textarea {
   font-size: small;
 }
 
+/* line 1, ../sass/_tables.scss */
+table {
+  width: 100%;
+}
+
+/* line 5, ../sass/_tables.scss */
+caption {
+  *zoom: 1;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+/* line 38, ../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+caption:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* line 11, ../sass/_tables.scss */
+caption .button,
+caption button,
+caption input[type="submit"],
+caption input[type="reset"],
+caption input[type="button"] {
+  margin-top: -.3em;
+}
+
+/* line 16, ../sass/_tables.scss */
+th {
+  text-align: left;
+}
+
+/* line 20, ../sass/_tables.scss */
+td, th {
+  padding: .25em .5em;
+}
+
+/* line 26, ../sass/_tables.scss */
+thead td, thead th,
+tr:nth-child(even) td,
+tr:nth-child(even) th {
+  background: rgba(51, 51, 51, 0.04);
+}
+
+/* line 32, ../sass/_tables.scss */
+thead th {
+  background: rgba(51, 51, 51, 0.08);
+  border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+}
+
+/* line 38, ../sass/_tables.scss */
+.col-response-code {
+  text-align: center;
+}
+
+/* line 43, ../sass/_tables.scss */
+.col-response-time,
+.col-response-size {
+  text-align: right;
+}
+
+/* line 47, ../sass/_tables.scss */
+.col-empty-text {
+  color: #959390;
+  font-style: italic;
+  padding: 1em;
+  text-align: center;
+}
+
 /* line 1, ../sass/_endpoints.scss */
 .endpoint, .key, .ban {
   background: rgba(255, 255, 255, 0.8);

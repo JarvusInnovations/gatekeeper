@@ -16,7 +16,7 @@
 		<fieldset class="shrink">
 			{* field name label='' error='' type=text placeholder='' hint='' required=false autofocus=false *}
 
-			{field name=Title label=Title default=$Endpoint->Title required=true autofocus=true}
+			{field name=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
 
 			{capture assign=urlInputHtml}{strip}
 				http://{$.server.HTTP_HOST}/api/&thinsp;
@@ -35,17 +35,9 @@
 
 			{field name=DeprecationDate label='Deprecation Date' type=date default=tif($Endpoint->DeprecationDate, date('Y-m-d', $Endpoint->DeprecationDate)) hint="Leave blank if none"}
 
-			{capture assign=maxRequestsInputHtml}{strip}
-				<input type="number" class="tiny" size=2 name="MaxRequestsCount" value="{refill field=MaxRequestsCount default=$Endpoint->MaxRequestsCount}">
-				&nbsp;per&nbsp;
-				<select name="MaxRequestsPeriod">
-					<option value="">Select</option>
-					{foreach item=period from=Endpoint::getFieldOptions(MaxRequestsPeriod, values)}
-						<option {refill field=MaxRequestsPeriod default=$Endpoint->MaxRequestsPeriod selected=$period}>{$period}</option>
-					{/foreach}
-				</select>
-			{/strip}{/capture}
-			{labeledField html=$maxRequestsInputHtml type=compound label='Maximum Requests (Global)' error=default($errors.MaxRequestsCount, $errors.MaxRequestsPeriod) hint="Leave blank if none"}
+			{ratefields baseName=GlobalRate countDefault=$Endpoint->GlobalRateCount periodDefault=$Endpoint->GlobalRatePeriod label='Rate Limit (Global)' error=default($errors.GlobalRateCount, $errors.GlobalRatePeriod) hint="Leave blank if none"}
+
+			{ratefields baseName=UserRate countDefault=$Endpoint->UserRateCount periodDefault=$Endpoint->UserRatePeriod label='Rate Limit (Per User)' error=default($errors.UserRateCount, $errors.UserRatePeriod) hint="Leave blank if none"}
 
 			{checkbox name=KeyRequired value=1 unsetValue=0 label='API Key Required' default=$Endpoint->KeyRequired}
 

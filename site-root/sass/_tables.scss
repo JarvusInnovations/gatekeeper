@@ -1,0 +1,52 @@
+table {
+	width: 100%;
+}
+
+caption {
+	@include clearfix;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	
+	.button {
+		margin-top: -.3em;
+	}
+}
+
+th {
+	text-align: left;
+}
+
+td, th {
+	padding: .25em .5em;
+}
+
+thead,
+tr:nth-child(even) {
+	td, th {
+		background: rgba($text-color, .04);
+	}
+}
+
+thead {
+	th {
+		background: rgba($text-color, .08);
+		border-bottom: 1px solid rgba($text-color, .16);
+	}
+}
+
+.col-response-code {
+	text-align: center;
+}
+
+.col-response-time,
+.col-response-size {
+	text-align: right;
+}
+
+.col-empty-text {
+	color: $muted-color;
+	font-style: italic;
+	padding: 1em;
+	text-align: center;
+}

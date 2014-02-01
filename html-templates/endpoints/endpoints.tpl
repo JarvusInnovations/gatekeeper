@@ -26,6 +26,7 @@
 	</form>
 	
 	<section class="endpoints">
+		<p class="muted">Metrics are updated every {Endpoint::$metricTTL} seconds.</p>
 
 		{foreach item=Endpoint from=$data}
 			{$metrics = array(

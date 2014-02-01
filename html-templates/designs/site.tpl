@@ -170,6 +170,31 @@
 		{jsmin prettify.js}
 		<script>prettyPrint();</script>
 	{/block}
+
+	{block "js-analytics"}
+		<script type="text/javascript">
+		{if $.User}
+			var clicky_custom = {
+				session: {
+					username: '{$.User->Username}'
+					,email: '{$.User->Email}'
+					,full_name: '{$.User->FullName}'
+				}
+			};
+		{/if}
+		
+		var clicky_site_ids = clicky_site_ids || [];
+		clicky_site_ids.push(100671073);
+		(function() {
+			var s = document.createElement('script');
+			s.type = 'text/javascript';
+			s.async = true;
+			s.src = '//static.getclicky.com/js';
+			( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+		})();
+		</script>
+		<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100671073ns.gif" /></p></noscript>
+	{/block}
 	
 	{* enables site developers to dump the internal session log here by setting ?log_report=1 on any page *}
 	{log_report}

@@ -30,13 +30,20 @@ class Endpoint extends ActiveRecord
 			'type' => 'timestamp'
 			,'notnull' => false
 		)
-		,'MaxRequestsCount' => array(
+		,'GlobalRateCount' => array(
 			'type' => 'uint'
 			,'notnull' => false
 		)
-		,'MaxRequestsPeriod' => array(
-			'type' => 'enum'
-			,'values' => array('Minute', 'Hour', 'Day', 'Week', 'Month')
+		,'GlobalRatePeriod' => array(
+			'type' => 'uint'
+			,'notnull' => false
+		)
+		,'UserRateCount' => array(
+			'type' => 'uint'
+			,'notnull' => false
+		)
+		,'UserRatePeriod' => array(
+			'type' => 'uint'
 			,'notnull' => false
 		)
 		,'KeyRequired' => array(
@@ -115,19 +122,23 @@ class Endpoint extends ActiveRecord
 	
 	public function getMetric($metricName, $forceUpdate = false)
 	{
-		$cacheKey = "metric/endpoint/$this->ID/$metricName";
+		$cacheKey = "metrics/endpoints/$this->ID/$metricName";
 		
 		if (false !== ($metricValue = Cache::fetch($cacheKey))) {
 			return $metricValue;
 		}
 		
-		$metricValue = DB::oneValue('SELECT %s FROM `%s` Endpoint WHERE Endpoint.ID = %u', array(
-			static::getMetricSQL($metricName)
-			,static::$tableName
-			,$this->ID
-		));
+		try {
+			$metricValue = DB::oneValue('SELECT %s FROM `%s` Endpoint WHERE Endpoint.ID = %u', array(
+				static::getMetricSQL($metricName)
+				,static::$tableName
+				,$this->ID
+			));
 		
-		Cache::store($cacheKey, $metricValue, static::$metricTTL);
+			Cache::store($cacheKey, $metricValue, static::$metricTTL);
+		} catch (TableNotFoundException $e) {
+			return null;
+		}
 		
 		return $metricValue;
 	}
