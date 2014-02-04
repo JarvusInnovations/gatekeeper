@@ -113,31 +113,61 @@ class Endpoint extends ActiveRecord
 			'field' => 'Handle'
 			,'required' => false
 			,'validator' => 'handle'
-			,'errorMessage' => 'Handle is required and can only contain letters, numbers, hyphens, and underscores'
+			,'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
 		));
         
         $this->_validator->validate(array(
 			'field' => 'Version'
-			,'required' => false
 			,'validator' => 'handle'
             ,'allowNumeric' => true
             ,'pattern' => '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/'
 			,'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
 		));
 
-		$this->_validator->validate(array(
+    	$this->_validator->validate(array(
+			'field' => 'InternalEndpoint'
+			,'validator' => 'URL'
+		));
+
+        $this->_validator->validate(array(
 			'field' => 'AdminEmail'
 			,'validator' => 'email'
 			,'required' => false
 		));
 
-		$this->_validator->validate(array(
-			'field' => 'Version'
-			,'validator' => 'number'
-			,'min' => 1
+        $this->_validator->validate(array(
+    		'field' => 'DeprecationDate'
+			,'validator' => 'date_ymd'
+			,'required' => false
 		));
-		
-		// TODO: validate remaining fields
+
+        $this->_validator->validate(array(
+            'field' => 'GlobalRateCount'
+			,'validator' => 'number'
+			,'required' => false
+            ,'min' => 1
+		));
+
+        $this->_validator->validate(array(
+        	'field' => 'GlobalRatePeriod'
+			,'validator' => 'number'
+			,'required' => false
+            ,'min' => 1
+		));
+
+        $this->_validator->validate(array(
+            'field' => 'UserRateCount'
+			,'validator' => 'number'
+			,'required' => false
+            ,'min' => 1
+		));
+
+        $this->_validator->validate(array(
+        	'field' => 'UserRatePeriod'
+			,'validator' => 'number'
+			,'required' => false
+            ,'min' => 1
+		));
 		
 		return $this->finishValidation();
 	}
