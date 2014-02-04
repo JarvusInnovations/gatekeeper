@@ -58,10 +58,10 @@
     				</ul>
 				</div>
 				<footer>
-					<a class="button" href="/endpoints/{$Endpoint->Handle}/edit">Edit</a>
-					<a class="button" href="/endpoints/{$Endpoint->Handle}#endpoint-docs">View Docs</a>
-					<a class="button" href="/endpoints/{$Endpoint->Handle}#endpoint-cache">View Cache</a>
-					<a class="button" href="/endpoints/{$Endpoint->Handle}#endpoint-log">View Log</a>
+					<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit</a>
+					<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-docs">View Docs</a>
+					<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-cache">View Cache</a>
+					<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-log">View Log</a>
 				</footer>
 			</article>
 		{/foreach}

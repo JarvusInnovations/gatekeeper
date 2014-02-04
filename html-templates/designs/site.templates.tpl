@@ -134,5 +134,5 @@
 {/template}
 
 {template endpoint Endpoint}
-	<a href="/endpoints/{$Endpoint->Handle}">{$Endpoint->Title|escape}</a>
+	<a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">{$Endpoint->Title|escape} <small class="muted">v{$Endpoint->Version}</small></a>
 {/template}

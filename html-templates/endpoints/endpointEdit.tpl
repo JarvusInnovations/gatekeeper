@@ -5,7 +5,7 @@
 {block "content"}
 	{$Endpoint = $data}
 	{$errors = $Endpoint->validationErrors}
-	
+
 	<form method="POST" class="register-form">
 		{if $errors}
 			<div class="notify error">
@@ -22,9 +22,9 @@
 				http://{$.server.HTTP_HOST}/api/&thinsp;
 				<input type="text" size=15 name="Handle" required value="{refill field=Handle default=$Endpoint->Handle}">
 				&nbsp;/v&nbsp;
-				<input type="number" class="tiny" size=2 name="Version" required value="{refill field=Version default=$Endpoint->Version}">
+				<input type="text" class="tiny" size=2 name="Version" required value="{refill field=Version default=$Endpoint->Version}">
 			{/strip}{/capture}
-			{labeledField html=$urlInputHtml type=compound label='Public Handle and Version' error=default($errors.ForwardEndpoint, $errors.Version) required=true}
+			{labeledField html=$urlInputHtml type=compound label='Public Handle and Version' error=default($errors.Handle, $errors.Version) required=true}
 
 			{field name=InternalEndpoint label='Internal Endpoint' type=url default=$Endpoint->InternalEndpoint required=true}
 

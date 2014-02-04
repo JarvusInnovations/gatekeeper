@@ -11,14 +11,13 @@ class ApiRequestHandler extends RequestHandler
 			return static::throwInvalidRequestError('Endpoint handle required');
 		}
 		
-		if (!($endpointVersion = static::shiftPath()) || !preg_match('/^v\d+$/', $endpointVersion)) {
+		if (!($endpointVersion = static::shiftPath()) || !preg_match('/^v.+$/', $endpointVersion)) {
 			return static::throwInvalidRequestError('Endpoint version required');
 		}
-		
-		
+
+
 		// get endpoint record and check version
-		// TODO: support multiple versions
-		if (!$Endpoint = Endpoint::getByHandle($endpointHandle)) {
+		if (!$Endpoint = Endpoint::getByWhere(array('Handle' => $endpointHandle, 'Version' => substr($endpointVersion, 1)))) {
 			return static::throwNotFoundError('Requested endpoint not found');
 		}
 		

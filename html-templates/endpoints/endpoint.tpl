@@ -23,7 +23,7 @@
 
 		<table>
 			<caption>
-		    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/edit">Edit Endpoint</a>			
+		    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>			
 				<h3>Request Log <small>(Last 30)</small></h3>
 			</caption>
 			<thead>

@@ -13,12 +13,13 @@ class Endpoint extends ActiveRecord
 	static public $fields = array(
 		'Title'
 		,'Handle' => array(
-			'unique' => true
-		)
+            'type' => 'varchar'
+            ,'length' => 32
+        )
 		,'Version' => array(
-			'type' => 'uint'
-			,'default' => 1
-		)
+            'type' => 'varchar'
+            ,'length' => 32
+        )
 		,'InternalEndpoint'
 		,'AdminName' => array(
 			'notnull' => false
@@ -71,6 +72,13 @@ class Endpoint extends ActiveRecord
 			,'class' => 'EndpointRewrite'
 		)
 	);
+    
+    static public $indexes = array(
+        'HandleVersion' => array(
+            'fields' => array('Handle', 'Version')
+            ,'unique' => true
+        )
+    );
 	
 	static public $sorters = array(
 		'calls-total' => array(__CLASS__, 'sortMetric')
@@ -96,11 +104,25 @@ class Endpoint extends ActiveRecord
 	{
 		parent::validate($deep);
 		
-		HandleBehavior::onValidate($this, $this->_validator);
-		
 		$this->_validator->validate(array(
 			'field' => 'Title'
 			,'minlength' => 2
+		));
+        
+        $this->_validator->validate(array(
+			'field' => 'Handle'
+			,'required' => false
+			,'validator' => 'handle'
+			,'errorMessage' => 'Handle is required and can only contain letters, numbers, hyphens, and underscores'
+		));
+        
+        $this->_validator->validate(array(
+			'field' => 'Version'
+			,'required' => false
+			,'validator' => 'handle'
+            ,'allowNumeric' => true
+            ,'pattern' => '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/'
+			,'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
 		));
 
 		$this->_validator->validate(array(
