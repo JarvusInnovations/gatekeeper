@@ -40,7 +40,7 @@
 			    </div>
 				<footer>
 					<a class="button" href="/bans/{$Ban->ID}/edit">Edit</a>
-					<a class="button" href="#remove">Remove</a>
+					<a class="button" href="/bans/{$Ban->ID}/delete">Remove</a>
 				</footer>
 			</article>
 		{/foreach}
