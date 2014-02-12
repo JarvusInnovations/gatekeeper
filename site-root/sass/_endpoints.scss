@@ -10,20 +10,23 @@
         margin-bottom: 0.25em;
     }
     
-    & > .details {
+    > .details {
         @include box-flex(1);
         padding: 1em;
     }
     
-    & > footer {
+    > footer {
         @include box-align(stretch);
         @include box-pack(start);
         @include box-orient(vertical);
         @include display-box;
         
-        .button {
+        > a {
             display: block;
-            margin-bottom: .25em;
+
+            + a {
+                margin-top: .25em;
+            }
         }
     }
 }
@@ -71,7 +74,7 @@
     margin: 1em 0 0;
     padding: 0;
     
-    & > li {
+    > li {
         @include box-flex(1);
         display: block;
         list-style: none;
@@ -80,5 +83,22 @@
     strong {
         color: $text-color;
         display: block;
-    }
+    }    
 }
+
+// tables
+
+.col-request {
+    @include word-break(break-all);
+    width: 100%;
+}
+
+.col-response-code {
+	text-align: center;
+}
+
+.col-response-time,
+.col-response-size {
+	text-align: right;
+}
+

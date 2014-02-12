@@ -20,7 +20,6 @@
 	</section>
 
 	<section id="endpoint-log">
-
 		<table>
 			<caption>
 		    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>			
@@ -44,8 +43,8 @@
 					<td class="col-request">{$Request->Method} {$Request->Path}{tif $Request->Query ? "?$Request->Query"}</td>
 					<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
 					<td class="col-response-code">{$Request->ResponseCode}</td>
-					<td class="col-response-time">{$Request->ResponseTime|number_format} ms</td>
-					<td class="col-response-size">{$Request->ResponseBytes|number_format} B</td>
+					<td class="col-response-time">{$Request->ResponseTime|number_format}&nbsp;ms</td>
+					<td class="col-response-size">{$Request->ResponseBytes|number_format}&nbsp;B</td>
 					<td class="col-client-ip">{$Request->ClientIP|long2ip}</td>
 					<td class="col-key">{if $Request->Key}{key $Request->Key}{else}<small class="muted">&mdash;</small></td>
 				</tr>

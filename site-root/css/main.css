@@ -1245,17 +1245,6 @@ thead th {
 }
 
 /* line 38, ../sass/_tables.scss */
-.col-response-code {
-  text-align: center;
-}
-
-/* line 43, ../sass/_tables.scss */
-.col-response-time,
-.col-response-size {
-  text-align: right;
-}
-
-/* line 47, ../sass/_tables.scss */
 .col-empty-text {
   color: #959390;
   font-style: italic;
@@ -1309,24 +1298,15 @@ thead th {
   display: box;
 }
 /* line 24, ../sass/_endpoints.scss */
-.endpoint > footer .button, .key > footer .button, .ban > footer .button,
-.endpoint > footer button,
-.key > footer button,
-.ban > footer button,
-.endpoint > footer input[type="submit"],
-.key > footer input[type="submit"],
-.ban > footer input[type="submit"],
-.endpoint > footer input[type="reset"],
-.key > footer input[type="reset"],
-.ban > footer input[type="reset"],
-.endpoint > footer input[type="button"],
-.key > footer input[type="button"],
-.ban > footer input[type="button"] {
+.endpoint > footer > a, .key > footer > a, .ban > footer > a {
   display: block;
-  margin-bottom: .25em;
+}
+/* line 27, ../sass/_endpoints.scss */
+.endpoint > footer > a + a, .key > footer > a + a, .ban > footer > a + a {
+  margin-top: .25em;
 }
 
-/* line 31, ../sass/_endpoints.scss */
+/* line 34, ../sass/_endpoints.scss */
 .key-metric {
   background: rgba(0, 0, 0, 0.1);
   -webkit-box-orient: vertical;
@@ -1347,39 +1327,39 @@ thead th {
   text-align: center;
   width: 10em;
 }
-/* line 42, ../sass/_endpoints.scss */
+/* line 45, ../sass/_endpoints.scss */
 .key-metric strong {
   display: block;
   font-size: x-large;
 }
-/* line 52, ../sass/_endpoints.scss */
+/* line 55, ../sass/_endpoints.scss */
 .key-metric.good {
   background: rgba(0, 255, 0, 0.2);
   color: #1e841e;
 }
-/* line 53, ../sass/_endpoints.scss */
+/* line 56, ../sass/_endpoints.scss */
 .key-metric.mid {
   background: rgba(255, 255, 0, 0.2);
   color: #84841e;
 }
-/* line 54, ../sass/_endpoints.scss */
+/* line 57, ../sass/_endpoints.scss */
 .key-metric.bad {
   background: rgba(255, 0, 0, 0.2);
   color: #841e1e;
 }
 
-/* line 57, ../sass/_endpoints.scss */
+/* line 60, ../sass/_endpoints.scss */
 .endpoint-urls {
   margin: 0;
 }
-/* line 60, ../sass/_endpoints.scss */
+/* line 63, ../sass/_endpoints.scss */
 .endpoint-urls dt {
   color: #959390;
   float: left;
   width: 4em;
 }
 
-/* line 67, ../sass/_endpoints.scss */
+/* line 70, ../sass/_endpoints.scss */
 .other-metrics {
   color: #959390;
   display: -webkit-box;
@@ -1390,7 +1370,7 @@ thead th {
   margin: 1em 0 0;
   padding: 0;
 }
-/* line 74, ../sass/_endpoints.scss */
+/* line 77, ../sass/_endpoints.scss */
 .other-metrics > li {
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
@@ -1399,15 +1379,35 @@ thead th {
   display: block;
   list-style: none;
 }
-/* line 80, ../sass/_endpoints.scss */
+/* line 83, ../sass/_endpoints.scss */
 .other-metrics strong {
   color: #333333;
   display: block;
 }
 
+/* line 91, ../sass/_endpoints.scss */
+.col-request {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  width: 100%;
+}
+
+/* line 96, ../sass/_endpoints.scss */
+.col-response-code {
+  text-align: center;
+}
+
+/* line 101, ../sass/_endpoints.scss */
+.col-response-time,
+.col-response-size {
+  text-align: right;
+}
+
 /* line 5, ../sass/_keys.scss */
 .key-string {
   border: 1px solid rgba(0, 0, 0, 0.1);
+  display: inline-block;
   font-family: Consolas, monospace;
   padding: .25em .25em 0;
 }
