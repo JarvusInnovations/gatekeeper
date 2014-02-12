@@ -38,7 +38,10 @@
 			)}
 
 			<article class="endpoint">
-				<div class="key-metric good"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all-time</div>
+				<div class="key-metric good">
+				    <strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong>
+				    <small>all-time</small>
+				</div>
 				<div class="details">
     				<header>
     					<h3 class="title">{endpoint $Endpoint}</h3>
@@ -51,10 +54,22 @@
     					</dl>
     				</header>
     				<ul class="other-metrics">
-    					<li><strong>{$metrics.callsWeek|number_format} call{tif $metrics.callsWeek != 1 ? s}</strong> this week</li>
-    					<li><strong>{$metrics.responseTime|number_format} ms</strong> avg response time</li>
-    					<li><strong>{$metrics.keys|number_format} key{tif $metrics.keys != 1 ? s}</strong> assigned</li>
-    					<li><strong>{$metrics.clients|number_format}</strong> unique client{tif $metrics.clients != 1 ? s}</li>
+    					<li>
+    					    <strong>{$metrics.callsWeek|number_format} call{tif $metrics.callsWeek != 1 ? s}</strong>
+    					    <small>this week</small>
+                        </li>
+    					<li>
+    					    <strong>{$metrics.responseTime|number_format} ms</strong>
+    					    <small>avg response time</small>
+                        </li>
+    					<li>
+    					    <strong>{$metrics.keys|number_format} key{tif $metrics.keys != 1 ? s}</strong>
+    					    <small>assigned</small>
+    					</li>
+    					<li>
+    					    <strong>{$metrics.clients|number_format}</strong>
+    					    <small>unique client{tif $metrics.clients != 1 ? s}</small>
+    					</li>
     				</ul>
 				</div>
 				<footer>
