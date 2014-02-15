@@ -26,15 +26,15 @@
 		</thead>
 
 		<tbody>
-		{foreach item=LoggedRequest from=$data}
+		{foreach item=Request from=$data}
 			<tr>
-				<td class="col-request">{$LoggedRequest->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"}</small></td>
-				<td class="col-timestamp">{$LoggedRequest->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
-				<td class="col-response-code">{$LoggedRequest->ResponseCode}</td>
-				<td class="col-response-time">{$LoggedRequest->ResponseTime|number_format} ms</td>
-				<td class="col-response-size">{$LoggedRequest->ResponseBytes|number_format} B</td>
-				<td class="col-client-ip">{$LoggedRequest->ClientIP|long2ip}</td>
-				<td class="col-key">{if $LoggedRequest->Key}{key $LoggedRequest->Key}{else}<small class="muted">&mdash;</small></td>
+				<td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"}</small></td>
+				<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+				<td class="col-response-code">{$Request->ResponseCode}</td>
+				<td class="col-response-time">{$Request->ResponseTime|number_format} ms</td>
+				<td class="col-response-size">{$Request->ResponseBytes|number_format} B</td>
+				<td class="col-client-ip">{$Request->ClientIP|long2ip}</td>
+				<td class="col-key">{if $Request->Key}{apiKey $Request->Key}{else}<small class="muted">&mdash;</small></td>
 			</tr>
 		{foreachelse}
 			<tr>

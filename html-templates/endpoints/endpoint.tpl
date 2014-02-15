@@ -40,13 +40,13 @@
 			<tbody>
 			{foreach item=Request from=LoggedRequest::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=30))}
 				<tr>
-					<td class="col-request">{$Request->Method} <small>{$Request->Path}{tif $Request->Query ? "?$Request->Query"}</small></td>
+					<td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"}</small></td>
 					<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
 					<td class="col-response-code">{$Request->ResponseCode}</td>
 					<td class="col-response-time">{$Request->ResponseTime|number_format}&nbsp;ms</td>
 					<td class="col-response-size">{$Request->ResponseBytes|number_format}&nbsp;B</td>
 					<td class="col-client-ip">{$Request->ClientIP|long2ip}</td>
-					<td class="col-key">{if $Request->Key}{key $Request->Key}{else}<small class="muted">&mdash;</small></td>
+					<td class="col-key">{if $Request->Key}{apiKey $Request->Key}{else}<small class="muted">&mdash;</small></td>
 				</tr>
 			{foreachelse}
 				<tr>

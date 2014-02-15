@@ -4,6 +4,7 @@ class LogsRequestHandler extends RecordsRequestHandler
 {
     static public $recordClass = 'LoggedRequest';
     static public $browseLimitDefault = 20;
+    static public $browseOrder = array('ID' => 'DESC');
 
 
     static public function handleBrowseRequest($options = array(), $conditions = array(), $responseID = null, $responseData = array())
