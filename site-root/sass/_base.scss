@@ -6,6 +6,7 @@ $page-bg-color: change-color($base-color, $saturation: 40, $lightness: 95);
 $link-color: change-color($accent-color, $saturation: 40);
 $text-color: #333;
 $muted-color: mix($text-color, $page-bg-color);
+$border-color: rgba($text-color, .2);
 
 $body-font: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 $heading-font: Georgia, Times, "Times New Roman", serif;
@@ -146,7 +147,7 @@ h1 {
 
 h2 {
 	font-size: 2em;
-	margin-bottom: 0.75em;
+	margin-bottom: 1.5em;
 	
 	@media #{$mq-phone} {
 		font-size: 1.5em;
@@ -441,7 +442,7 @@ a {
 	}
 }
 
-.mini-search {
+.site-search {
 	float: right;
 	margin-top: .125em;
 	

@@ -1,6 +1,6 @@
 .endpoint {
     background: rgba(white, .8);
-    border: 1px solid rgba(black, .2);
+    border: 1px solid $border-color;
     @include box-shadow(0 .5em .5em -.5em rgba(black, .2));
     @include display-box;
     margin: 1em 0;
@@ -90,11 +90,10 @@
 
 .col-request {
     @include word-break(break-all);
-    width: 100%;
 }
 
 .col-response-code {
-	text-align: center;
+    text-align: center;
 }
 
 .col-response-time,
@@ -102,3 +101,6 @@
 	text-align: right;
 }
 
+.col-key {
+    width: 1%;
+}

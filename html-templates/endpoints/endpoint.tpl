@@ -29,9 +29,9 @@
 				<tr>
 					<th class="col-request">Request</th>
 					<th class="col-timestamp">Timestamp</th>
-					<th class="col-response-code">Response Code</th>
-					<th class="col-response-time">Response Time</th>
-					<th class="col-response-size">Response Size</th>
+					<th class="col-response-code"><small>Response</small> Code</th>
+					<th class="col-response-time"><small>Response</small> Time</th>
+					<th class="col-response-size"><small>Response</small> Size</th>
 					<th class="col-client-ip">Client IP</th>
 					<th class="col-key">Key</th>
 				</tr>
@@ -40,7 +40,7 @@
 			<tbody>
 			{foreach item=Request from=LoggedRequest::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=30))}
 				<tr>
-					<td class="col-request">{$Request->Method} {$Request->Path}{tif $Request->Query ? "?$Request->Query"}</td>
+					<td class="col-request">{$Request->Method} <small>{$Request->Path}{tif $Request->Query ? "?$Request->Query"}</small></td>
 					<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
 					<td class="col-response-code">{$Request->ResponseCode}</td>
 					<td class="col-response-time">{$Request->ResponseTime|number_format}&nbsp;ms</td>
