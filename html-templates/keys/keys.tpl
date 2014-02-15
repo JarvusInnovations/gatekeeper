@@ -39,7 +39,7 @@
 				<div class="key-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                 <div class="details">
     				<header>
-    					<h3 class="title">{key $Key}</h3>
+    					<h3 class="title">{apiKey $Key}</h3>
     					<div class="owner">{if $Key->ContactEmail}
     						{$recipient = $Key->ContactEmail}
     						{if $Key->ContactName}

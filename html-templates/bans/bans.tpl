@@ -28,7 +28,7 @@
     						{if $Ban->IP}
     							IP Address: <strong>{$Ban->IP|long2ip}</strong>
     						{else}
-    							Key: <strong>{key $Ban->Key}</strong>
+    							Key: <strong>{apiKey $Ban->Key}</strong>
     						{/if}
     					</h3>
     

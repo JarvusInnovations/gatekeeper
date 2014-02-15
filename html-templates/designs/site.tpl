@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
-{$siteConfig = Site::$config}
-{load_templates designs/site.templates.tpl}
+{load_templates designs/site.subtemplates.tpl}
 
 {* page name/responseId => 'optional description' *}
 {$navItems = array(
@@ -13,18 +11,18 @@
 <html class="no-js" lang="en">
 
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> {* disable IE compatibility mode, use Chrome Frame if available *}
 	{block "viewport"}
 	<meta name="viewport" content="width=device-width, initial-scale=1"> {* responsive viewport *}
 	{/block}
 
-	<title>{block "title"}{$siteConfig.label|default:$.server.HTTP_HOST}{/block}</title>
+	<title>{block "title"}{Site::getConfig(label)}{/block}</title>
 	
 	{block "css"}
 		{cssmin main.css}
 		{* <link rel="stylesheet" href="/css/prettify.css"> included in main.css via sass *}
-		{/block}
+	{/block}
 	
 	{block "js-top"}
 		{jsmin modernizr.js} {* minimal build; shivs html5 and replaces no-js class *}
@@ -32,7 +30,7 @@
 	{/block}
 </head>
 
-<body class="{block 'body-class'}{str_replace('/', '_', $responseID)}-tpl{/block}">
+<body class="{block 'body-class'}{str_replace('/', '_', $.responseId)}-tpl{/block}">
 	<!--[if lt IE 9]>
 	<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 	<![endif]-->
@@ -65,17 +63,15 @@
 			{block "branding"}
 			<h1 class="branding"><a href="/">
 				{if Site::resolvePath('site-root/apple-touch-icon.css')}<img src="/apple-touch-icon.png" width=36>{/if}
-				{$siteConfig.label|default:$.server.HTTP_HOST}
+				{Site::getConfig(label)}
 			</a></h1>
 			{/block}
 			
 			<div class="mobile-only nav-link-ct"><a href="#nav">Menu</a></div>
 			{nav $navItems mobileHidden=true}
 
-			<form class="mini-search mobile-hidden">
-				<label class="inline text">
-					<input type="search" placeholder="Search This Site" required>
-				</label>
+			<form class="search-form site-search" action="/search">
+    			<input name="q" class="search-field" type="search" placeholder="Find something&hellip;">
 			</form>
 		</div>
 	</header>

@@ -5,7 +5,7 @@
 {block content}
 	{$Key = $data}
 
-	<h2>Key: {key $Key}</h2>
+	<h2>Key: {apiKey $Key}</h2>
 
 	<section id="key-log">
 
