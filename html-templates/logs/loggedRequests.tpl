@@ -47,4 +47,5 @@
 	{$pagingHtml}
 
     <a class="button" href="/logs/json{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">Download JSON</a>
+    <a class="button" href="/logs/csv{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">Download CSV</a>
 {/block}
