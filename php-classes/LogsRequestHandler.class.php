@@ -3,6 +3,13 @@
 class LogsRequestHandler extends RecordsRequestHandler
 {
     static public $recordClass = 'LoggedRequest';
+
+    static public $accountLevelRead = 'Staff';
+    static public $accountLevelComment = 'Staff';
+	static public $accountLevelBrowse = 'Staff';
+	static public $accountLevelWrite = 'Staff';
+	static public $accountLevelAPI = 'Staff';
+
     static public $browseLimitDefault = 20;
     static public $browseOrder = array('ID' => 'DESC');
 
