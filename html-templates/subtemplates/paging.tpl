@@ -1,4 +1,4 @@
-{template pagingLinks total pageSize=12}
+{template pagingLinks total pageSize=12 showAll=false}
 <div class="paging">
 	{if $total > $pageSize}
 		<?php
@@ -25,6 +25,10 @@
 		{if $.get.offset < $total - $pageSize}
 			<a class="paging-link next" href="?{refill_query limit=$pageSize offset=$nextOffset}">Next&nbsp;&rarr;</a>
 		{/if}
+
+        {if $showAll}
+    		<a class="paging-link show-all" href="?{refill_query limit=0}">Show All</a>
+        {/if}
 	{/if}
 </div>
 {/template}

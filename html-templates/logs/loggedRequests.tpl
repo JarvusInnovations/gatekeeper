@@ -8,7 +8,7 @@
     <h2>Logged Requests</h2>
 
     {capture assign=pagingHtml}
-	    {if $limit}{pagingLinks $total pageSize=$limit}{/if}
+	    {if $limit}{pagingLinks $total pageSize=$limit showAll=true}{/if}
     {/capture}
 
     {$pagingHtml}
