@@ -1243,10 +1243,11 @@ textarea {
 
 /* line 1, ../sass/_tables.scss */
 table {
+  margin: 1em 0;
   width: 100%;
 }
 
-/* line 5, ../sass/_tables.scss */
+/* line 6, ../sass/_tables.scss */
 caption {
   *zoom: 1;
   margin: 0;
@@ -1259,7 +1260,7 @@ caption:after {
   display: table;
   clear: both;
 }
-/* line 11, ../sass/_tables.scss */
+/* line 12, ../sass/_tables.scss */
 caption .button,
 caption button,
 caption input[type="submit"],
@@ -1268,41 +1269,41 @@ caption input[type="button"] {
   margin-top: -.3em;
 }
 
-/* line 16, ../sass/_tables.scss */
+/* line 17, ../sass/_tables.scss */
 th {
   text-align: left;
 }
 
-/* line 21, ../sass/_tables.scss */
+/* line 22, ../sass/_tables.scss */
 td + td {
   border-left: 1px solid rgba(51, 51, 51, 0.04);
 }
 
-/* line 26, ../sass/_tables.scss */
+/* line 27, ../sass/_tables.scss */
 td, th {
   padding: .25em .5em;
 }
 
-/* line 32, ../sass/_tables.scss */
+/* line 33, ../sass/_tables.scss */
 thead td, thead th,
 tr:nth-child(even) td,
 tr:nth-child(even) th {
   background: rgba(51, 51, 51, 0.04);
 }
 
-/* line 39, ../sass/_tables.scss */
+/* line 40, ../sass/_tables.scss */
 tbody > tr:hover > td, tbody > tr:hover > th {
   background: rgba(71, 113, 166, 0.12);
 }
 
-/* line 46, ../sass/_tables.scss */
+/* line 47, ../sass/_tables.scss */
 thead th {
   background: rgba(51, 51, 51, 0.08);
   border-bottom: 1px solid rgba(51, 51, 51, 0.16);
   text-align: left;
   vertical-align: bottom;
 }
-/* line 53, ../sass/_tables.scss */
+/* line 54, ../sass/_tables.scss */
 thead small, thead .hint {
   color: #959390;
   display: block;
@@ -1310,7 +1311,7 @@ thead small, thead .hint {
   margin-bottom: -.25em;
 }
 
-/* line 61, ../sass/_tables.scss */
+/* line 62, ../sass/_tables.scss */
 .col-empty-text {
   color: #959390;
   font-style: italic;

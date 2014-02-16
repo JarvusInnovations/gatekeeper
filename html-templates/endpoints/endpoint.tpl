@@ -5,7 +5,10 @@
 {block content}
 	{$Endpoint = $data}
 
-	<h2>Endpoint: {endpoint $Endpoint}</h2>
+	<header class="clearfix">
+    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>			
+	    <h2>Endpoint: {endpoint $Endpoint}</h2>
+	</header>
 
 	<section id="endpoint-docs">
 		<h3>Documentation</h3>
@@ -22,7 +25,6 @@
 	<section id="endpoint-log">
 		<table>
 			<caption>
-		    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>			
 				<h3>Request Log <small>(Last 30)</small></h3>
 			</caption>
 			<thead>
@@ -55,5 +57,6 @@
 			{/foreach}
 			</tbody>
 		</table>
+        <a class="button" href="/logs?endpoint={$Endpoint->Handle}">View Full Log</a>
 	</section>
 {/block}
