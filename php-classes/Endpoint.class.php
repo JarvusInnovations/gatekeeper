@@ -137,7 +137,7 @@ class Endpoint extends ActiveRecord
 
         $this->_validator->validate(array(
     		'field' => 'DeprecationDate'
-			,'validator' => 'date_ymd'
+			,'validator' => 'datetime'
 			,'required' => false
 		));
 

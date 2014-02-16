@@ -49,6 +49,12 @@ class Ban extends ActiveRecord
 			$this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
 		}
 
+        $this->_validator->validate(array(
+        	'field' => 'ExpirationDate'
+			,'validator' => 'datetime'
+			,'required' => false
+		));
+
 		return $this->finishValidation();
 	}
 
