@@ -99,12 +99,31 @@ class ApiRequestHandler extends RequestHandler
 		// configure and execute internal API call
 		$urlPrefix = rtrim($Endpoint->InternalEndpoint, '/');
 		$path = '/' . implode('/', static::getPath());
+        
+        // TODO: migrate caching implementation to HttpProxy and include headers in cache
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $cacheKey = "response:$Endpoint->ID:$path";
+            
+            if ($cachedResponse = Cache::fetch($cacheKey)) {
+                if ($cachedResponse['expires'] < time()) {
+                    Cache::delete($cacheKey);
+                    $cachedResponse = false;
+                } else {
+                    foreach ($cachedResponse['headers'] AS $header) {
+                        header($header);
+                    }
+                    print($cachedResponse['body']);
+                    exit();
+                }
+            }
+        }
 
 		HttpProxy::relayRequest(array(
 			'autoAppend' => false
 			,'url' => $urlPrefix . $path
 			,'interface' => static::$sourceInterface
-			,'afterResponse' => function($responseBody, $options, $ch) use ($Endpoint, $Key, $path) {
+            ,'afterResponseSync' => true
+			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $path, $cacheKey) {
 				$curlInfo = curl_getinfo($ch);
 
 				// log request to database
@@ -119,6 +138,32 @@ class ApiRequestHandler extends RequestHandler
 					,'ResponseCode' => $curlInfo['http_code']
 					,'ResponseBytes' => $curlInfo['size_download']
 				), true);
+
+                // cache request
+                if (!empty($responseHeaders['Expires']) && $cacheKey) {
+                    $expires = strtotime($responseHeaders['Expires']);
+                    $now = time();
+
+                    if ($expires > $now) {
+                        $cachableHeaders = array();
+                        
+                        foreach ($responseHeaders AS $headerKey => $headerValue) {
+                            $header = "$headerKey: $headerValue";
+                            foreach (HttpProxy::$defaultPassthruHeaders AS $pattern) {
+                                if (preg_match($pattern, $header)) {
+                                    $cachableHeaders[] = $header;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        Cache::store($cacheKey, array(
+                            'headers' => $cachableHeaders
+                            ,'expires' => $expires
+                            ,'body' => $responseBody
+                        ), $expires - $now);
+                    }
+                }
 			}
 		));
 	}
