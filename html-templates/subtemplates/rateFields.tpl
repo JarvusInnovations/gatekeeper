@@ -1,3 +1,5 @@
+{load_templates subtemplates/forms.tpl}
+
 {template ratefields baseName countDefault='' periodDefault='' label='' error='' hint='' required=false}
     {$countField = cat($baseName, "Count")}
 	{$periodField = cat($baseName, "Period")}

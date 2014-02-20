@@ -5,6 +5,7 @@
 {block "content"}
 	{$Endpoint = $data}
 	{$errors = $Endpoint->validationErrors}
+    {load_templates subtemplates/rateFields.tpl}
 
 	<form method="POST" class="register-form">
 		{if $errors}
