@@ -26,6 +26,7 @@ class Ban extends ActiveRecord
 		,'Notes' => array(
 			'type' => 'clob'
 			,'notnull' => false
+            ,'fulltext' => true
 		)
 	);
 
