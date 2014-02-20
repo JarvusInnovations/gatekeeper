@@ -16,11 +16,40 @@
 		<p class="muted"><em>Not yet implemented. Either <a href="https://github.com/mashery/iodocs">I/O Docs</a> or <a href="https://github.com/wordnik/swagger-ui">Swagger</a> will be integrated in the future to allow JSON-defined documentation to be entered here.</em></p>
 	</section>
 
+    {if $Endpoint->CachingEnabled}
 	<section id="endpoint-cache">
-		<h3>Cache Status</h3>
+    	<table>
+			<caption>
+				<h3>Cached Responses</h3>
+			</caption>
+			<thead>
+				<tr>
+					<th class="col-request">Request</th>
+					<th class="col-created">Created</th>
+					<th class="col-hits">Hits</th>
+					<th class="col-last-hit">Last Hit</th>
+					<th class="col-expiration">Expiration</th>
+				</tr>
+			</thead>
 
-		<p class="muted"><em>Coming soon.</em></p>
+			<tbody>
+                {foreach item=response from=$Endpoint->getCachedResponses()}
+        			<tr>
+    					<td class="col-request">GET <small>{$response.value.path|escape|default:'/'}{tif $response.value.query ? "?$response.value.query"}</small></td>
+    					<td class="col-created">{$response.creation_time|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+    					<td class="col-hits">{$response.num_hits}</td>
+    					<td class="col-last-hit">{$response.access_time|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+    					<td class="col-expiration">{$response.value.expires|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+    				</tr>
+                {foreachelse}
+        			<tr>
+    					<td colspan="5" class="col-empty-text">No requests logged yet.</td>
+    				</tr>
+                {/foreach}
+            </tbody>
+        </table>
 	</section>
+    {/if}
 
 	<section id="endpoint-log">
 		<table>

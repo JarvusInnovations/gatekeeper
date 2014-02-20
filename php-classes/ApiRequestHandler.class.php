@@ -158,8 +158,10 @@ class ApiRequestHandler extends RequestHandler
                         }
                         
                         Cache::store($cacheKey, array(
-                            'headers' => $cachableHeaders
+                            'path' => $path
+                            ,'query' => $_SERVER['QUERY_STRING']
                             ,'expires' => $expires
+                            ,'headers' => $cachableHeaders
                             ,'body' => $responseBody
                         ), $expires - $now);
                     }

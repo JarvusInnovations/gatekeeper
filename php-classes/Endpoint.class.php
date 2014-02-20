@@ -218,4 +218,14 @@ class Endpoint extends ActiveRecord
 	{
 		return static::getMetricSQL($name) . ' ' . $dir;
 	}
+    
+    public function getCachedResponses()
+    {
+        $cachedResponses = array();
+        foreach (Cache::getIterator("/^response\:{$this->ID}/") AS $cachedResponse) {
+            $cachedResponses[] = $cachedResponse;
+        }
+        
+        return $cachedResponses;
+    }
 }
