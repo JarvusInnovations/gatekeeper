@@ -138,7 +138,7 @@ class Endpoint extends ActiveRecord
 
         $this->_validator->validate(array(
     		'field' => 'DeprecationDate'
-			,'validator' => 'datetime'
+			,'validator' => 'date_ymd'
 			,'required' => false
 		));
 
@@ -228,5 +228,20 @@ class Endpoint extends ActiveRecord
         }
         
         return $cachedResponses;
+    }
+    
+    public function getNotificationEmailRecipient()
+    {
+        $email = $this->AdminEmail;
+        
+        if (!$email) {
+            return null;
+        }
+        
+        if ($this->AdminName) {
+            $email = "$this->AdminName <$email>";
+        }
+        
+        return $email;
     }
 }

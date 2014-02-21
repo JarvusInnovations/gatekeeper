@@ -69,14 +69,14 @@ class ApiRequestHandler extends RequestHandler
 		$userKey = $Key ? "keys/$Key->ID" : "ips/$_SERVER[REMOTE_ADDR]";
 
 
-		// drip into endpoint+user bucket first so that abusive users can't polute the global bucket
+		// drip into endpoint+user bucket first so that abusive users can't pollute the global bucket
 		if ($Endpoint->UserRatePeriod && $Endpoint->UserRateCount) {
-			$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID/$userKey", function() use ($Endpoint) {
+			$bucket = HitBuckets::drip("endpoints/$Endpoint->ID/$userKey", function() use ($Endpoint) {
 				return array('seconds' => $Endpoint->UserRatePeriod, 'count' => $Endpoint->UserRateCount);
 			});
 
-			if ($retryAfter) {
-				return static::throwRateError($retryAfter, 'Your rate limit for this endpoint has been exceeded');
+			if ($bucket['hits'] <= 0) {
+				return static::throwRateError($bucket['seconds'], 'Your rate limit for this endpoint has been exceeded');
 			}
 		}
 
@@ -86,12 +86,22 @@ class ApiRequestHandler extends RequestHandler
 
 		// drip into endpoint bucket
 		if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
-			$retryAfter = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
+			$bucket = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
 				return array('seconds' => $Endpoint->GlobalRatePeriod, 'count' => $Endpoint->GlobalRateCount);
 			});
+            
+            if ($bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
+                static::sendAdminNotification($Endpoint, 'endpointRateLimitNear', array(
+                    'bucket' => $bucket
+                ), "endpoints/$Endpoint->ID/rate-warning-sent", $bucket['seconds']);
+            }
 
-			if ($retryAfter) {
-				return static::throwRateError($retryAfter, 'The global rate limit for this endpoint has been exceeded');
+			if ($bucket['hits'] <= 0) {
+                static::sendAdminNotification($Endpoint, 'endpointRateLimitReached', array(
+                    'bucket' => $bucket
+            	), "endpoints/$Endpoint->ID/rate-notification-sent", $bucket['seconds']);
+                
+				return static::throwRateError($bucket['seconds'], 'The global rate limit for this endpoint has been exceeded');
 			}
 		}
 
@@ -151,7 +161,7 @@ class ApiRequestHandler extends RequestHandler
                 list($path, $query) = explode('?', $url);
 
 				// log request to database
-				LoggedRequest::create(array(
+				$LoggedRequest = LoggedRequest::create(array(
 					'Endpoint' => $Endpoint
 					,'Key' => $Key
 					,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
@@ -190,18 +200,27 @@ class ApiRequestHandler extends RequestHandler
                         ), $expires - $now);
                     }
                 }
+                
+                // send error alert
+                if ($curlInfo['http_code'] >= 500 AND $Endpoint->AlertOnError) {
+                    static::sendAdminNotification($Endpoint, 'endpointError', array(
+                        'LoggedRequest' => $LoggedRequest
+                        ,'responseHeaders' => $responseHeaders
+                        ,'responseBody' => $responseBody
+                    ), "endpoints/$Endpoint->ID/error-notification-sent");
+                }
 			}
 		));
 	}
 
-	static public function throwKeyError(Endpoint $Endpoint, $error)
+	static protected function throwKeyError(Endpoint $Endpoint, $error)
 	{
 		header('HTTP/1.0 401 Unauthorized');
 		header('WWW-Authenticate: GateKeeper-Key endpoint="'.$Endpoint->Handle.'"');
 		JSON::error($error);
 	}
 
-	static public function throwRateError($retryAfter = null, $error = 'Rate limit exceeded')
+	static protected function throwRateError($retryAfter = null, $error = 'Rate limit exceeded')
 	{
 		header('HTTP/1.1 429 Too Many Requests');
 
@@ -212,4 +231,20 @@ class ApiRequestHandler extends RequestHandler
 
 		JSON::error($error);
 	}
+    
+    static protected function sendAdminNotification(Endpoint $Endpoint, $templateName, $data, $throttleKey = null, $throttleTime = 60)
+    {
+        // send notification email to staff
+        if (!$throttleKey || !Cache::fetch($throttleKey)) {
+            $data['Endpoint'] = $Endpoint;
+            
+            if ($emailTo = $Endpoint->getNotificationEmailRecipient()) {
+                \Emergence\Mailer\Mailer::sendFromTemplate($emailTo, $templateName, $data);
+            }
+            
+            if ($throttleKey) {
+                Cache::store($throttleKey, true, $throttleTime);
+            }
+        }
+    }
 }

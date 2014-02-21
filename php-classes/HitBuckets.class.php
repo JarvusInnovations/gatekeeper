@@ -10,7 +10,7 @@ class HitBuckets
 	 *    bucket does not exist. It should return an array containing the keys 
 	 *    'seconds' and 'hits' defining the parameters of the next bucket
 	 *
-	 * @return boolean|integer False if bucket has been filled or number of seconds until new bucket will be available
+	 * @return int[] Array containing # of hits and seconds remaining
 	 */
 	static public function drip($bucketKey, callable $getBucketLimits)
 	{
@@ -27,10 +27,8 @@ class HitBuckets
 			Cache::store($cacheKey, $bucketStamp);
 		}
 		
-		if (0 <= Cache::decrease("$cacheKey/$bucketStamp")) {
-			return false;
-		} else {
-			return $bucketStamp - $now; 
-		}
+        $hitsRemaining = Cache::decrease("$cacheKey/$bucketStamp");
+
+		return array('hits' => $hitsRemaining, 'seconds' => $bucketStamp - $now);
 	}
 }
