@@ -24,7 +24,7 @@
 
 			{field name=ExpirationDate label='Expiration Date' type=date default=tif($Ban->ExpirationDate, date('Y-m-d', $Ban->ExpirationDate)) hint="Leave blank if none"}
 
-			{checkbox name=AllEndpoints value=1 unsetValue=0 label='Allow all endpoints?' default=$Key->AllEndpoints}
+			{checkbox name=AllEndpoints value=1 unsetValue=0 label='Allow all endpoints?' default=$Key->AllEndpoints hint="Uncheck this option to allow more fine-grained access control to endpoints on the key page."}
 
 			<div class="submit-area">
 				<input type="submit" class="button submit" value="{tif $Key->isPhantom ? Create : Update} Key">

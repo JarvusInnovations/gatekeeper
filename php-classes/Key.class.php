@@ -84,6 +84,15 @@ class Key extends ActiveRecord
 		
 		return $this->finishValidation();
 	}
+    
+    public function getUnlinkedEndpoints()
+    {
+        $currentEndpoints = array_map(function($Endpoint) {
+            return $Endpoint->ID;
+        }, $this->Endpoints);
+
+        return count($currentEndpoints) ? Endpoint::getAllByWhere('ID NOT IN ('.implode(',', $currentEndpoints).')') : Endpoint::getAll();
+    }
 	
 	public static function generateUniqueKey()
 	{

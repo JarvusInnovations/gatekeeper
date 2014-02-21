@@ -5,13 +5,47 @@
 {block content}
 	{$Key = $data}
 
-	<h2>Key: {apiKey $Key}</h2>
+    <header class="page-header">
+		<a class="button pull-right" href="/keys/{$Key->Key}/edit">Edit Key</a>
+    	<h2 class="page-title">Key: {apiKey $Key}</h2>
+    </header>
 
-	<section id="key-log">
+    <section class="page-section" id="key-endpoints">
+        <h3>Permitted Endpoints</h3>
 
+        {if $Key->AllEndpoints}
+            <ul>
+                <li>This key can access <strong>all endpoints</strong>.</li>
+                <li><a href="/keys/{$Key->Key}/edit">Edit this key</a> to restrict access to an explicit list of endpoints here.</li>
+            </ul>
+        {else}
+            <ul>
+                {foreach item=Endpoint from=$Key->Endpoints}
+                    <li>{endpoint $Endpoint}&nbsp;<a href="/keys/{$Key->Key}/endpoints/{$Endpoint->ID}/remove" class="button destructive tiny">Remove</a></li>
+                {foreachelse}
+                    <li><em>No endpoints added yet</em></li>
+                {/foreach}
+                {$unlinkedEndpoints = $Key->getUnlinkedEndpoints()}
+                {if count($unlinkedEndpoints)}
+                    <li>
+                        <form action="/keys/{$Key->Key}/endpoints" method="POST">
+                            <select name="EndpointID" class="field-control inline">
+                                <option value="">Select endpoint</option>
+                                {foreach item=Endpoint from=$unlinkedEndpoints}
+                                    <option value="{$Endpoint->ID}">{$Endpoint->Title|escape} v{$Endpoint->Version|escape}</option>
+                                {/foreach}
+                            </select>
+                            <input type="submit" value="Add">
+                        </form>
+                    </li>
+                {/if}
+            </ul>
+        {/if}
+    </section>
+
+	<section class="page-section" id="key-log">
 		<table>
 			<caption>
-				<a class="button pull-right" href="/keys/{$Key->Key}/edit">Edit Key</a>
 				<h3>Request Log <small>(Last 30)</small></h3>
 			</caption>
 			<thead>
