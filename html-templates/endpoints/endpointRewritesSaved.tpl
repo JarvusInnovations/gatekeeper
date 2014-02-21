@@ -46,5 +46,5 @@
         </form>
     {/if}
 
-	<a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">&larr; Return to endpoint</a>
+	<a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">&larr;&nbsp;Back to {$Endpoint->Title}</a>
 {/block}

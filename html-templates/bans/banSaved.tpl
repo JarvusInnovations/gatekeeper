@@ -5,7 +5,13 @@
 {block "content"}
 	{$Ban = $data}
 	
-	<p class="lead">Ban on {if $Ban->IP}IP Address: <strong>{$Ban->IP|long2ip}</strong>{else}Key: {apiKey $Ban->Key}{/if} {tif $Ban->isNew ? created : saved}.</p>
+	<p class="lead">
+	    Ban on
+	    {if $Ban->IP}IP Address: <strong>{$Ban->IP|long2ip}</strong>
+	    {else}Key: {apiKey $Ban->Key}
+	    {/if}
+	    {tif $Ban->isNew ? created : saved}.
+    </p>
 
-	<p><a href="/bans">Browse all bans</a></p>
+	<p><a href="/bans">&larr;&nbsp;Browse all bans</a></p>
 {/block}

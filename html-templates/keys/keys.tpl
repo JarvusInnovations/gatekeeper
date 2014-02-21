@@ -4,10 +4,12 @@
 
 {block content}
 
-	<h2>Keys</h2>
+	<header class="page-header">
+		<a class="button primary pull-right" href="/keys/create">Create Key</a>
+    	<h2 class="page-title">Keys</h2>
+	</header>
 
 	<form method="GET">
-		<a class="button pull-right" href="/keys/create">Create Key</a>
 		<label>
 			Sort by
 			<select name="sort" onchange="this.form.submit()">

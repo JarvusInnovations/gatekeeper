@@ -6,6 +6,10 @@
 	{$Ban = $data}
 	{$errors = $Ban->validationErrors}
 	
+	<header class="page-header">
+        <h2 class="page-title">{if $Ban->isPhantom}New Ban{else}Edit Ban{/if}</h2>
+	</header>
+	
 	<form method="POST" class="register-form">
 		{if $errors}
 			<div class="notify error">

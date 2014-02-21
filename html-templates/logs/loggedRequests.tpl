@@ -5,8 +5,10 @@
 {block content}
 {load_templates subtemplates/paging.tpl}
     
-    <h2>Logged Requests</h2>
-
+    <header class="page-header">
+        <h2 class="page-title">Logged Requests {if $Endpoint}for {endpoint $Endpoint}{/if}</h2>
+    </header>
+    
     {capture assign=pagingHtml}
 	    {if $limit}{pagingLinks $total pageSize=$limit showAll=true}{/if}
     {/capture}

@@ -4,10 +4,12 @@
 
 {block content}
 
-	<h2>Endpoints</h2>
+	<header class="page-header">
+    	<a class="button primary pull-right" href="/endpoints/create">Create Endpoint</a>
+    	<h2 class="page-title">Endpoints</h2>
+	</header>
 
 	<form method="GET">
-    	<a class="button pull-right" href="/endpoints/create">Add Endpoint</a>
 		<label>
 			Sort by
 			<select name="sort" onchange="this.form.submit()">

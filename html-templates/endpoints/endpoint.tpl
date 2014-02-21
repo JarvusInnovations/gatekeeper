@@ -5,9 +5,9 @@
 {block content}
 	{$Endpoint = $data}
 
-	<header class="clearfix">
+	<header class="page-header">
     	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>			
-	    <h2>Endpoint: {endpoint $Endpoint}</h2>
+	    <h2 class="page-title">Endpoint: {endpoint $Endpoint}</h2>
 	</header>
 
 	<section class="page-section" id="endpoint-docs">
@@ -120,6 +120,6 @@
 			{/foreach}
 			</tbody>
 		</table>
-        <a class="button" href="/logs?endpoint={$Endpoint->Handle}">View Full Log</a>
+        <a class="button" href="/logs?endpoint={$Endpoint->Handle}">View Full Log &rarr;</a>
 	</section>
 {/block}

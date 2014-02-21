@@ -4,10 +4,12 @@
 
 {block content}
 
-	<h2>Bans</h2>
+	<header class="page-header">
+		<a class="button primary pull-right" href="/bans/create">Create Ban</a>
+	    <h2 class="page-title">Bans</h2>
+	</header>
 
 	<form method="GET">
-		<a class="button pull-right" href="/bans/create">Create Ban</a>
 		<label>
 			Sort by
 			<select name="sort" onchange="this.form.submit()">
@@ -40,7 +42,7 @@
 			    </div>
 				<footer>
 					<a class="button" href="/bans/{$Ban->ID}/edit">Edit</a>
-					<a class="button" href="/bans/{$Ban->ID}/delete">Remove</a>
+					<a class="button destructive" href="/bans/{$Ban->ID}/delete">Remove</a>
 				</footer>
 			</article>
 		{/foreach}

@@ -6,6 +6,10 @@
 	{$Endpoint = $data}
 	{$errors = $Endpoint->validationErrors}
     {load_templates subtemplates/rateFields.tpl}
+    
+    <header class="page-header">
+        <h2 class="page-title">{if $Endpoint->isPhantom}New Endpoint{else}Edit {endpoint $Endpoint}{/if}</h2>
+    </header>
 
 	<form method="POST" class="register-form">
 		{if $errors}

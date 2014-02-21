@@ -23,6 +23,7 @@ class LogsRequestHandler extends RecordsRequestHandler
             }
             
 			$conditions['EndpointID'] = $Endpoint->ID;
+            $responseData['Endpoint'] = $Endpoint;
 		}
 		
         return parent::handleBrowseRequest($options, $conditions, $responseID, $responseData);

@@ -6,6 +6,10 @@
 	{$Key = $data}
 	{$errors = $Key->validationErrors}
 	
+	<header class="page-header">
+        <h2 class="page-title">{if $Key->isPhantom}New Key{else}Edit Key {apiKey $Key}{/if}</h2>	    
+	</header>
+	
 	<form method="POST" class="register-form">
 		{if $errors}
 			<div class="notify error">
