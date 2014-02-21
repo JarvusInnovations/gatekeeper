@@ -43,7 +43,7 @@
     				</tr>
                 {foreachelse}
         			<tr>
-    					<td colspan="5" class="col-empty-text">No requests logged yet.</td>
+    					<td colspan="5" class="col-empty-text">No responses cached right now.</td>
     				</tr>
                 {/foreach}
             </tbody>
