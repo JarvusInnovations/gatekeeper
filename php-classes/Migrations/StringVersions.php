@@ -1,6 +1,10 @@
 <?php
 
-class Migrations_StringVersions extends AbstractMigration
+namespace Migrations;
+
+use Endpoint;
+
+class StringVersions extends AbstractMigration
 {
     static public function upgrade()
     {
