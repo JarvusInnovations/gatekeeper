@@ -34,7 +34,6 @@ class EndpointRewrite extends ActiveRecord
 		
 		$this->_validator->validate(array(
 			'field' => 'Pattern'
-            ,'required' => false
 			,'validator' => 'regexp'
             ,'regexp' => '/^(.).+\1[a-zA-Z]*$/'
             ,'errorMessage' => 'Pattern must include matching delimiters'

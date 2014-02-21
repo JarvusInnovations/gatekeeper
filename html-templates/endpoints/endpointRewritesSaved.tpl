@@ -22,11 +22,12 @@
     
     			<tbody>
                     {foreach item=Rewrite from=$invalid}
+                        {$rewriteKey = tif($Rewrite->isPhantom ? 'new' : $Rewrite->ID)}
             			<tr>
-        					<td class="col-priority">{field name="rewrites[$Rewrite->ID][Priority]" default=$Rewrite->Priority}</td>
-        					<td class="col-pattern">{field name="rewrites[$Rewrite->ID][Pattern]" default=$Rewrite->Pattern}</td>
-        					<td class="col-replace">{field name="rewrites[$Rewrite->ID][Replace]" default=$Rewrite->Replace}</td>
-        					<td class="col-last">{checkbox name="rewrites[$Rewrite->ID][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
+        					<td class="col-priority">{field name="rewrites[$rewriteKey][Priority]" default=$Rewrite->Priority}</td>
+        					<td class="col-pattern">{field name="rewrites[$rewriteKey][Pattern]" default=$Rewrite->Pattern}</td>
+        					<td class="col-replace">{field name="rewrites[$rewriteKey][Replace]" default=$Rewrite->Replace}</td>
+        					<td class="col-last">{checkbox name="rewrites[$rewriteKey][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
         				</tr>
                         <tr>
                             <td>&nbsp;</td>
