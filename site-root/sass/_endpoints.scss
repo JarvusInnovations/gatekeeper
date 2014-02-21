@@ -104,3 +104,24 @@
 .col-key {
     width: 1%;
 }
+
+.col-priority {
+    text-align: right;
+    width: 10%;
+}
+
+.col-last {
+    text-align: center;
+    width: 1%;
+
+    input {
+        float: none;
+    }
+}
+
+.col-pattern,
+.col-replace {
+    > .field {
+        font-family: $mono-font;
+    }
+}

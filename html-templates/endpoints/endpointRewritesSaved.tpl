@@ -6,7 +6,7 @@
 	<p class="lead"><strong>{$saved|count}</strong> rewrite{tif count($saved) != 1 ? 's'} saved, <strong>{$deleted|count}</strong> rewrite{tif count($deleted) != 1 ? 's'} deleted, <strong>{$invalid|count}</strong> rewrite{tif count($invalid) != 1 ? 's'} invalid.</p>
 
     {if count($invalid)}
-        <form id="endpoint-rewrites" method="POST">
+        <form class="page-section" id="endpoint-rewrites" method="POST">
             <table>
         		<caption>
     				<h3>Unsaved rewrites</h3>
@@ -29,8 +29,9 @@
         					<td class="col-last">{checkbox name="rewrites[$Rewrite->ID][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
         				</tr>
                         <tr>
-                            <td colspan="4" class="errors">
-                                <ul>
+                            <td>&nbsp;</td>
+                            <td colspan="3">
+                                <ul class="errors">
                                 {foreach item=error from=$Rewrite->validationErrors}
                                     <li>{$error|escape}</li>
                                 {/foreach}
@@ -40,9 +41,9 @@
                     {/foreach}
                 </tbody>
             </table>
-            <input type="submit" value="Save rewrites">
+            <input type="submit" value="Save Rewrites">
         </form>
     {/if}
 
-	<p><a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">Return to endpoint</a></p>
+	<a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">&larr; Return to endpoint</a>
 {/block}

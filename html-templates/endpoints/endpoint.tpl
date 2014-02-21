@@ -10,13 +10,13 @@
 	    <h2>Endpoint: {endpoint $Endpoint}</h2>
 	</header>
 
-	<section id="endpoint-docs">
+	<section class="page-section" id="endpoint-docs">
 		<h3>Documentation</h3>
 
 		<p class="muted"><em>Not yet implemented. Either <a href="https://github.com/mashery/iodocs">I/O Docs</a> or <a href="https://github.com/wordnik/swagger-ui">Swagger</a> will be integrated in the future to allow JSON-defined documentation to be entered here.</em></p>
 	</section>
 
-    <form id="endpoint-rewrites" action="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/rewrites" method="POST">
+    <form class="page-section" id="endpoint-rewrites" action="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/rewrites" method="POST">
         <table>
 			<caption>
 				<h3>Rewrite Rules</h3>
@@ -47,11 +47,11 @@
 				</tr>
             </tbody>
         </table>
-        <input type="submit" value="Save rewrites">
+        <input type="submit" value="Save Rewrites">
     </form>
 
     {if $Endpoint->CachingEnabled}
-	<section id="endpoint-cache">
+	<section class="page-section" id="endpoint-cache">
     	<table>
 			<caption>
 				<h3>Cached Responses</h3>
@@ -85,7 +85,7 @@
 	</section>
     {/if}
 
-	<section id="endpoint-log">
+	<section class="page-section" id="endpoint-log">
 		<table>
 			<caption>
 				<h3>Request Log <small>(Last 30)</small></h3>
