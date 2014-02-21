@@ -1,6 +1,6 @@
 <?php
 
-header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 10)); // strtotime('2014-02-22')
+header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 30));
 
 JSON::respond(array(
     'success' => true,
