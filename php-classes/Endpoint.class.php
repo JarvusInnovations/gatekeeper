@@ -70,6 +70,7 @@ class Endpoint extends ActiveRecord
 		'Rewrites' => array(
 			'type' => 'one-many'
 			,'class' => 'EndpointRewrite'
+            ,'order' => 'Priority'
 		)
 	);
     

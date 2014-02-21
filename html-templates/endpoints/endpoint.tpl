@@ -16,6 +16,40 @@
 		<p class="muted"><em>Not yet implemented. Either <a href="https://github.com/mashery/iodocs">I/O Docs</a> or <a href="https://github.com/wordnik/swagger-ui">Swagger</a> will be integrated in the future to allow JSON-defined documentation to be entered here.</em></p>
 	</section>
 
+    <form id="endpoint-rewrites" action="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/rewrites" method="POST">
+        <table>
+			<caption>
+				<h3>Rewrite Rules</h3>
+			</caption>
+			<thead>
+				<tr>
+					<th class="col-priority">Priority</th>
+					<th class="col-pattern">Pattern</th>
+					<th class="col-replace">Replace</th>
+					<th class="col-last">Last?</th>
+				</tr>
+			</thead>
+
+			<tbody>
+                {foreach item=Rewrite from=$Endpoint->Rewrites}
+        			<tr>
+    					<td class="col-priority">{field name="rewrites[$Rewrite->ID][Priority]" default=$Rewrite->Priority}</td>
+    					<td class="col-pattern">{field name="rewrites[$Rewrite->ID][Pattern]" default=$Rewrite->Pattern}</td>
+    					<td class="col-replace">{field name="rewrites[$Rewrite->ID][Replace]" default=$Rewrite->Replace}</td>
+    					<td class="col-last">{checkbox name="rewrites[$Rewrite->ID][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
+    				</tr>
+                {/foreach}
+        		<tr>
+					<td class="col-priority">{field name="rewrites[new][Priority]" placeholder=EndpointRewrite::getFieldOptions(Priority, default)}</td>
+					<td class="col-pattern">{field name="rewrites[new][Pattern]" placeholder="|^/routes/([^/]+)|i"}</td>
+					<td class="col-replace">{field name="rewrites[new][Replace]" placeholder="/?route=\$1"}</td>
+					<td class="col-last">{checkbox name="rewrites[new][Last]" value=1 unsetValue=0}</td>
+				</tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Save rewrites">
+    </form>
+
     {if $Endpoint->CachingEnabled}
 	<section id="endpoint-cache">
     	<table>

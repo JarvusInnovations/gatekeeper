@@ -99,7 +99,29 @@ class ApiRequestHandler extends RequestHandler
 		// configure and execute internal API call
 		$urlPrefix = rtrim($Endpoint->InternalEndpoint, '/');
 		$path = '/' . implode('/', static::getPath());
+        $url = $path . '?' . $_SERVER['QUERY_STRING'];
         
+        
+        // apply rewrite rules
+        foreach ($Endpoint->Rewrites AS $Rewrite) {
+            if (preg_match($Rewrite->Pattern, $url)) {
+                $url = preg_replace($Rewrite->Pattern, $Rewrite->Replace, $url);
+                
+                if ($Rewrite->Last) {
+                    break;
+                }
+            }
+        }
+
+
+        // normalize URL after rewrite
+        $url = rtrim($url, '?&');
+
+        if (substr_count($url, '?') > 1) {
+            $url[strrpos($url, '?')] = '&';
+        }
+
+
         // TODO: migrate caching implementation to HttpProxy and include headers in cache
         if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint>CachingEnabled) {
             $cacheKey = "response:$Endpoint->ID:$path?$_SERVER[QUERY_STRING]";
@@ -120,11 +142,13 @@ class ApiRequestHandler extends RequestHandler
 
 		HttpProxy::relayRequest(array(
 			'autoAppend' => false
-			,'url' => $urlPrefix . $path
+            ,'autoQuery' => false
+			,'url' => $urlPrefix . $url
 			,'interface' => static::$sourceInterface
             ,'afterResponseSync' => true
-			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $path, $cacheKey) {
+			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $url, $cacheKey) {
 				$curlInfo = curl_getinfo($ch);
+                list($path, $query) = explode('?', $url);
 
 				// log request to database
 				LoggedRequest::create(array(
@@ -133,7 +157,7 @@ class ApiRequestHandler extends RequestHandler
 					,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
 					,'Method' => $_SERVER['REQUEST_METHOD']
 					,'Path' => $path
-					,'Query' => $_SERVER['QUERY_STRING']
+					,'Query' => $query
 					,'ResponseTime' => $curlInfo['starttransfer_time'] * 1000
 					,'ResponseCode' => $curlInfo['http_code']
 					,'ResponseBytes' => $curlInfo['size_download']
@@ -159,7 +183,7 @@ class ApiRequestHandler extends RequestHandler
                         
                         Cache::store($cacheKey, array(
                             'path' => $path
-                            ,'query' => $_SERVER['QUERY_STRING']
+                            ,'query' => $query
                             ,'expires' => $expires
                             ,'headers' => $cachableHeaders
                             ,'body' => $responseBody
