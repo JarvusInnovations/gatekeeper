@@ -14,11 +14,19 @@
     		{$suffix}
     	</a>
     {elseif is_a($Context, 'Ban')}
-    	<a href="/bans/{$Context->Handle}" class="{$class}">{$prefix}Ban: {$Context->Title|escape}{$suffix}</a>
+    	<a href="/bans/{$Context->Handle}" class="{$class}">
+            {$prefix}Ban #{$Context->ID}
+            &mdash;
+            {if $Context->IP}
+                IP Address: <strong>{$Context->IP|long2ip}</strong>
+    		{else}
+    			Key: <strong>{$Context->Key->OwnerName|escape} <small class="muted key-string">{$Context->Key->Key}</small></strong>
+    		{/if}{$suffix}
+        </a>
     {elseif is_a($Context, 'Key')}
-        {apiKey $Context}
+        {$prefix}{apiKey $Context}
     {elseif is_a($Context, 'Endpoint')}
-        {endpoint $Context}
+        {$prefix}{endpoint $Context}
     {else}
     	<a href="/{Router::getClassPath($Context)}/{tif $Context->Handle ? $Context->Handle : $Context->ID}" class="{$class}">{$Context->Title|escape}</a>
     {/if}
