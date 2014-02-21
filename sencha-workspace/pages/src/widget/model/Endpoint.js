@@ -9,7 +9,7 @@ Ext.define('Site.widget.model.Endpoint', {
     collectionTitleTpl: 'Endpoints',
 
     tpl: [
-        '<a href="/endpoints/{Handle}" class="link-model link-endpoint">',
+        '<a href="/endpoints/{Handle}/v{Version}" class="link-model link-endpoint">',
             '<strong class="result-title">{Title:htmlEncode}</strong> ',
             '<span class="result-info">/api/{Handle}/v{Version}</strong>',
         '</a>'
