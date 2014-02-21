@@ -1,10 +1,15 @@
-@import 'base';
-@import 'buttons';
-@import 'forms';
-@import 'paging';
-@import 'tables';
+// declare custom variables here
+// before the defaults are imported below
+// e.g. $base-color: red;
 
-@import 'endpoints';
-@import 'keys';
+@import 'variables'; // bring in default variables (will be overridden by any declarations above
+@import 'compass';   // bring in compass for useful functions, mixins, etc.
+
+@import 'modules';   // bring in skeleton's default module styles
+                     // you can also omit this line and import only the modules you need
+                     // e.g. @import 'buttons';
+
+// write (or import, to stay tidy) site-specific code below
 @import 'bans';
-// @import 'prettify'; // code highlighting
+@import 'keys';
+@import 'endpoints';
