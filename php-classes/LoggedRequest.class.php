@@ -21,7 +21,7 @@ class LoggedRequest extends ActiveRecord
 		,'ClientIP' => 'uint'
 		,'Method'
 		,'Path'
-		,'Query'
+		,'Query' => 'clob'
 		,'ResponseTime' => array(
 			'type' => 'mediumint'
 			,'unsigned' => true
