@@ -11,5 +11,6 @@ Git::$repositories['GateKeeper'] = array(
 		,'php-config'
     	,'site-root'
     	,'sencha-workspace'
+        ,'dwoo-plugins'
 	)
 );
