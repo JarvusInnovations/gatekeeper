@@ -1903,46 +1903,126 @@ textarea[name=Notes] {
 }
 
 /* line 92, ../sass/_endpoints.scss */
+.col-options {
+  display: inline;
+  margin: 0 0 0 .5em;
+  padding: 0;
+}
+
+/* line 98, ../sass/_endpoints.scss */
+.col-option {
+  background: no-repeat center;
+  -webkit-background-size: 16px;
+  -moz-background-size: 16px;
+  -o-background-size: 16px;
+  background-size: 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 16px;
+  overflow: hidden;
+  text-indent: 100%;
+  vertical-align: -.2em;
+  white-space: nowrap;
+  width: 16px;
+  image-rendering: optimizeSpeed;
+  /* Legal fallback                 */
+  image-rendering: -moz-crisp-edges;
+  /* Firefox                        */
+  image-rendering: -o-crisp-edges;
+  /* Opera                          */
+  image-rendering: -webkit-optimize-contrast;
+  /* Chrome (and eventually Safari) */
+  image-rendering: crisp-edges;
+  /* CSS3 Proposed                  */
+  -ms-interpolation-mode: bicubic;
+  /* IE8+                           */
+}
+/* line 120, ../sass/_endpoints.scss */
+.col-option:hover, .col-option:focus {
+  border-color: rgba(51, 51, 51, 0.2);
+}
+/* line 125, ../sass/_endpoints.scss */
+.col-option:active, .col-option.selected {
+  background-color: rgba(51, 51, 51, 0.1);
+  border-color: rgba(51, 51, 51, 0.2);
+}
+/* line 130, ../sass/_endpoints.scss */
+.col-option.query-inline {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAAnRSTlMAAQGU/a4AAAAdSURBVHgBY/gPBOQSH5gZ+JkYgAC7LAMPkiyZBACMNXGiAa+NPgAAAABJRU5ErkJggg==');
+}
+/* line 134, ../sass/_endpoints.scss */
+.col-option.query-list {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAAnRSTlMAAQGU/a4AAAAjSURBVHgBY/gPBLiJzwz2YAKXLD+YwCXLACZwyDJDCfwuAABPB3HRvu3UngAAAABJRU5ErkJggg==');
+}
+
+/* line 139, ../sass/_endpoints.scss */
 .col-request {
   -ms-word-break: break-all;
   word-break: break-all;
   word-break: break-word;
 }
 
-/* line 96, ../sass/_endpoints.scss */
+/* line 143, ../sass/_endpoints.scss */
 .col-response-code {
   text-align: center;
 }
 
-/* line 101, ../sass/_endpoints.scss */
+/* line 148, ../sass/_endpoints.scss */
 .col-response-time,
 .col-response-size {
   text-align: right;
 }
 
-/* line 105, ../sass/_endpoints.scss */
+/* line 152, ../sass/_endpoints.scss */
 .col-key {
   width: 1%;
 }
 
-/* line 109, ../sass/_endpoints.scss */
+/* line 156, ../sass/_endpoints.scss */
 .col-priority {
   text-align: right;
   width: 10%;
 }
 
-/* line 114, ../sass/_endpoints.scss */
+/* line 161, ../sass/_endpoints.scss */
 .col-last {
   text-align: center;
   width: 1%;
 }
-/* line 118, ../sass/_endpoints.scss */
+/* line 165, ../sass/_endpoints.scss */
 .col-last input {
   float: none;
 }
 
-/* line 125, ../sass/_endpoints.scss */
+/* line 172, ../sass/_endpoints.scss */
 .col-pattern > .field,
 .col-replace > .field {
   font-family: Consolas, monospace;
+}
+
+/* line 177, ../sass/_endpoints.scss */
+.query-pair {
+  color: #959390;
+  display: inline-block;
+  margin-right: .4em;
+}
+/* line 182, ../sass/_endpoints.scss */
+.query-expand .query-pair {
+  display: list-item;
+  list-style: square;
+  margin-left: 1.25em;
+}
+
+/* line 189, ../sass/_endpoints.scss */
+.query-key {
+  color: #8f4f9e;
+  display: inline-block;
+}
+
+/* line 194, ../sass/_endpoints.scss */
+.query-value {
+  color: #4f9e67;
+  display: inline-block;
+  font-weight: normal;
 }

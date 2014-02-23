@@ -89,6 +89,53 @@
 
 // tables
 
+.col-options {
+    display: inline;
+    margin: 0 0 0 .5em;
+    padding: 0;
+}
+
+.col-option {
+    background: no-repeat center;
+    @include background-size(16px);
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 100%;
+    vertical-align: -.2em;
+    white-space: nowrap;
+    width: 16px;
+    
+    // gimme crisp pixels
+    image-rendering:optimizeSpeed;              /* Legal fallback                 */
+    image-rendering:-moz-crisp-edges;           /* Firefox                        */
+    image-rendering:-o-crisp-edges;             /* Opera                          */
+    image-rendering:-webkit-optimize-contrast;  /* Chrome (and eventually Safari) */
+    image-rendering:crisp-edges;                /* CSS3 Proposed                  */
+    -ms-interpolation-mode:bicubic;             /* IE8+                           */
+    
+    &:hover,
+    &:focus {
+        border-color: rgba($text-color, .2);
+    }
+    
+    &:active,
+    &.selected {
+        background-color: rgba($text-color, .1);
+        border-color: rgba($text-color, .2);
+    }
+
+    &.query-inline {
+        background-image: inline-image('query-inline.png');
+    }
+
+    &.query-list {
+        background-image: inline-image('query-list.png');
+    }
+}
+
 .col-request {
     @include word-break(break-all);
 }
@@ -125,4 +172,27 @@
     > .field {
         font-family: $mono-font;
     }
+}
+
+.query-pair {
+    color: $muted-color;
+    display: inline-block;
+    margin-right: .4em;
+
+    .query-expand & {
+        display: list-item;
+        list-style: square;
+        margin-left: 1.25em;
+    }
+}
+
+.query-key {
+    color: adjust-color($accent-color, $hue: 75, $saturation: 15);
+    display: inline-block;
+}
+
+.query-value {
+    color: adjust-color($accent-color, $hue: -75, $saturation: 15);
+    display: inline-block;
+    font-weight: normal;
 }

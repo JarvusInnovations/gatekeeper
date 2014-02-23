@@ -2,6 +2,21 @@
 
 {block title}{$data->Title|escape} &mdash; Endpoints &mdash; {$dwoo.parent}{/block}
 
+{block js-bottom}
+    {$dwoo.parent}
+    <script>
+        Ext.onReady(function(){
+            var colOptions = Ext.select('.col-options');
+            
+            colOptions.on('click', function(ev, t){
+                var opt = Ext.get(t);
+                    opt.radioCls('selected');
+                    opt.up('table').toggleCls('query-expand');
+            }, null, { delegate: '.col-option' });
+        });
+    </script>
+{/block}
+
 {block content}
 	{$Endpoint = $data}
 
@@ -92,7 +107,13 @@
 			</caption>
 			<thead>
 				<tr>
-					<th class="col-request">Request</th>
+					<th class="col-request">
+					    Request
+					    <ul class="col-options">
+					        <li class="col-option query-inline selected" title="Show Query Params Inline">Inline</li>
+					        <li class="col-option query-list" title="Show Query Params as List">List</li>
+					    </ul>
+                    </th>
 					<th class="col-timestamp">Timestamp</th>
 					<th class="col-response-code"><small>Response</small> Code</th>
 					<th class="col-response-time"><small>Response</small> Time</th>

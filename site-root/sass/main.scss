@@ -2,7 +2,7 @@
 // before the defaults are imported below
 // e.g. $base-color: red;
 
-@import 'variables'; // bring in default variables (will be overridden by any declarations above
+@import 'variables'; // bring in default variables (will be overridden by any declarations above)
 @import 'compass';   // bring in compass for useful functions, mixins, etc.
 
 @import 'modules';   // bring in skeleton's default module styles
