@@ -30,7 +30,7 @@
 		<tbody>
 		{foreach item=Request from=$data}
 			<tr>
-				<td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"}</small></td>
+				<td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"|query_string}</small></td>
 				<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
 				<td class="col-response-code">{$Request->ResponseCode}</td>
 				<td class="col-response-time">{$Request->ResponseTime|number_format} ms</td>

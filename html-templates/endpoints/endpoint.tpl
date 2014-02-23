@@ -69,7 +69,7 @@
 			<tbody>
                 {foreach item=response from=$Endpoint->getCachedResponses()}
         			<tr>
-    					<td class="col-request">GET <small>{$response.value.path|escape|default:'/'}{tif $response.value.query ? "?$response.value.query"}</small></td>
+    					<td class="col-request">GET <small>{$response.value.path|escape|default:'/'}{tif $response.value.query ? "?$response.value.query"|query_string}</small></td>
     					<td class="col-created">{$response.creation_time|date_format:'%Y-%m-%d %H:%M:%S'}</td>
     					<td class="col-hits">{$response.num_hits}</td>
     					<td class="col-last-hit">{$response.access_time|date_format:'%Y-%m-%d %H:%M:%S'}</td>
@@ -105,7 +105,7 @@
 			<tbody>
 			{foreach item=Request from=LoggedRequest::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=30))}
 				<tr>
-					<td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"}</small></td>
+					<td class="col-request">{$Request->Method} <small>{$Request->Path|escape|default:/}{tif $Request->Query ? "?$Request->Query"|query_string}</small></td>
 					<td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
 					<td class="col-response-code">{$Request->ResponseCode}</td>
 					<td class="col-response-time">{$Request->ResponseTime|number_format}&nbsp;ms</td>
