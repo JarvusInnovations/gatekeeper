@@ -7,6 +7,7 @@ class ApiRequestHandler extends RequestHandler
     static public $responseMode = 'json'; // override RequestHandler::$responseMode
 
 	static public function handleRequest() {
+        $now = time();
 
 		// check required parameters
 		if (!$endpointHandle = static::shiftPath()) {
@@ -30,16 +31,17 @@ class ApiRequestHandler extends RequestHandler
 		}
 
 
-		// get endpoint record and check version
+		// get endpoint record
 		if (!$Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, substr($endpointVersion, 1))) {
-			return static::throwNotFoundError('Requested endpoint not found');
+			return static::throwNotFoundError('Requested endpoint+version not found');
 		}
 
-		$endpointVersion = substr($endpointVersion, 1);
 
-		if ($endpointVersion != $Endpoint->Version) {
-			return static::throwNotFoundError('Requested endpoint version not available');
-		}
+        // check if endpoint is deprecated
+        if ($Endpoint->DeprecationDate && $Endpoint->DeprecationDate < $now) {
+    		header('HTTP/1.1 410 Gone');
+            JSON::error('This endpoint+version has been deprecated');
+        }
 
 
 		// verify key if required
@@ -54,7 +56,7 @@ class ApiRequestHandler extends RequestHandler
 				return static::throwKeyError($Endpoint, 'gatekeeper key required for this endpoint');
 			} elseif(!$Key = Key::getByKey($keyString)) {
 				return static::throwKeyError($Endpoint, 'gatekeeper key invalid');
-			} elseif($Key->ExpirationDate && $Key->ExpirationDate < time()) {
+			} elseif($Key->ExpirationDate && $Key->ExpirationDate < $now) {
     			return static::throwKeyError($Endpoint, 'gatekeeper key valid but expired');
 			} elseif(!$Key->canAccessEndpoint($Endpoint)) {
 				return static::throwKeyError($Endpoint, 'gatekeeper key valid but does not permit this endpoint');
@@ -132,7 +134,7 @@ class ApiRequestHandler extends RequestHandler
             $cacheKey = "response:$Endpoint->ID:$path?$_SERVER[QUERY_STRING]";
             
             if ($cachedResponse = Cache::fetch($cacheKey)) {
-                if ($cachedResponse['expires'] < time()) {
+                if ($cachedResponse['expires'] < $now) {
                     Cache::delete($cacheKey);
                     $cachedResponse = false;
                 } else {
@@ -151,7 +153,7 @@ class ApiRequestHandler extends RequestHandler
 			,'url' => $urlPrefix . $url
 			,'interface' => static::$sourceInterface
             ,'afterResponseSync' => true
-			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $url, $cacheKey) {
+			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $url, $cacheKey, $now) {
 				$curlInfo = curl_getinfo($ch);
                 list($path, $query) = explode('?', $url);
 
@@ -171,7 +173,6 @@ class ApiRequestHandler extends RequestHandler
                 // cache request
                 if (!empty($responseHeaders['Expires']) && $cacheKey) {
                     $expires = strtotime($responseHeaders['Expires']);
-                    $now = time();
 
                     if ($expires > $now) {
                         $cachableHeaders = array();
