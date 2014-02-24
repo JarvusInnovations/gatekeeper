@@ -3,6 +3,8 @@
 class ApiRequestHandler extends RequestHandler
 {
     static public $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
+    
+    static public $responseMode = 'json'; // override RequestHandler::$responseMode
 
 	static public function handleRequest() {
 
