@@ -253,4 +253,33 @@ class Endpoint extends ActiveRecord
         
         return $email;
     }
+    
+    public function applyRewrites($url)
+    {
+        $cacheKey = "endpoints/$this->ID/rewrites";
+
+        // get ordered list of rewrites
+        if (false == ($rewriteIDs = Cache::fetch($cacheKey))) {
+            $rewriteIDs = array_map(function($Rewrite) {
+                return $Rewrite->ID;
+            }, $this->Rewrites);
+            
+            Cache::store($cacheKey, $rewriteIDs);
+        }
+        
+        // apply each rewrite
+        foreach ($rewriteIDs AS $rewriteID) {
+            $Rewrite = EndpointRewrite::getByID($rewriteID);
+
+            if (preg_match($Rewrite->Pattern, $url)) {
+                $url = preg_replace($Rewrite->Pattern, $Rewrite->Replace, $url);
+                
+                if ($Rewrite->Last) {
+                    break;
+                }
+            }
+        }
+        
+        return $url;
+    }
 }

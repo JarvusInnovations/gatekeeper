@@ -116,15 +116,7 @@ class ApiRequestHandler extends RequestHandler
         
         
         // apply rewrite rules
-        foreach ($Endpoint->Rewrites AS $Rewrite) {
-            if (preg_match($Rewrite->Pattern, $url)) {
-                $url = preg_replace($Rewrite->Pattern, $Rewrite->Replace, $url);
-                
-                if ($Rewrite->Last) {
-                    break;
-                }
-            }
-        }
+        $url = $Endpoint->applyRewrites($url);
 
 
         // normalize URL after rewrite
