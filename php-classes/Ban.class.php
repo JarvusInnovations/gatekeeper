@@ -52,7 +52,7 @@ class Ban extends ActiveRecord
 
         $this->_validator->validate(array(
         	'field' => 'ExpirationDate'
-			,'validator' => 'datetime'
+			,'validator' => 'date_ymd'
 			,'required' => false
 		));
 
