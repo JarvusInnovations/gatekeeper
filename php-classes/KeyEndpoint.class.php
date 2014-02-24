@@ -33,4 +33,19 @@ class KeyEndpoint extends ActiveRecord
 		
 		return $this->finishValidation();
 	}
+
+    public function save($deep = true)
+	{
+		parent::save($deep);
+
+		if (($this->isUpdated || $this->isNew) && $this->KeyID) {
+			Cache::delete("keys/$this->KeyID/endpoints");
+		}
+	}
+
+    public function destroy()
+	{
+		$success = parent::destroy();
+		Cache::delete("keys/$this->KeyID/endpoints");
+	}
 }

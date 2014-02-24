@@ -52,8 +52,9 @@ class ApiRequestHandler extends RequestHandler
 				return static::throwKeyError($Endpoint, 'gatekeeper key required for this endpoint');
 			} elseif(!$Key = Key::getByKey($keyString)) {
 				return static::throwKeyError($Endpoint, 'gatekeeper key invalid');
-			} elseif(!$Key->AllEndpoints) {
-				// TODO: check explicit endpoints list
+			} elseif($Key->ExpirationDate && $Key->ExpirationDate < time()) {
+    			return static::throwKeyError($Endpoint, 'gatekeeper key valid but expired');
+			} elseif(!$Key->canAccessEndpoint($Endpoint)) {
 				return static::throwKeyError($Endpoint, 'gatekeeper key valid but does not permit this endpoint');
 			}
 

@@ -94,16 +94,6 @@ class Key extends ActiveRecord
         return count($currentEndpoints) ? Endpoint::getAllByWhere('ID NOT IN ('.implode(',', $currentEndpoints).')') : Endpoint::getAll();
     }
 	
-	public static function generateUniqueKey()
-	{
-		do {
-			$key = md5(mt_rand(0, mt_getrandmax()));
-		}
-		while (static::getByKey($key));
-		
-		return $key;
-	}
-	
 	public function getMetric($metricName, $forceUpdate = false)
 	{
 		$cacheKey = "metrics/keys/$this->ID/$metricName";
@@ -121,6 +111,39 @@ class Key extends ActiveRecord
 		Cache::store($cacheKey, $metricValue, static::$metricTTL);
 		
 		return $metricValue;
+	}
+    
+    public function canAccessEndpoint(Endpoint $Endpoint)
+    {
+        if ($this->AllEndpoints) {
+            return true;
+        }
+        
+        $cacheKey = "keys/$this->ID/endpoints";
+        if (false == ($allowedEndpoints = Cache::fetch($cacheKey))) {
+            $allowedEndpoints = DB::allValues(
+                'EndpointID'
+                ,'SELECT EndpointID FROM `%s` KeyEndpoint WHERE KeyID = %u'
+                ,array(
+                    KeyEndpoint::$tableName
+                    ,$this->ID
+                )
+            );
+
+            Cache::store($cacheKey, $allowedEndpoints);
+        }
+        
+        return in_array($Endpoint->ID, $allowedEndpoints);
+    }
+    
+	static public function generateUniqueKey()
+	{
+		do {
+			$key = md5(mt_rand(0, mt_getrandmax()));
+		}
+		while (static::getByKey($key));
+		
+		return $key;
 	}
 	
 	static public function getMetricSQL($metricName)
