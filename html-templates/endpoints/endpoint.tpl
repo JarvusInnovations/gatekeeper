@@ -141,6 +141,6 @@
 			{/foreach}
 			</tbody>
 		</table>
-        <a class="button" href="/logs?endpoint={$Endpoint->Handle}">View Full Log &rarr;</a>
+        <a class="button" href="/logs?endpoint={$Endpoint->Handle}&endpointVersion={$Endpoint->Version}">View Full Log &rarr;</a>
 	</section>
 {/block}

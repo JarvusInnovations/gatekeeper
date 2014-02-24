@@ -89,9 +89,18 @@ class Endpoint extends ActiveRecord
 		,'clients' => array(__CLASS__, 'sortMetric')
 	);
 	
-	static public function getByHandle($handle)
+	static public function getByHandleAndVersion($handle, $version)
 	{
-		return static::getByField('Handle', $handle);
+        $cacheKey = "endpoints-lookup/$handle/$version";
+        
+        if ($endpointID = Cache::fetch($cacheKey)) {
+            $Endpoint = static::getByID($endpointID);
+        } elseif($Endpoint = static::getByWhere(array('Handle' => $handle, 'Version' => $version))) {
+            static::mapDependentCacheKey($Endpoint->ID, $cacheKey);
+            Cache::store($cacheKey, $Endpoint->ID);
+        }
+        
+        return $Endpoint;
 	}
 	
 	public function save($deep = true)

@@ -19,10 +19,7 @@ class EndpointsRequestHandler extends RecordsRequestHandler
         
         $endpointVersion = substr($endpointVersion, 1);
         
-        return Endpoint::getByWhere(array(
-            'Handle' => $endpointHandle
-            ,'Version' => $endpointVersion
-        ));
+        return Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion);
     }
 	
 	static protected function applyRecordDelta(ActiveRecord $Endpoint, $data)

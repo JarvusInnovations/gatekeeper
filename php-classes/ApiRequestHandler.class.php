@@ -31,7 +31,7 @@ class ApiRequestHandler extends RequestHandler
 
 
 		// get endpoint record and check version
-		if (!$Endpoint = Endpoint::getByWhere(array('Handle' => $endpointHandle, 'Version' => substr($endpointVersion, 1)))) {
+		if (!$Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, substr($endpointVersion, 1))) {
 			return static::throwNotFoundError('Requested endpoint not found');
 		}
 
