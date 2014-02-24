@@ -72,6 +72,7 @@ class Ban extends ActiveRecord
 	{
 		$success = parent::destroy();
 		Cache::delete('bans');
+        return $success;
 	}
 
 	static public function sortExpiration($dir, $name)

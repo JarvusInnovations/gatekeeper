@@ -47,5 +47,6 @@ class KeyEndpoint extends ActiveRecord
 	{
 		$success = parent::destroy();
 		Cache::delete("keys/$this->KeyID/endpoints");
+        return $success;
 	}
 }
