@@ -18,6 +18,10 @@ class ApiRequestHandler extends RequestHandler
 	static public function handleRequest() {
         $now = time();
 
+        // set GateKeeper headers
+        header('X-Powered-By: Jarvus GateKeeper');
+
+
 		// check required parameters
 		if (!$endpointHandle = static::shiftPath()) {
 			return static::throwInvalidRequestError('Endpoint handle required');
@@ -96,10 +100,6 @@ class ApiRequestHandler extends RequestHandler
 
 
 		// TODO: implement a per-user throttle that applies across all endpoints? Might not be useful...
-
-
-        // set GateKeeper headers
-        header('X-Powered-By: Jarvus GateKeeper');
 
 
 		// configure and execute internal API call
