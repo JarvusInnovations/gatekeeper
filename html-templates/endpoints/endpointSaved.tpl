@@ -1,6 +1,6 @@
 {extends "designs/site.tpl"}
 
-{block "title"}Endpoint saved &mdash; {$dwoo.parent}{/block}
+{block "title"}Endpoint {tif $data->isNew ? 'created' : 'saved'} &mdash; {$dwoo.parent}{/block}
 
 {block "content"}
 	{$Endpoint = $data}
