@@ -89,7 +89,7 @@ class ApiRequestHandler extends RequestHandler
 				return array('seconds' => $Endpoint->UserRatePeriod, 'count' => $Endpoint->UserRateCount);
 			});
 
-			if ($bucket['hits'] <= 0) {
+			if ($bucket['hits'] < 0) {
 				return static::throwRateError($bucket['seconds'], 'Your rate limit for this endpoint has been exceeded');
 			}
 		}
@@ -151,7 +151,7 @@ class ApiRequestHandler extends RequestHandler
                 ), "endpoints/$Endpoint->ID/rate-warning-sent", $bucket['seconds']);
             }
 
-			if ($bucket['hits'] <= 0) {
+			if ($bucket['hits'] < 0) {
                 static::sendAdminNotification($Endpoint, 'endpointRateLimitReached', array(
                     'bucket' => $bucket
             	), "endpoints/$Endpoint->ID/rate-notification-sent", $bucket['seconds']);
