@@ -89,28 +89,6 @@ class ApiRequestHandler extends RequestHandler
 		// TODO: implement a per-user throttle that applies across all endpoints? Might not be useful...
 
 
-		// drip into endpoint bucket
-		if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
-			$bucket = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
-				return array('seconds' => $Endpoint->GlobalRatePeriod, 'count' => $Endpoint->GlobalRateCount);
-			});
-            
-            if ($bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
-                static::sendAdminNotification($Endpoint, 'endpointRateLimitNear', array(
-                    'bucket' => $bucket
-                ), "endpoints/$Endpoint->ID/rate-warning-sent", $bucket['seconds']);
-            }
-
-			if ($bucket['hits'] <= 0) {
-                static::sendAdminNotification($Endpoint, 'endpointRateLimitReached', array(
-                    'bucket' => $bucket
-            	), "endpoints/$Endpoint->ID/rate-notification-sent", $bucket['seconds']);
-                
-				return static::throwRateError($bucket['seconds'], 'The global rate limit for this endpoint has been exceeded');
-			}
-		}
-
-
 		// configure and execute internal API call
 		$urlPrefix = rtrim($Endpoint->InternalEndpoint, '/');
 		$path = '/' . implode('/', static::getPath());
@@ -147,6 +125,30 @@ class ApiRequestHandler extends RequestHandler
             }
         }
 
+
+    	// drip into endpoint bucket
+		if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
+			$bucket = HitBuckets::drip("endpoints/$Endpoint->ID", function() use ($Endpoint) {
+				return array('seconds' => $Endpoint->GlobalRatePeriod, 'count' => $Endpoint->GlobalRateCount);
+			});
+            
+            if ($bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
+                static::sendAdminNotification($Endpoint, 'endpointRateLimitNear', array(
+                    'bucket' => $bucket
+                ), "endpoints/$Endpoint->ID/rate-warning-sent", $bucket['seconds']);
+            }
+
+			if ($bucket['hits'] <= 0) {
+                static::sendAdminNotification($Endpoint, 'endpointRateLimitReached', array(
+                    'bucket' => $bucket
+            	), "endpoints/$Endpoint->ID/rate-notification-sent", $bucket['seconds']);
+                
+				return static::throwRateError($bucket['seconds'], 'The global rate limit for this endpoint has been exceeded');
+			}
+		}
+
+
+        // execute request against internal API
 		HttpProxy::relayRequest(array(
 			'autoAppend' => false
             ,'autoQuery' => false
