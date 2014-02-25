@@ -3,6 +3,15 @@
 class ApiRequestHandler extends RequestHandler
 {
     static public $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
+    static public $passthruHeaders = array(
+        '/^HTTP\//'
+        ,'/^Content-Type:/'
+        ,'/^Date:/'
+        ,'/^Set-Cookie:/'
+        ,'/^Location:/'
+        ,'/^ETag:/'
+        ,'/^Last-Modified:/'
+    );
     
     static public $responseMode = 'json'; // override RequestHandler::$responseMode
 
@@ -89,6 +98,10 @@ class ApiRequestHandler extends RequestHandler
 		// TODO: implement a per-user throttle that applies across all endpoints? Might not be useful...
 
 
+        // set GateKeeper headers
+        header('X-Powered-By: Jarvus GateKeeper');
+
+
 		// configure and execute internal API call
 		$urlPrefix = rtrim($Endpoint->InternalEndpoint, '/');
 		$path = '/' . implode('/', static::getPath());
@@ -154,7 +167,7 @@ class ApiRequestHandler extends RequestHandler
             ,'autoQuery' => false
 			,'url' => $urlPrefix . $url
 			,'interface' => static::$sourceInterface
-            ,'afterResponseSync' => true
+            ,'passthruHeaders' => static::$passthruHeaders
 			,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $url, $cacheKey, $now) {
 				$curlInfo = curl_getinfo($ch);
                 list($path, $query) = explode('?', $url);
@@ -181,7 +194,7 @@ class ApiRequestHandler extends RequestHandler
                         
                         foreach ($responseHeaders AS $headerKey => $headerValue) {
                             $header = "$headerKey: $headerValue";
-                            foreach (HttpProxy::$defaultPassthruHeaders AS $pattern) {
+                            foreach (static::$passthruHeaders AS $pattern) {
                                 if (preg_match($pattern, $header)) {
                                     $cachableHeaders[] = $header;
                                     break;
@@ -207,6 +220,9 @@ class ApiRequestHandler extends RequestHandler
                         ,'responseBody' => $responseBody
                     ), "endpoints/$Endpoint->ID/error-notification-sent");
                 }
+                
+                // log SQL queries to file for auditing
+                //file_put_contents('/tmp/gatekeeper-last-queries', var_export(Debug::$log, true));
 			}
 		));
 	}
