@@ -2,6 +2,7 @@
 
 class ApiRequestHandler extends RequestHandler
 {
+    static public $poweredByHeader = 'Jarvus GateKeeper';
     static public $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
     static public $passthruHeaders = array(
         '/^HTTP\//'
@@ -19,7 +20,9 @@ class ApiRequestHandler extends RequestHandler
         $now = time();
 
         // set GateKeeper headers
-        header('X-Powered-By: Jarvus GateKeeper');
+        if (static::$poweredByHeader) {
+            header('X-Powered-By: '.static::$poweredByHeader);
+        }
 
 
 		// check required parameters
