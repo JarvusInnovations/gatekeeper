@@ -108,7 +108,7 @@ class ApiRequestHandler extends RequestHandler
 		// configure and execute internal API call
 		$urlPrefix = rtrim($Endpoint->InternalEndpoint, '/');
 		$path = '/' . implode('/', static::getPath());
-        $url = $path . '?' . $_SERVER['QUERY_STRING'];
+        $url = rtrim($path . '?' . $_SERVER['QUERY_STRING'], '?&');
         
         
         // apply rewrite rules
