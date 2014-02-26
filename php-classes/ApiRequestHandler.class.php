@@ -124,8 +124,8 @@ class ApiRequestHandler extends RequestHandler
 
 
         // TODO: migrate caching implementation to HttpProxy and include headers in cache
-        if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint>CachingEnabled) {
-            $cacheKey = "response:$Endpoint->ID:$path?$_SERVER[QUERY_STRING]";
+        if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint->CachingEnabled) {
+            $cacheKey = "response:$Endpoint->ID:$url";
             
             if ($cachedResponse = Cache::fetch($cacheKey)) {
                 if ($cachedResponse['expires'] < $now) {
