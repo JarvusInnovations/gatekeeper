@@ -6,13 +6,13 @@ if ($GLOBALS['Session']->hasAccountLevel('User')) {
 			array(
 				'field' => 'FirstName'
 				,'method' => 'like'
-			), array(
+			),array(
 				'field' => 'LastName'
 				,'method' => 'like'
-			), array(
+			),array(
 				'field' => 'Username'
 				,'method' => 'like'
-			), array(
+			),array(
 				'field' => 'FullName'
 				,'method' => 'sql'
 				,'sql' => 'CONCAT(FirstName," ",LastName) = "%s"'
@@ -24,12 +24,18 @@ if ($GLOBALS['Session']->hasAccountLevel('User')) {
 
 SearchRequestHandler::$searchClasses['Endpoint'] = array(
 	'fields' => array(
-		'Title'
+    	array(
+			'field' => 'Title'
+			,'method' => 'like'
+		)
     	,array(
 			'field' => 'Handle'
 			,'method' => 'like'
 		)
-        ,'AdminName'
+    	,array(
+			'field' => 'AdminName'
+			,'method' => 'like'
+		)
 		,array(
 			'field' => 'AdminEmail'
 			,'method' => 'like'
@@ -39,8 +45,14 @@ SearchRequestHandler::$searchClasses['Endpoint'] = array(
 
 SearchRequestHandler::$searchClasses['Key'] = array(
 	'fields' => array(
-		'OwnerName'
-        ,'ContactName'
+		array(
+			'field' => 'OwnerName'
+			,'method' => 'like'
+		)
+        ,array(
+			'field' => 'Key'
+			,'method' => 'ContactName'
+		)
         ,array(
 			'field' => 'ContactEmail'
 			,'method' => 'like'
