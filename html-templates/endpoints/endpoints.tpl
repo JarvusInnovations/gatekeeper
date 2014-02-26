@@ -5,8 +5,10 @@
 {block content}
 
 	<header class="page-header">
-    	<a class="button primary pull-right" href="/endpoints/create">Create Endpoint</a>
     	<h2 class="page-title">Endpoints</h2>
+    	<div class="page-buttons">
+    	    <a class="button primary" href="/endpoints/create">Create Endpoint</a>
+    	</div>
 	</header>
 
 	<form method="GET">

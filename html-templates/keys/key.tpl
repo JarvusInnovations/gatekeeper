@@ -6,8 +6,10 @@
 	{$Key = $data}
 
     <header class="page-header">
-		<a class="button pull-right" href="/keys/{$Key->Key}/edit">Edit Key</a>
     	<h2 class="page-title">Key: {apiKey $Key}</h2>
+    	<div class="page-buttons">
+    		<a class="button" href="/keys/{$Key->Key}/edit">Edit Key</a>
+    	</div>
     </header>
 
     <section class="page-section" id="key-endpoints">

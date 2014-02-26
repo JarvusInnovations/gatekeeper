@@ -7,6 +7,11 @@
     
     <header class="page-header">
         <h2 class="page-title">Logged Requests {if $Endpoint}for {endpoint $Endpoint}{/if}</h2>
+        <div class="page-buttons">
+            <small class="muted">Download:&nbsp;</small>
+            <a class="button" href="/logs/json{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">JSON</a>
+            <a class="button" href="/logs/csv{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">CSV</a>
+        </div>
     </header>
     
     {capture assign=pagingHtml}

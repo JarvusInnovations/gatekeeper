@@ -21,9 +21,10 @@
 	{$Endpoint = $data}
 
 	<header class="page-header">
-        <a class="button destructive pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/delete">Delete</a>
-    	<a class="button pull-right" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>
 	    <h2 class="page-title">Endpoint: {endpoint $Endpoint}</h2>
+	    <div class="page-buttons">
+        	<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>
+	    </div>
 	</header>
 
 	<section class="page-section" id="endpoint-docs">

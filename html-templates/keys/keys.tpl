@@ -5,8 +5,10 @@
 {block content}
 
 	<header class="page-header">
-		<a class="button primary pull-right" href="/keys/create">Create Key</a>
-    	<h2 class="page-title">Keys</h2>
+		<h2 class="page-title">Keys</h2>
+    	<div class="page-buttons">
+        	<a class="button primary" href="/keys/create">Create Key</a>
+    	</div>
 	</header>
 
 	<form method="GET">

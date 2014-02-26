@@ -9,6 +9,13 @@
     
     <header class="page-header">
         <h2 class="page-title">{if $Endpoint->isPhantom}New Endpoint{else}Edit {endpoint $Endpoint}{/if}</h2>
+        <div class="page-buttons">
+            {if $Endpoint->isPhantom}
+                <a class="button destructive" href="/endpoints/">Cancel</a>
+            {else}
+                <a class="button destructive" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/delete">Delete Endpoint</a>
+            {/if}
+        </div>
     </header>
 
 	<form method="POST" class="register-form">

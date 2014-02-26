@@ -5,8 +5,10 @@
 {block content}
 
 	<header class="page-header">
-		<a class="button primary pull-right" href="/bans/create">Create Ban</a>
 	    <h2 class="page-title">Bans</h2>
+	    <div class="page-buttons">
+	        <a class="button primary" href="/bans/create">Create Ban</a>
+	    </div>
 	</header>
 
 	<form method="GET">

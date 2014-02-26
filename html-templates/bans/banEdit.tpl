@@ -8,6 +8,13 @@
 	
 	<header class="page-header">
         <h2 class="page-title">{if $Ban->isPhantom}New Ban{else}Edit Ban{/if}</h2>
+        <div class="page-buttons">
+            {if $Ban->isPhantom}
+                <a class="button destructive" href="/bans/">Cancel</a>
+            {else}
+                <a class="button destructive" href="/bans/{$Ban->ID}/delete">Remove Ban</a>
+            {/if}
+        </div>
 	</header>
 	
 	<form method="POST" class="register-form">
