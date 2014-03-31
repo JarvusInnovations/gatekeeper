@@ -2,7 +2,7 @@
 
 class ApiRequestHandler extends RequestHandler
 {
-    static public $poweredByHeader = 'Jarvus GateKeeper';
+    static public $poweredByHeader = 'Jarvus Gatekeeper';
     static public $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
     static public $passthruHeaders = array(
         '/^HTTP\//'
@@ -16,16 +16,16 @@ class ApiRequestHandler extends RequestHandler
     
     static public $responseMode = 'json'; // override RequestHandler::$responseMode
 
-	static public function handleRequest() {
+    static public function handleRequest() {
         $now = time();
 
-        // set GateKeeper headers
+        // set Gatekeeper headers
         if (static::$poweredByHeader) {
             header('X-Powered-By: '.static::$poweredByHeader);
         }
 
 
-		// check required parameters
+    	// check required parameters
 		if (!$endpointHandle = static::shiftPath()) {
 			return static::throwInvalidRequestError('Endpoint handle required');
 		}
@@ -62,7 +62,7 @@ class ApiRequestHandler extends RequestHandler
 
 		// verify key if required
 		if ($Endpoint->KeyRequired) {
-			if (!empty($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^GateKeeper-Key\s+(\w+)$/i', $_SERVER['HTTP_AUTHORIZATION'], $keyMatches)) {
+			if (!empty($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Gatekeeper-Key\s+(\w+)$/i', $_SERVER['HTTP_AUTHORIZATION'], $keyMatches)) {
 				$keyString = $keyMatches[1];
 			} elseif (!empty($_REQUEST['gatekeeperKey'])) {
 				$keyString = $_REQUEST['gatekeeperKey'];
@@ -233,7 +233,7 @@ class ApiRequestHandler extends RequestHandler
 	static protected function throwKeyError(Endpoint $Endpoint, $error)
 	{
 		header('HTTP/1.0 401 Unauthorized');
-		header('WWW-Authenticate: GateKeeper-Key endpoint="'.$Endpoint->Handle.'"');
+		header('WWW-Authenticate: Gatekeeper-Key endpoint="'.$Endpoint->Handle.'"');
 		JSON::error($error);
 	}
 
