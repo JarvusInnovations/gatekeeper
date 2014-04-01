@@ -282,4 +282,19 @@ class Endpoint extends ActiveRecord
         
         return $url;
     }
+    
+    public function getExternalUrl()
+    {
+        $url = 'http://';
+
+        if (Gatekeeper::$apiHostname) {
+            $url .= Gatekeeper::$apiHostname;
+        } else {
+            $url .= $_SERVER['HTTP_HOST'] . '/api';
+        }
+        
+        $url .= "/$this->Handle/v$this->Version";
+        
+        return $url;
+    }
 }

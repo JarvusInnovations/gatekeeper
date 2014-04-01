@@ -49,7 +49,7 @@
 				<div class="details">
     				<header>
     					<h3 class="title">{endpoint $Endpoint}</h3>
-    					{$externalEndpoint = "http://$.server.HTTP_HOST/api/$Endpoint->Handle/v$Endpoint->Version"}
+    					{$externalEndpoint = $Endpoint->getExternalUrl()}
     					<dl class="endpoint-urls">
         					<dt class="external">External</dt>
         					<dd class="external"><a href="{$externalEndpoint|escape}">{$externalEndpoint|escape}</a>
