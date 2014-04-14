@@ -71,7 +71,7 @@
 	<section class="page-section" id="endpoint-cache">
     	<table>
 			<caption>
-				<h3>Cached Responses</h3>
+				<h3>Cached Responses <small>(Top and most recent 30)</small></h3>
 			</caption>
 			<thead>
 				<tr>
@@ -84,7 +84,7 @@
 			</thead>
 
 			<tbody>
-                {foreach item=response from=$Endpoint->getCachedResponses()}
+                {foreach item=response from=$Endpoint->getCachedResponses(30)}
         			<tr>
     					<td class="col-request">GET <small>{$response.value.path|escape|default:'/'}{tif $response.value.query ? "?$response.value.query"|query_string}</small></td>
     					<td class="col-created">{$response.creation_time|date_format:'%Y-%m-%d %H:%M:%S'}</td>

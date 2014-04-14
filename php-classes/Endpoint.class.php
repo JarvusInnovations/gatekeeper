@@ -229,11 +229,29 @@ class Endpoint extends ActiveRecord
 		return static::getMetricSQL($name) . ' ' . $dir;
 	}
     
-    public function getCachedResponses()
+    public function getCachedResponses($limit = null)
     {
         $cachedResponses = array();
         foreach (Cache::getIterator("/^response\:{$this->ID}/") AS $cachedResponse) {
             $cachedResponses[] = $cachedResponse;
+        }
+        
+        // sort by hits desc, created desc
+        usort($cachedResponses, function($a, $b) {
+            if ($a['num_hits'] == $b['num_hits']) {
+                if ($a['creation_time'] == $b['creation_time']) {
+                    return 0;
+                } else {
+                    return ($a['creation_time'] > $b['creation_time']) ? -1 : 1;
+                }
+            } else {
+                return ($a['num_hits'] > $b['num_hits']) ? -1 : 1;
+            }
+        });
+        
+        // limit
+        if ($limit) {
+            $cachedResponses = array_slice($cachedResponses, 0, $limit);
         }
         
         return $cachedResponses;
