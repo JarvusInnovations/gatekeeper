@@ -8,7 +8,7 @@ The GateKeeper application is built on the Emergence PHP framework and deployeme
 
 Emergence takes just a few minutes to setup on a Linux VM, and is designed to have a fresh system to itself. Once launched
 it will configure services on the machine as-needed to host an instance of the application along with any other
-sites, clones, or child sites. The guides for Ubuntu and Gentoo are most up-to-date: http://emr.ge/manual/installing
+sites, clones, or child sites. The guides for Ubuntu and Gentoo are most up-to-date: http://emr.ge/docs/setup
 
 ## Installation via Emergence (linked child)
 -  Create an emergence site that extends http://Nrnt1W9ER1FewOP1@gatekeeper.sandbox01.jarv.us
