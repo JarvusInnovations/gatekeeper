@@ -31,7 +31,7 @@
 			{field name=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
 
 			{capture assign=urlInputHtml}{strip}
-				http://{$.server.HTTP_HOST}/api/&thinsp;
+				http://{tif Gatekeeper::$apiHostname ? Gatekeeper::$apiHostname : "$.server.HTTP_HOST}/api"}/&thinsp;
 				<input type="text" size=15 name="Handle" required value="{refill field=Handle default=$Endpoint->Handle}">
 				&nbsp;/v&nbsp;
 				<input type="text" class="tiny" size=2 name="Version" required value="{refill field=Version default=$Endpoint->Version}">
