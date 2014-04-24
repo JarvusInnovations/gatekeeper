@@ -14,6 +14,7 @@ sites, clones, or child sites. The guides for Ubuntu and Gentoo are most up-to-d
 -  Create an emergence site that extends http://Nrnt1W9ER1FewOP1@gatekeeper.sandbox01.jarv.us
 
 This video walks through the complete process of installing emergence and then instantiating the GateKeeper application:
+
 [![Walkthrough Video](http://b.vimeocdn.com/ts/455/313/455313620_640.jpg)](https://vimeo.com/79587819)
 
 ## Installation from Git
