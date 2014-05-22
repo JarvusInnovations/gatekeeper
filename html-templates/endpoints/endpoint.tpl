@@ -21,8 +21,8 @@
 	{$Endpoint = $data}
 
 	<header class="page-header">
-	    <h2 class="page-title">Endpoint: {endpoint $Endpoint}</h2>
-	    <div class="page-buttons">
+	    <h2 class="header-title">Endpoint: {endpoint $Endpoint}</h2>
+	    <div class="header-buttons">
         	<a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>
 	    </div>
 	</header>

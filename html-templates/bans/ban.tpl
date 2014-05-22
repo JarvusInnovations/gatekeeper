@@ -7,8 +7,8 @@
 
     <article class="ban">
 	    <div class="details">
-			<header>
-				<h3 class="title">
+			<header class="page-header">
+				<h3 class="header-title">
 					{if $Ban->IP}
 						IP Address: <strong>{$Ban->IP|long2ip}</strong>
 					{else}

@@ -8,8 +8,8 @@
     {load_templates subtemplates/rateFields.tpl}
     
     <header class="page-header">
-        <h2 class="page-title">{if $Endpoint->isPhantom}New Endpoint{else}Edit {endpoint $Endpoint}{/if}</h2>
-        <div class="page-buttons">
+        <h2 class="header-title">{if $Endpoint->isPhantom}New Endpoint{else}Edit {endpoint $Endpoint}{/if}</h2>
+        <div class="header-buttons">
             {if $Endpoint->isPhantom}
                 <a class="button destructive" href="/endpoints/">Cancel</a>
             {else}

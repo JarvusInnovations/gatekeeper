@@ -5,8 +5,8 @@
 {block content}
 
 	<header class="page-header">
-	    <h2 class="page-title">Bans</h2>
-	    <div class="page-buttons">
+	    <h2 class="header-title">Bans</h2>
+	    <div class="header-buttons">
 	        <a class="button primary" href="/bans/create">Create Ban</a>
 	    </div>
 	</header>

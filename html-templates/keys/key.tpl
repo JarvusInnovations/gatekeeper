@@ -6,8 +6,8 @@
 	{$Key = $data}
 
     <header class="page-header">
-    	<h2 class="page-title">Key: {apiKey $Key}</h2>
-    	<div class="page-buttons">
+    	<h2 class="header-title">Key: {apiKey $Key}</h2>
+    	<div class="header-buttons">
     		<a class="button" href="/keys/{$Key->Key}/edit">Edit Key</a>
     	</div>
     </header>

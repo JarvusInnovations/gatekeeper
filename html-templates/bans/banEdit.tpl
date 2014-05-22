@@ -7,8 +7,8 @@
 	{$errors = $Ban->validationErrors}
 	
 	<header class="page-header">
-        <h2 class="page-title">{if $Ban->isPhantom}New Ban{else}Edit Ban{/if}</h2>
-        <div class="page-buttons">
+        <h2 class="header-title">{if $Ban->isPhantom}New Ban{else}Edit Ban{/if}</h2>
+        <div class="header-buttons">
             {if $Ban->isPhantom}
                 <a class="button destructive" href="/bans/">Cancel</a>
             {else}

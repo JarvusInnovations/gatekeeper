@@ -7,8 +7,8 @@
 	{$errors = $Key->validationErrors}
 	
 	<header class="page-header">
-        <h2 class="page-title">{if $Key->isPhantom}New Key{else}Edit Key {apiKey $Key}{/if}</h2>	    
-        <div class="page-buttons">
+        <h2 class="header-title">{if $Key->isPhantom}New Key{else}Edit Key {apiKey $Key}{/if}</h2>	    
+        <div class="header-buttons">
             {if $Key->isPhantom}
                 <a class="button destructive" href="/keys/">Cancel</a>
             {else}
