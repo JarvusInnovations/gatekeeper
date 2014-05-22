@@ -37,20 +37,27 @@ class ApiRequestHandler extends RequestHandler
 		}
 
 
-        // read endpoint address parameters
+        // read endpoint handle from path
 		if (!$endpointHandle = static::shiftPath()) {
 			return static::throwInvalidRequestError('Endpoint handle required');
 		}
 
-		if (($endpointVersion = static::peekPath()) && $endpointVersion[0] == 'v' && preg_match(Endpoint::$versionPattern, substr($endpointVersion, 1))) {
+        // read endpoint version from path and get endpoint
+		if (
+            ($endpointVersion = static::peekPath()) &&
+            $endpointVersion[0] == 'v' &&
+            ($endpointVersion = substr($endpointVersion, 1)) &&
+            preg_match(Endpoint::$versionPattern, $endpointVersion) &&
+            ($Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion))
+        ) {
             static::shiftPath();
 		} else {
-			$endpointVersion = null;
+            $Endpoint = Endpoint::getByHandleAndVersion($endpointHandle);
 		}
 
 
-		// get endpoint record
-		if (!$Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, substr($endpointVersion, 1))) {
+		// ensure endpoint was found
+		if (!$Endpoint) {
 			return static::throwNotFoundError('Requested endpoint+version not found, be sure to specify a version if this endpoint requires it');
 		}
 
