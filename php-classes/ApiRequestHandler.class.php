@@ -25,16 +25,6 @@ class ApiRequestHandler extends RequestHandler
         }
 
 
-    	// check required parameters
-		if (!$endpointHandle = static::shiftPath()) {
-			return static::throwInvalidRequestError('Endpoint handle required');
-		}
-
-		if (!($endpointVersion = static::shiftPath()) || !preg_match('/^v.+$/', $endpointVersion)) {
-			return static::throwInvalidRequestError('Endpoint version required');
-		}
-
-
 		// get active bans
 		//	- cache entire list of currently active bans in an array, maybe this will prove less efficient when the list grows
 		$activeBans = Ban::getActiveBansTable();
@@ -47,9 +37,21 @@ class ApiRequestHandler extends RequestHandler
 		}
 
 
+        // read endpoint address parameters
+		if (!$endpointHandle = static::shiftPath()) {
+			return static::throwInvalidRequestError('Endpoint handle required');
+		}
+
+		if (($endpointVersion = static::peekPath()) && $endpointVersion[0] == 'v' && preg_match(Endpoint::$versionPattern, substr($endpointVersion, 1))) {
+            static::shiftPath();
+		} else {
+			$endpointVersion = null;
+		}
+
+
 		// get endpoint record
 		if (!$Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, substr($endpointVersion, 1))) {
-			return static::throwNotFoundError('Requested endpoint+version not found');
+			return static::throwNotFoundError('Requested endpoint+version not found, be sure to specify a version if this endpoint requires it');
 		}
 
 

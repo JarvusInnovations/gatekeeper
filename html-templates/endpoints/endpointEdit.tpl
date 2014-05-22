@@ -26,8 +26,6 @@
 		{/if}
 	
 		<fieldset class="shrink">
-			{* field name label='' error='' type=text placeholder='' hint='' required=false autofocus=false *}
-
 			{field name=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
 
 			{capture assign=urlInputHtml}{strip}
@@ -39,6 +37,8 @@
 			{labeledField html=$urlInputHtml type=compound label='Public Handle and Version' error=default($errors.Handle, $errors.Version) required=true}
 
 			{field name=InternalEndpoint label='Internal Endpoint' type=url default=$Endpoint->InternalEndpoint required=true}
+
+            {checkbox name=DefaultVersion value=1 unsetValue=0 label='Default Version' default=$Endpoint->DefaultVersion hint='This endpoint should be the default for its handle if no version is requested'}
 
 			<div class="inline-fields">
 				{field name=AdminName label='Admin Name' error=$errors.AdminName default=$Endpoint->AdminName}

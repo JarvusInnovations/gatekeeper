@@ -3,6 +3,7 @@
 class Endpoint extends ActiveRecord
 {
 	static public $metricTTL = 60;
+    static public $versionPattern = '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/';
 	
 	// ActiveRecord configuration
 	static public $tableName = 'endpoints';
@@ -64,6 +65,10 @@ class Endpoint extends ActiveRecord
 			,'length' => '3,2'
 			,'notnull' => false
 		)
+        ,'DefaultVersion' => array(
+            'type' => 'boolean'
+            ,'default' => false
+        )
 	);
 	
 	static public $relationships = array(
@@ -89,17 +94,27 @@ class Endpoint extends ActiveRecord
 		,'clients' => array(__CLASS__, 'sortMetric')
 	);
 	
-	static public function getByHandleAndVersion($handle, $version)
+	static public function getByHandleAndVersion($handle, $version = null)
 	{
-        $cacheKey = "endpoints-lookup/$handle/$version";
-        
+        $cacheKey = sprintf('endpoints-lookup/%s/%s', $handle, $version ? $version : '_default');
+
         if ($endpointID = Cache::fetch($cacheKey)) {
             $Endpoint = static::getByID($endpointID);
-        } elseif($Endpoint = static::getByWhere(array('Handle' => $handle, 'Version' => $version))) {
-            static::mapDependentCacheKey($Endpoint->ID, $cacheKey);
-            Cache::store($cacheKey, $Endpoint->ID);
+        } else {
+            $where = array('Handle' => $handle);
+
+            if ($version) {
+                $where['Version'] = $version;
+            } else {
+                $where[] = 'DefaultVersion';
+            }
+
+            if ($Endpoint = static::getByWhere($where)) {
+                static::mapDependentCacheKey($Endpoint->ID, $cacheKey);
+                Cache::store($cacheKey, $Endpoint->ID);
+            }
         }
-        
+
         return $Endpoint;
 	}
 	
@@ -108,6 +123,20 @@ class Endpoint extends ActiveRecord
 		HandleBehavior::onSave($this);
 		
 		parent::save($deep);
+
+        // if this is endpoint is being set to the default version, unset it from sibling endpoints
+        if ($this->isFieldDirty('DefaultVersion') && $this->DefaultVersion) {
+            $otherDefault = static::getByWhere(array(
+                'DefaultVersion' => true
+                ,'Handle' => $this->Handle
+                ,'ID != ' . $this->ID
+            ));
+            
+            if ($otherDefault) {
+                $otherDefault->DefaultVersion = false;
+                $otherDefault->save();
+            }
+        }
 	}
 	
 	public function validate($deep = true)
@@ -130,7 +159,7 @@ class Endpoint extends ActiveRecord
 			'field' => 'Version'
 			,'validator' => 'handle'
             ,'allowNumeric' => true
-            ,'pattern' => '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/'
+            ,'pattern' => static::$versionPattern
 			,'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
 		));
 
