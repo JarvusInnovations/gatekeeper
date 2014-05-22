@@ -2,46 +2,46 @@
 
 class EndpointsRequestHandler extends RecordsRequestHandler
 {
-	static public $recordClass = 'Endpoint';
+    public static $recordClass = 'Endpoint';
 
-    static public $accountLevelRead = 'Staff';
-	static public $accountLevelComment = 'Staff';
-	static public $accountLevelBrowse = 'Staff';
-	static public $accountLevelWrite = 'Staff';
-	static public $accountLevelAPI = 'Staff';
-    
-    static public function getRecordByHandle($endpointHandle)
+    public static $accountLevelRead = 'Staff';
+    public static $accountLevelComment = 'Staff';
+    public static $accountLevelBrowse = 'Staff';
+    public static $accountLevelWrite = 'Staff';
+    public static $accountLevelAPI = 'Staff';
+
+    public static function getRecordByHandle($endpointHandle)
     {
         // get version tag from next URL component
         if (!($endpointVersion = static::shiftPath()) || !preg_match('/^v.+$/', $endpointVersion)) {
-			return static::throwInvalidRequestError('Endpoint version required');
-		}
-        
+            return static::throwInvalidRequestError('Endpoint version required');
+        }
+
         $endpointVersion = substr($endpointVersion, 1);
-        
+
         return Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion);
     }
-	
-	static protected function applyRecordDelta(ActiveRecord $Endpoint, $data)
-	{
-		if (is_numeric($data['AlertNearMaxRequests'])) {
-			$data['AlertNearMaxRequests'] = $data['AlertNearMaxRequests'] / 100;
-		}
-		
-		return parent::applyRecordDelta($Endpoint, $data);
-	}
 
-    static public function handleRecordRequest(ActiveRecord $Endpoint, $action = false)
-	{
-		switch ($action ? $action : $action = static::shiftPath()) {			
-			case 'rewrites':
-				return static::handleRewritesRequest($Endpoint);
-			default:
-				return parent::handleRecordRequest($Endpoint, $action);
-		}
-	}
-    
-    static public function handleRewritesRequest(Endpoint $Endpoint)
+    protected static function applyRecordDelta(ActiveRecord $Endpoint, $data)
+    {
+        if (is_numeric($data['AlertNearMaxRequests'])) {
+            $data['AlertNearMaxRequests'] = $data['AlertNearMaxRequests'] / 100;
+        }
+
+        return parent::applyRecordDelta($Endpoint, $data);
+    }
+
+    public static function handleRecordRequest(ActiveRecord $Endpoint, $action = false)
+    {
+        switch ($action ? $action : $action = static::shiftPath()) {
+            case 'rewrites':
+                return static::handleRewritesRequest($Endpoint);
+            default:
+                return parent::handleRecordRequest($Endpoint, $action);
+        }
+    }
+
+    public static function handleRewritesRequest(Endpoint $Endpoint)
     {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -52,11 +52,11 @@ class EndpointsRequestHandler extends RecordsRequestHandler
                 if (!is_array($_POST['rewrites'])) {
                     return static::throwInvalidRequestError('POST method expects "rewrites" array');
                 }
-                
+
                 $saved = array();
                 $deleted = array();
                 $invalid = array();
-                
+
                 foreach ($_POST['rewrites'] AS $key => $data) {
                     $nonEmptyData = array_filter($data);
 
@@ -64,13 +64,13 @@ class EndpointsRequestHandler extends RecordsRequestHandler
                         if (!count($nonEmptyData)) {
                             continue;
                         }
-                        
+
                         $Rewrite = EndpointRewrite::create(array(
                             'Endpoint' => $Endpoint
                         ));
                     } else {
                         $Rewrite = EndpointRewrite::getByID($key);
-                        
+
                         if ($Rewrite->EndpointID != $Endpoint->ID) {
                             return static::throwInvalidRequestError('Supplied rewrite ID does not belong to this endpoint');
                         }
@@ -81,13 +81,13 @@ class EndpointsRequestHandler extends RecordsRequestHandler
                             continue;
                         }
                     }
-                    
+
                     if (empty($data['Priority'])) {
                         $data['Priority'] = EndpointRewrite::getFieldOptions('Priority', 'default');
                     }
-                    
+
                     $Rewrite->setFields($data);
-                    
+
                     if ($Rewrite->isDirty) {
                         if ($Rewrite->validate()) {
                             $Rewrite->save();
@@ -97,7 +97,7 @@ class EndpointsRequestHandler extends RecordsRequestHandler
                         }
                     }
                 }
-                
+
                 return static::respond('endpointRewritesSaved', array(
                     'success' => count($saved) > 0
                     ,'saved' => $saved

@@ -3,32 +3,32 @@
 {block "title"}Rewrites saved &mdash; {$dwoo.parent}{/block}
 
 {block "content"}
-	<p class="lead"><strong>{$saved|count}</strong> rewrite{tif count($saved) != 1 ? 's'} saved, <strong>{$deleted|count}</strong> rewrite{tif count($deleted) != 1 ? 's'} deleted, <strong>{$invalid|count}</strong> rewrite{tif count($invalid) != 1 ? 's'} invalid.</p>
+    <p class="lead"><strong>{$saved|count}</strong> rewrite{tif count($saved) != 1 ? 's'} saved, <strong>{$deleted|count}</strong> rewrite{tif count($deleted) != 1 ? 's'} deleted, <strong>{$invalid|count}</strong> rewrite{tif count($invalid) != 1 ? 's'} invalid.</p>
 
     {if count($invalid)}
         <form class="page-section" id="endpoint-rewrites" method="POST">
             <table>
-        		<caption>
-    				<h3>Unsaved rewrites</h3>
-    			</caption>
-    			<thead>
-    				<tr>
-    					<th class="col-priority">Priority</th>
-    					<th class="col-pattern">Pattern</th>
-    					<th class="col-replace">Replace</th>
-    					<th class="col-last">Last?</th>
-    				</tr>
-    			</thead>
-    
-    			<tbody>
+                <caption>
+                    <h3>Unsaved rewrites</h3>
+                </caption>
+                <thead>
+                    <tr>
+                        <th class="col-priority">Priority</th>
+                        <th class="col-pattern">Pattern</th>
+                        <th class="col-replace">Replace</th>
+                        <th class="col-last">Last?</th>
+                    </tr>
+                </thead>
+
+                <tbody>
                     {foreach item=Rewrite from=$invalid}
                         {$rewriteKey = tif($Rewrite->isPhantom ? 'new' : $Rewrite->ID)}
-            			<tr>
-        					<td class="col-priority">{field name="rewrites[$rewriteKey][Priority]" default=$Rewrite->Priority}</td>
-        					<td class="col-pattern">{field name="rewrites[$rewriteKey][Pattern]" default=$Rewrite->Pattern}</td>
-        					<td class="col-replace">{field name="rewrites[$rewriteKey][Replace]" default=$Rewrite->Replace}</td>
-        					<td class="col-last">{checkbox name="rewrites[$rewriteKey][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
-        				</tr>
+                        <tr>
+                            <td class="col-priority">{field name="rewrites[$rewriteKey][Priority]" default=$Rewrite->Priority}</td>
+                            <td class="col-pattern">{field name="rewrites[$rewriteKey][Pattern]" default=$Rewrite->Pattern}</td>
+                            <td class="col-replace">{field name="rewrites[$rewriteKey][Replace]" default=$Rewrite->Replace}</td>
+                            <td class="col-last">{checkbox name="rewrites[$rewriteKey][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
+                        </tr>
                         <tr>
                             <td>&nbsp;</td>
                             <td colspan="3">
@@ -46,5 +46,5 @@
         </form>
     {/if}
 
-	<a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">&larr;&nbsp;Back to {$Endpoint->Title}</a>
+    <a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-rewrites">&larr;&nbsp;Back to {$Endpoint->Title}</a>
 {/block}

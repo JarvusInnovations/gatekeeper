@@ -2,110 +2,110 @@
 
 class Ban extends ActiveRecord
 {
-    static public $tableCachePeriod = 300;
+    public static $tableCachePeriod = 300;
 
-	// ActiveRecord configuration
-	static public $tableName = 'bans';
-	static public $singularNoun = 'ban';
-	static public $pluralNoun = 'bans';
-	static public $useCache = true;
+    // ActiveRecord configuration
+    public static $tableName = 'bans';
+    public static $singularNoun = 'ban';
+    public static $pluralNoun = 'bans';
+    public static $useCache = true;
 
-	static public $fields = array(
-		'KeyID' => array(
-			'type' => 'uint'
-			,'notnull' => false
-		)
-		,'IP' => array(
-			'type' => 'uint'
-			,'notnull' => false
-		)
-		,'ExpirationDate' => array(
-			'type' => 'timestamp'
-			,'notnull' => false
-		)
-		,'Notes' => array(
-			'type' => 'clob'
-			,'notnull' => false
+    public static $fields = array(
+        'KeyID' => array(
+            'type' => 'uint'
+            ,'notnull' => false
+        )
+        ,'IP' => array(
+            'type' => 'uint'
+            ,'notnull' => false
+        )
+        ,'ExpirationDate' => array(
+            'type' => 'timestamp'
+            ,'notnull' => false
+        )
+        ,'Notes' => array(
+            'type' => 'clob'
+            ,'notnull' => false
             ,'fulltext' => true
-		)
-	);
+        )
+    );
 
-	static public $relationships = array(
-		'Key' => array(
-			'type' => 'one-one'
-			,'class' => 'Key'
-		)
-	);
+    public static $relationships = array(
+        'Key' => array(
+            'type' => 'one-one'
+            ,'class' => 'Key'
+        )
+    );
 
-	static public $sorters = array(
-		'created' => array(__CLASS__, 'sortCreated')
-		,'expiration' => array(__CLASS__, 'sortExpiration')
-	);
+    public static $sorters = array(
+        'created' => array(__CLASS__, 'sortCreated')
+        ,'expiration' => array(__CLASS__, 'sortExpiration')
+    );
 
-	public function validate($deep = true)
-	{
-		parent::validate($deep);
+    public function validate($deep = true)
+    {
+        parent::validate($deep);
 
-		if (!$this->KeyID == !$this->IP) {
-			$this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
-		}
+        if (!$this->KeyID == !$this->IP) {
+            $this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
+        }
 
         $this->_validator->validate(array(
-        	'field' => 'ExpirationDate'
-			,'validator' => 'datetime'
-			,'required' => false
-		));
+            'field' => 'ExpirationDate'
+            ,'validator' => 'datetime'
+            ,'required' => false
+        ));
 
-		return $this->finishValidation();
-	}
+        return $this->finishValidation();
+    }
 
-	public function save($deep = true)
-	{
-		parent::save($deep);
+    public function save($deep = true)
+    {
+        parent::save($deep);
 
-		if ($this->isUpdated || $this->isNew) {
-			Cache::delete('bans');
-		}
-	}
+        if ($this->isUpdated || $this->isNew) {
+            Cache::delete('bans');
+        }
+    }
 
-	public function destroy()
-	{
-		$success = parent::destroy();
-		Cache::delete('bans');
+    public function destroy()
+    {
+        $success = parent::destroy();
+        Cache::delete('bans');
         return $success;
-	}
+    }
 
-	static public function sortExpiration($dir, $name)
-	{
-		return "ExpirationDate $dir";
-	}
+    public static function sortExpiration($dir, $name)
+    {
+        return "ExpirationDate $dir";
+    }
 
-	static public function sortCreated($dir, $name)
-	{
-		return "ID $dir";
-	}
+    public static function sortCreated($dir, $name)
+    {
+        return "ID $dir";
+    }
 
-	static public function getActiveBansTable()
-	{
-		if($bans = Cache::fetch('bans')) {
-			return $bans;
-		}
+    public static function getActiveBansTable()
+    {
+        if($bans = Cache::fetch('bans')) {
+            return $bans;
+        }
 
-		$bans = array(
-			'ips' => array()
-			,'keys' => array()
-		);
+        $bans = array(
+            'ips' => array()
+            ,'keys' => array()
+        );
 
-		foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
-			if ($Ban->IP) {
-				$bans['ips'][] = long2ip($Ban->IP);
-			} elseif($Ban->KeyID) {
-				$bans['keys'][] = $Ban->KeyID;
-			}
-		}
+        foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
+            if ($Ban->IP) {
+                $bans['ips'][] = long2ip($Ban->IP);
+            } elseif($Ban->KeyID) {
+                $bans['keys'][] = $Ban->KeyID;
+            }
+        }
 
-		Cache::store('bans', $bans, static::$tableCachePeriod);
+        Cache::store('bans', $bans, static::$tableCachePeriod);
 
-		return $bans;
-	}
+        return $bans;
+    }
 }
