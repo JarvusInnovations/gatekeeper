@@ -1,0 +1,1 @@
+<small class="muted">Powered by <a target="_blank" href="https://github.com/JarvusInnovations/GateKeeper">GateKeeper</a> &mdash; an open-source product of <a target=_blank href="http://jarv.us" title="Jarvus Innovations, a web software development firm in Philadelphia">Jarvus Innovations</a></small>
