@@ -4,6 +4,8 @@ class ApiRequestHandler extends RequestHandler
 {
     public static $poweredByHeader = 'Jarvus Gatekeeper';
     public static $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
+    public static $defaultTimeout = 30;
+    public static $defaultTimeoutConnect = 5;
     public static $passthruHeaders = array(
         '/^HTTP\//'
         ,'/^Content-Type:/'
@@ -180,6 +182,8 @@ class ApiRequestHandler extends RequestHandler
             ,'url' => $urlPrefix . $url
             ,'interface' => static::$sourceInterface
             ,'passthruHeaders' => static::$passthruHeaders
+            ,'timeout' => static::$defaultTimeout
+            ,'timeoutConnect' => static::$defaultTimeoutConnect
             ,'afterResponse' => function($responseBody, $responseHeaders, $options, $ch) use ($Endpoint, $Key, $url, $cacheKey, $now) {
                 $curlInfo = curl_getinfo($ch);
                 list($path, $query) = explode('?', $url);
