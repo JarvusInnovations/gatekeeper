@@ -1,5 +1,7 @@
 <?php
 
+Gatekeeper::authorizeTestApiAccess();
+
 $delay = !empty($_REQUEST['delay']) && is_numeric($_REQUEST['delay']) ? $_REQUEST['delay'] : 5;
 
 sleep($delay);
