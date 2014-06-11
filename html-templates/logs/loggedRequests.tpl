@@ -53,6 +53,12 @@
 
     {$pagingHtml}
 
-    <a class="button" href="/logs/json{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">Download JSON</a>
-    <a class="button" href="/logs/csv{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">Download CSV</a>
+    <div>
+        <a class="button" href="/logs?{refill_query format=json}">Download JSON (this page)</a>
+        <a class="button" href="/logs?{refill_query format=csv}">Download CSV (this page)</a>
+    </div>
+    <div>
+        <a class="button" href="/logs?{refill_query format=json limit=0 offset=0}">Download JSON (all pages)</a>
+        <a class="button" href="/logs?{refill_query format=csv limit=0 offset=0}">Download CSV (all pages)</a>
+    </div>
 {/block}
