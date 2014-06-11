@@ -8,17 +8,15 @@
     <header class="page-header">
         <h2 class="page-title">Logged Requests {if $Endpoint}for {endpoint $Endpoint}{/if}</h2>
         <div class="page-buttons">
-            <small class="muted">Download:&nbsp;</small>
-            <a class="button" href="/logs/json{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">JSON</a>
-            <a class="button" href="/logs/csv{tif $.server.QUERY_STRING ? "?$.server.QUERY_STRING"}">CSV</a>
+            <small class="muted">Download this page:&nbsp;</small>
+            <a class="button" href="/logs?{refill_query format=json}">JSON</a>
+            <a class="button" href="/logs?{refill_query format=csv}">CSV</a>
+
+            <small class="muted">Download all:&nbsp;</small>
+            <a class="button" href="/logs?{refill_query format=json limit=0 offset=0}">JSON</a>
+            <a class="button" href="/logs?{refill_query format=csv limit=0 offset=0}">CSV</a>
         </div>
     </header>
-
-    {capture assign=pagingHtml}
-        {if $limit}{pagingLinks $total pageSize=$limit showAll=true}{/if}
-    {/capture}
-
-    {$pagingHtml}
 
     <table>
         <thead>
@@ -51,14 +49,5 @@
         </tbody>
     </table>
 
-    {$pagingHtml}
-
-    <div>
-        <a class="button" href="/logs?{refill_query format=json}">Download JSON (this page)</a>
-        <a class="button" href="/logs?{refill_query format=csv}">Download CSV (this page)</a>
-    </div>
-    <div>
-        <a class="button" href="/logs?{refill_query format=json limit=0 offset=0}">Download JSON (all pages)</a>
-        <a class="button" href="/logs?{refill_query format=csv limit=0 offset=0}">Download CSV (all pages)</a>
-    </div>
+    {if $limit}{pagingLinks $total pageSize=$limit showAll=true}{/if}
 {/block}
