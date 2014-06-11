@@ -16,7 +16,7 @@ class LogsRequestHandler extends RecordsRequestHandler
 
     public static function handleBrowseRequest($options = array(), $conditions = array(), $responseID = null, $responseData = array())
     {
-        // apply time-slot filter
+        // apply endpoint filter
         if (!empty($_REQUEST['endpoint']) && !empty($_REQUEST['endpointVersion'])) {
             if (!$Endpoint = Endpoint::getByHandleAndVersion($_REQUEST['endpoint'], $_REQUEST['endpointVersion'])) {
                 return static::throwNotFoundError('Endpoint not found');
