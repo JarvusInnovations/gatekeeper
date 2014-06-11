@@ -63,7 +63,7 @@
                 </div>
                 <footer>
                     <a class="button" href="/keys/{$Key->Key}/edit">Edit</a>
-                    <a class="button" href="#suspend">Suspend</a>
+                    <a class="button" href="/bans/create?KeyID={$Key->Key}">Suspend</a>
                     <a class="button" href="/keys/{$Key->Key}#key-log">View Log</a>
                 </footer>
             </article>
