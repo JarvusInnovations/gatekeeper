@@ -8,12 +8,15 @@ class ApiRequestHandler extends RequestHandler
     public static $defaultTimeoutConnect = 5;
     public static $passthruHeaders = array(
         '/^HTTP\//'
-        ,'/^Content-Type:/'
-        ,'/^Date:/'
-        ,'/^Set-Cookie:/'
-        ,'/^Location:/'
-        ,'/^ETag:/'
-        ,'/^Last-Modified:/'
+        ,'/^Content-Type:/i'
+        ,'/^Date:/i'
+        ,'/^Set-Cookie:/i'
+        ,'/^Location:/i'
+        ,'/^ETag:/i'
+        ,'/^Last-Modified:/i'
+        ,'/^Cache-Control:/i'
+        ,'/^Pragma:/i'
+        ,'/^Expires:/i'
     );
 
     public static $responseMode = 'json'; // override RequestHandler::$responseMode
