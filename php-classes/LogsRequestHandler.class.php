@@ -12,6 +12,7 @@ class LogsRequestHandler extends RecordsRequestHandler
 
     public static $browseLimitDefault = 20;
     public static $browseOrder = array('ID' => 'DESC');
+    public static $browseCalcFoundRows = false;
 
 
     public static function handleBrowseRequest($options = array(), $conditions = array(), $responseID = null, $responseData = array())

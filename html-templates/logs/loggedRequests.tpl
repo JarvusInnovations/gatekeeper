@@ -49,5 +49,11 @@
         </tbody>
     </table>
 
-    {if $limit}{pagingLinks $total pageSize=$limit showAll=true}{/if}
+    {if $limit}
+        {$count = count($data)}
+        Showing {$offset+1}&ndash;{$offset+$count}
+        {if $count == $limit}
+            <a class="paging-link next" href="?{refill_query offset=$offset+$limit}">Next&nbsp;&rarr;</a>
+        {/if}
+    {/if}
 {/block}
