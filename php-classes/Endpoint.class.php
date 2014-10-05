@@ -1,9 +1,12 @@
 <?php
 
+use Gatekeeper\Metrics;
+
 class Endpoint extends ActiveRecord
 {
     public static $metricTTL = 60;
     public static $versionPattern = '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/';
+    protected $_metricsCache = ['counters' => [], 'averages' => []];
 
     // ActiveRecord configuration
     public static $tableName = 'endpoints';
@@ -86,13 +89,13 @@ class Endpoint extends ActiveRecord
         )
     );
 
-    public static $sorters = array(
-        'calls-total' => array(__CLASS__, 'sortMetric')
-        ,'calls-week' => array(__CLASS__, 'sortMetric')
-        ,'responsetime' => array(__CLASS__, 'sortMetric')
-        ,'keys' => array(__CLASS__, 'sortMetric')
-        ,'clients' => array(__CLASS__, 'sortMetric')
-    );
+#    public static $sorters = array(
+#        'calls-total' => array(__CLASS__, 'sortMetric')
+#        ,'calls-week' => array(__CLASS__, 'sortMetric')
+#        ,'responsetime' => array(__CLASS__, 'sortMetric')
+#        ,'keys' => array(__CLASS__, 'sortMetric')
+#        ,'clients' => array(__CLASS__, 'sortMetric')
+#    );
 
     public static function getByHandleAndVersion($handle, $version = null)
     {
@@ -210,53 +213,71 @@ class Endpoint extends ActiveRecord
 
         return $this->finishValidation();
     }
-
-    public function getMetric($metricName, $forceUpdate = false)
+    
+    public function getCounterMetric($counterName)
     {
-        $cacheKey = "metrics/endpoints/$this->ID/$metricName";
-
-        if (false !== ($metricValue = Cache::fetch($cacheKey))) {
-            return $metricValue;
+        if (!array_key_exists($counterName, $this->_metricsCache['counters'])) {
+            $this->_metricsCache['counters'][$counterName] = Gatekeeper\Metrics::estimateCounter("endpoints/$this->ID/$counterName");
         }
 
-        try {
-            $metricValue = DB::oneValue('SELECT %s FROM `%s` Endpoint WHERE Endpoint.ID = %u', array(
-                static::getMetricSQL($metricName)
-                ,static::$tableName
-                ,$this->ID
-            ));
-
-            Cache::store($cacheKey, $metricValue, static::$metricTTL);
-        } catch (TableNotFoundException $e) {
-            return null;
+        return $this->_metricsCache['counters'][$counterName];
+    }
+    
+    public function getAverageMetric($averageName, $counterName)
+    {
+        if (!array_key_exists($averageName, $this->_metricsCache['averages'])) {
+            $this->_metricsCache['averages'][$averageName] = Gatekeeper\Metrics::estimateAverage("endpoints/$this->ID/$averageName", "endpoints/$this->ID/$counterName");
         }
 
-        return $metricValue;
+        return $this->_metricsCache['averages'][$averageName];
     }
 
-    public static function getMetricSQL($metricName)
-    {
-        switch($metricName)
-        {
-            case 'calls-total':
-                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
-            case 'calls-week':
-                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID AND Created >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK))', LoggedRequest::$tableName);
-            case 'responsetime':
-                return sprintf('(SELECT AVG(ResponseTime) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
-            case 'keys':
-                return sprintf('(SELECT COUNT(*) FROM `%s` K LEFT JOIN `%s` KE ON (KE.KeyID = K.ID) WHERE K.AllEndpoints OR KE.EndpointID = Endpoint.ID)', Key::$tableName, KeyEndpoint::$tableName);
-            case 'clients':
-                return sprintf('(SELECT COUNT(DISTINCT ClientIP) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
-            default:
-                return 'NULL';
-        }
-    }
-
-    public static function sortMetric($dir, $name)
-    {
-        return static::getMetricSQL($name) . ' ' . $dir;
-    }
+#    public function getMetric($metricName, $forceUpdate = false)
+#    {
+#        $cacheKey = "metrics/endpoints/$this->ID/$metricName";
+#
+#        if (false !== ($metricValue = Cache::fetch($cacheKey))) {
+#            return $metricValue;
+#        }
+#
+#        try {
+#            $metricValue = DB::oneValue('SELECT %s FROM `%s` Endpoint WHERE Endpoint.ID = %u', array(
+#                static::getMetricSQL($metricName)
+#                ,static::$tableName
+#                ,$this->ID
+#            ));
+#
+#            Cache::store($cacheKey, $metricValue, static::$metricTTL);
+#        } catch (TableNotFoundException $e) {
+#            return null;
+#        }
+#
+#        return $metricValue;
+#    }
+#
+#    public static function getMetricSQL($metricName)
+#    {
+#        switch($metricName)
+#        {
+#            case 'calls-total':
+#                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
+#            case 'calls-week':
+#                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID AND Created >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK))', LoggedRequest::$tableName);
+#            case 'responsetime':
+#                return sprintf('(SELECT AVG(ResponseTime) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
+#            case 'keys':
+#                return sprintf('(SELECT COUNT(*) FROM `%s` K LEFT JOIN `%s` KE ON (KE.KeyID = K.ID) WHERE K.AllEndpoints OR KE.EndpointID = Endpoint.ID)', Key::$tableName, KeyEndpoint::$tableName);
+#            case 'clients':
+#                return sprintf('(SELECT COUNT(DISTINCT ClientIP) FROM `%s` WHERE EndpointID = Endpoint.ID)', LoggedRequest::$tableName);
+#            default:
+#                return 'NULL';
+#        }
+#    }
+#
+#    public static function sortMetric($dir, $name)
+#    {
+#        return static::getMetricSQL($name) . ' ' . $dir;
+#    }
 
     public function getCachedResponses($limit = null)
     {

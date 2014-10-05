@@ -11,6 +11,7 @@
         </div>
     </header>
 
+    {*
     <form method="GET">
         <label>
             Sort by
@@ -28,23 +29,32 @@
             </select>
         </label>
     </form>
+    *}
+    
+    {$sampleDuration = Gatekeeper\Metrics::$sampleDuration}
+    {capture assign=sampleDurationString}{strip}
+        {if $sampleDuration == 3600}
+            hour
+        {else}
+            {$sampleDuration} second{tif $sampleDuration != 1 ? s}
+        {/if}
+    {/strip}{/capture}
 
     <section class="endpoints">
-        <p class="muted">Metrics are updated every {Endpoint::$metricTTL} seconds.</p>
+        {*<p class="muted">Metrics are updated every {Endpoint::$metricTTL} seconds.</p>*}
 
         {foreach item=Endpoint from=$data}
             {$metrics = array(
-                callsTotal = $Endpoint->getMetric(calls-total)
-                ,callsWeek = $Endpoint->getMetric(calls-week)
-                ,responseTime = $Endpoint->getMetric(responsetime)
-                ,keys = $Endpoint->getMetric(keys)
-                ,clients = $Endpoint->getMetric(clients)
+                requests = $Endpoint->getCounterMetric('requests'),
+                responseTime = $Endpoint->getAverageMetric('response-time', 'requests'),
+                responsesExecuted = $Endpoint->getCounterMetric('responses-executed'),
+                responsesCached = $Endpoint->getCounterMetric('responses-cached'),
             )}
 
             <article class="endpoint">
                 <div class="key-metric good">
-                    <strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong>
-                    <small>all-time</small>
+                    <strong>{$metrics.requests|number_format} request{tif $metrics.requests != 1 ? s}</strong>
+                    <small>per {$sampleDurationString}</small>
                 </div>
                 <div class="details">
                     <header>
@@ -59,21 +69,25 @@
                     </header>
                     <ul class="other-metrics">
                         <li>
-                            <strong>{$metrics.callsWeek|number_format} call{tif $metrics.callsWeek != 1 ? s}</strong>
-                            <small>this week</small>
-                        </li>
-                        <li>
-                            <strong>{$metrics.responseTime|number_format} ms</strong>
+                            <strong>{tif $metrics.responseTime === null ? '&mdash;' : $metrics.responseTime|number_format} ms</strong>
                             <small>avg response time</small>
                         </li>
                         <li>
+                            <strong>{$metrics.responsesExecuted|number_format} response{tif $metrics.responsesExecuted != 1 ? s}</strong>
+                            <small>executed per {$sampleDurationString}</small>
+                        </li>
+                        <li>
+                            <strong>{$metrics.responsesCached|number_format} response{tif $metrics.responsesCached != 1 ? s}</strong>
+                            <small>hit cache per {$sampleDurationString}</small>
+                        </li>
+                        {*<li>
                             <strong>{$metrics.keys|number_format} key{tif $metrics.keys != 1 ? s}</strong>
                             <small>assigned</small>
                         </li>
                         <li>
                             <strong>{$metrics.clients|number_format}</strong>
                             <small>unique client{tif $metrics.clients != 1 ? s}</small>
-                        </li>
+                        </li>*}
                     </ul>
                 </div>
                 <footer>
