@@ -10,6 +10,7 @@ Git::$repositories['GateKeeper'] = array(
         ,'html-templates'
         ,'php-classes'
         ,'php-config'
+        ,'phpunit-tests'
         ,'site-root'
         ,'sencha-workspace'
         ,'dwoo-plugins'
