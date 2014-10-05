@@ -13,4 +13,4 @@ $query = preg_replace('/(^|&)gatekeeperKey=[a-zA-Z0-9]+(&|$)/', '$2', $query);
 
 
 // save URL to request object
-$_EVENT['request']->setUrl(rtrim($path . '?' . $query, '?&'));
+$_EVENT['request']->setUrl(rtrim($path . '?' . ltrim($query, '?&'), '?&'));
