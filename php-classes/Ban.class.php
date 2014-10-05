@@ -85,27 +85,42 @@ class Ban extends ActiveRecord
         return "ID $dir";
     }
 
+    protected static $_activeBans; 
     public static function getActiveBansTable()
     {
-        if($bans = Cache::fetch('bans')) {
-            return $bans;
+        if (isset(static::$_activeBans)) {
+            return static::$_activeBans;
         }
 
-        $bans = array(
+        if (static::$_activeBans = Cache::fetch('bans')) {
+            return static::$_activeBans;
+        }
+
+        static::$_activeBans = array(
             'ips' => array()
             ,'keys' => array()
         );
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
             if ($Ban->IP) {
-                $bans['ips'][] = long2ip($Ban->IP);
+                static::$_activeBans['ips'][] = long2ip($Ban->IP);
             } elseif($Ban->KeyID) {
-                $bans['keys'][] = $Ban->KeyID;
+                static::$_activeBans['keys'][] = $Ban->KeyID;
             }
         }
 
-        Cache::store('bans', $bans, static::$tableCachePeriod);
+        Cache::store('bans', static::$_activeBans, static::$tableCachePeriod);
 
-        return $bans;
+        return static::$_activeBans;
+    }
+
+    public static function isIPAddressBanned($ip)
+    {
+        return in_array($ip, static::getActiveBansTable()['ips']);
+    }
+
+    public static function isKeyBanned(Key $Key)
+    {
+        return in_array($Key->ID, static::getActiveBansTable()['keys']);
     }
 }
