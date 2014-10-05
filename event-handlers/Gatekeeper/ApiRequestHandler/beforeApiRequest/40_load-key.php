@@ -11,6 +11,6 @@ if ($keyString) {
     if ($Key = Key::getByKey($keyString)) {
         $_EVENT['request']->setKey($Key);
     } else {
-        return ApiRequestHandler::throwKeyError('provided gatekeeper key is invalid');
+        JSON::error('provided gatekeeper key is invalid', 401);
     }
 }

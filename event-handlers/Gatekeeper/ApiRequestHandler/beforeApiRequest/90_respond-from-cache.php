@@ -1,5 +1,7 @@
 <?php
 
+use Gatekeeper\Metrics;
+
 $Endpoint = $_EVENT['request']->getEndpoint();
 $url = $_EVENT['request']->getUrl();
 

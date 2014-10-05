@@ -6,7 +6,7 @@ $Key = $_EVENT['request']->getKey();
 
 if ($Endpoint->KeyRequired) {
     if (!$Key) {
-        $realm = static::$authRealm;
+        $realm = Gatekeeper::$authRealm;
         
         if ($Endpoint) {
             $realm .= '/';
