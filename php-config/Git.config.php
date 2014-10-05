@@ -6,7 +6,8 @@ Git::$repositories['GateKeeper'] = array(
     ,'workingBranch' => 'master'
     ,'localOnly' => true
     ,'trees' => array(
-        'html-templates'
+        'event-handlers'
+        ,'html-templates'
         ,'php-classes'
         ,'php-config'
         ,'site-root'
