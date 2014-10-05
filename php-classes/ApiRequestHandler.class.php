@@ -102,7 +102,7 @@ class ApiRequestHandler extends RequestHandler
         JSON::error($error);
     }
 
-    public static function sendAdminNotification(Endpoint $Endpoint, $templateName, $data, $throttleKey = null, $throttleTime = 60)
+    public static function sendAdminNotification(Endpoint $Endpoint, $templateName, $data, $throttleKey = null, $throttleTime = 1800)
     {
         // send notification email to staff
         if (!$throttleKey || !Cache::fetch($throttleKey)) {
