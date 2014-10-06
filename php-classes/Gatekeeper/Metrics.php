@@ -6,7 +6,7 @@ use Cache;
 
 class Metrics
 {
-    public static $sampleDuration = 30; // 3600; // 1 hr
+    public static $sampleDuration = 3600; // 1 hr
 
     protected static $_currentSampleIndex;
 
