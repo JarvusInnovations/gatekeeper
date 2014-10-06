@@ -1,7 +1,7 @@
 <?php
 
 Git::$repositories['GateKeeper'] = array(
-    'remote' => 'git@github.com:JarvusInnovations/GateKeeper.git'
+    'remote' => 'git@github.com:JarvusInnovations/Gatekeeper.git'
     ,'originBranch' => 'master'
     ,'workingBranch' => 'master'
     ,'localOnly' => true
