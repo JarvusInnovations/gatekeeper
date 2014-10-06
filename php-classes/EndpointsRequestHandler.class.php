@@ -3,6 +3,7 @@
 class EndpointsRequestHandler extends RecordsRequestHandler
 {
     public static $recordClass = 'Endpoint';
+    public static $browseOrder = ['ID' => 'DESC'];
 
     public static $accountLevelRead = 'Staff';
     public static $accountLevelComment = 'Staff';
