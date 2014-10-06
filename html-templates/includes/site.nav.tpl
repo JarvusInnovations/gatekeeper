@@ -1,10 +1,9 @@
-{* page name/responseId => 'optional description' *}
-{$navItems = array(
-  'endpoints' => ''
-       'keys' => ''
-       'bans' => ''
-)}
-
-{load_templates subtemplates/nav.tpl}
-
-{nav $navItems mobileHidden=$mobileHidden}
+<nav class="nav site {if $mobileHidden}mobile-hidden{/if} {if $mobileOnly}mobile-only{/if}">
+	<ul>
+        <li><a href="/endpoints" class="{tif $.responseId == endpoints ? current}">Endpoints</a></li>
+        <li><a href="/keys" class="{tif $.responseId == keys ? current}">Keys</a></li>
+        <li><a href="/bans" class="{tif $.responseId == bans ? current}">Bans</a></li>
+        <li><a href="/logs" class="{tif $.responseId == loggedRequests ? current}">Request Log</a></li>
+        <li><a href="/reports/top-users" class="{tif $.responseId == topUsers ? current}">Top Users</a></li>
+	</ul>
+</nav>
