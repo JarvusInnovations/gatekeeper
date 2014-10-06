@@ -49,7 +49,8 @@ class TopUsersRequestHandler extends AbstractReportRequestHandler
         );
 
         return static::respond('topUsers', [
-           'data' => $topUsers 
+           'data' => $topUsers,
+           'Endpoint' => $Endpoint
         ]);
     }
 }
