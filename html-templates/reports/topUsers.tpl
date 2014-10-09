@@ -13,14 +13,14 @@
     </header>
 
     <form method="GET">
-        <fieldset>
-            <label>Filters</label>
+        <h3 class="section-title">Filters</h3>
+        <fieldset class="inline-fields">
 
             {field name=time-max label='Time (max)' default='now'}
             {field name=time-min label='Time (min)' default='1 week ago'}
 
             {capture assign=endpointSelectHtml}
-                <select name="endpoint" class="field-control inline">
+                <select name="endpoint" class="field-control">
                     <option value="">All endpoints</option>
                     {foreach item=AvailableEndpoint from=Endpoint::getAll()}
                         <option value="{$AvailableEndpoint->ID}" {refill field=endpoint selected=$AvailableEndpoint->ID default=$Endpoint->ID}>{$AvailableEndpoint->Title|escape} v{$AvailableEndpoint->Version|escape}</option>
@@ -30,7 +30,7 @@
         	
         	{labeledField html=$endpointSelectHtml type=select label='Endpoint'}
 
-            <input type="submit" value="Apply Filters">
+            <div class="submit-area"><input type="submit" value="Apply Filters"></div>
         </fieldset>
     </form>
 
@@ -38,8 +38,8 @@
         <thead>
                 <th class="col-user">User</th>
                 <th class="col-timestamp">Total Requests</th>
-                <th class="col-request-earliest">Earliest <small>Request</small></th>
-                <th class="col-request-latest">Latest <small>Request</small></th>
+                <th class="col-request-earliest">Earliest <small class="inline">Request</small></th>
+                <th class="col-request-latest">Latest <small class="inline">Request</small></th>
             </tr>
         </thead>
 
