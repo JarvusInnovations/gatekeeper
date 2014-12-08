@@ -27,14 +27,14 @@
         <fieldset class="shrink">
 
             <div class="inline-fields">
-                {field name=IP label='IP Address' error=$errors.IP default=tif($Ban->IP, long2ip($Ban->IP))}
+                {field inputName=IP label='IP Address' error=$errors.IP default=tif($Ban->IP, long2ip($Ban->IP))}
                 <div class="or">&mdash;or&mdash;</div>
-                {field name=KeyID label='API Key' error=$errors.KeyID default=$Ban->Key->Key}
+                {field inputName=KeyID label='API Key' error=$errors.KeyID default=$Ban->Key->Key}
             </div>
 
-            {field name=ExpirationDate label='Expiration Date' type=date default=tif($Ban->ExpirationDate, date('Y-m-d', $Ban->ExpirationDate)) hint="Leave blank for indefinate ban"}
+            {field inputName=ExpirationDate label='Expiration Date' type=date default=tif($Ban->ExpirationDate, date('Y-m-d', $Ban->ExpirationDate)) hint="Leave blank for indefinate ban"}
 
-            {textarea name=Notes label='Notes' default=$Ban->Notes}
+            {textarea inputName=Notes label='Notes' default=$Ban->Notes}
 
             <div class="submit-area">
                 <input type="submit" class="button submit" value="{tif $Ban->isPhantom ? Create : Update} Ban">

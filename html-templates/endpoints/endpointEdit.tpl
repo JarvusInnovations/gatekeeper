@@ -26,7 +26,7 @@
         {/if}
 
         <fieldset class="shrink">
-            {field name=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
+            {field inputName=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
 
             {capture assign=urlInputHtml}{strip}
                 http://{tif Gatekeeper::$apiHostname ? Gatekeeper::$apiHostname : "$.server.HTTP_HOST/api"}/&thinsp;
@@ -36,28 +36,28 @@
             {/strip}{/capture}
             {labeledField html=$urlInputHtml type=compound label='Public Handle and Version' error=default($errors.Handle, $errors.Version) required=true}
 
-            {field name=InternalEndpoint label='Internal Endpoint' type=url default=$Endpoint->InternalEndpoint error=$errors.InternalEndpoint required=true}
+            {field inputName=InternalEndpoint label='Internal Endpoint' type=url default=$Endpoint->InternalEndpoint error=$errors.InternalEndpoint required=true}
 
-            {checkbox name=DefaultVersion value=1 unsetValue=0 label='Default Version' default=$Endpoint->DefaultVersion hint='This endpoint should be the default for its handle if no version is requested' error=$errors.DefaultVersion}
+            {checkbox inputName=DefaultVersion value=1 unsetValue=0 label='Default Version' default=$Endpoint->DefaultVersion hint='This endpoint should be the default for its handle if no version is requested' error=$errors.DefaultVersion}
 
             <div class="inline-fields">
-                {field name=AdminName label='Admin Name' error=$errors.AdminName default=$Endpoint->AdminName}
-                {field name=AdminEmail label='Admin Email' type=email error=$errors.AdminEmail hint="Alerts will be sent here" default=$Endpoint->AdminEmail}
+                {field inputName=AdminName label='Admin Name' error=$errors.AdminName default=$Endpoint->AdminName}
+                {field inputName=AdminEmail label='Admin Email' type=email error=$errors.AdminEmail hint="Alerts will be sent here" default=$Endpoint->AdminEmail}
             </div>
 
-            {field name=DeprecationDate label='Deprecation Date' type=date default=tif($Endpoint->DeprecationDate, date('Y-m-d', $Endpoint->DeprecationDate)) hint="Leave blank if none" error=$errors.DeprecationDate}
+            {field inputName=DeprecationDate label='Deprecation Date' type=date default=tif($Endpoint->DeprecationDate, date('Y-m-d', $Endpoint->DeprecationDate)) hint="Leave blank if none" error=$errors.DeprecationDate}
 
             {ratefields baseName=GlobalRate countDefault=$Endpoint->GlobalRateCount periodDefault=$Endpoint->GlobalRatePeriod label='Rate Limit (Global)' error=default($errors.GlobalRateCount, $errors.GlobalRatePeriod) hint="Leave blank if none"}
 
             {ratefields baseName=UserRate countDefault=$Endpoint->UserRateCount periodDefault=$Endpoint->UserRatePeriod label='Rate Limit (Per User)' error=default($errors.UserRateCount, $errors.UserRatePeriod) hint="Leave blank if none"}
 
-            {checkbox name=KeyRequired value=1 unsetValue=0 label='API Key Required' default=$Endpoint->KeyRequired error=$errors.KeyRequired}
+            {checkbox inputName=KeyRequired value=1 unsetValue=0 label='API Key Required' default=$Endpoint->KeyRequired error=$errors.KeyRequired}
 
-            {checkbox name=CachingEnabled value=1 unsetValue=0 label='Enable Response Caching' default=$Endpoint->CachingEnabled hint='Internal API must activate via HTTP headers' error=$errors.CachingEnabled}
+            {checkbox inputName=CachingEnabled value=1 unsetValue=0 label='Enable Response Caching' default=$Endpoint->CachingEnabled hint='Internal API must activate via HTTP headers' error=$errors.CachingEnabled}
 
-            {checkbox name=AlertOnError value=1 unsetValue=0 label='Alert Admin on Error' default=$Endpoint->AlertOnError error=$errors.AlertOnError}
+            {checkbox inputName=AlertOnError value=1 unsetValue=0 label='Alert Admin on Error' default=$Endpoint->AlertOnError error=$errors.AlertOnError}
 
-            {field name=AlertNearMaxRequests label='Alert Admin at % of Max Requests' type=number default=$Endpoint->AlertNearMaxRequests*100 attribs='min=0 max=100 step=1' hint="Leave blank for no alerts" class="tiny" error=$errors.AlertNearMaxRequests}
+            {field inputName=AlertNearMaxRequests label='Alert Admin at % of Max Requests' type=number default=$Endpoint->AlertNearMaxRequests*100 attribs='min=0 max=100 step=1' hint="Leave blank for no alerts" class="tiny" error=$errors.AlertNearMaxRequests}
 
             <div class="submit-area">
                 <input type="submit" class="button submit" value="{tif $Endpoint->isPhantom ? Create : Update} Endpoint">
