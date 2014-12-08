@@ -1,9 +1,14 @@
 <?php
 
-use Emergence\EventBus;
-use Gatekeeper\ApiRequest;
+namespace Gatekeeper;
 
-class ApiRequestHandler extends RequestHandler
+use Cache;
+use Exception;
+use HttpProxy;
+use Emergence\EventBus;
+use Emergence\Mailer\Mailer;
+
+class ApiRequestHandler extends \RequestHandler
 {
     public static $poweredByHeader = 'Jarvus Gatekeeper';
     public static $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
@@ -109,7 +114,7 @@ class ApiRequestHandler extends RequestHandler
             $data['Endpoint'] = $Endpoint;
 
             if ($emailTo = $Endpoint->getNotificationEmailRecipient()) {
-                \Emergence\Mailer\Mailer::sendFromTemplate($emailTo, $templateName, $data);
+                Mailer::sendFromTemplate($emailTo, $templateName, $data);
             }
 
             if ($throttleKey) {

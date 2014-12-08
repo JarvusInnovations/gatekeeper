@@ -1,5 +1,9 @@
 <?php
 
+namespace Gatekeeper;
+
+use HitBuckets;
+
 $Endpoint = $_EVENT['request']->getEndpoint();
 
 

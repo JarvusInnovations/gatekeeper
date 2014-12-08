@@ -1,5 +1,10 @@
 <?php
 
+namespace Gatekeeper;
+
+use Cache;
+
+
 $Endpoint = $_EVENT['request']->getEndpoint();
 
 

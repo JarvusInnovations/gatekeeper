@@ -1,3 +1,0 @@
-<?php
-
-ApiRequestHandler::$sourceInterface = false;

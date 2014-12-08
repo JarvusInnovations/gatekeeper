@@ -1,3 +1,3 @@
 <?php
 
-ApiRequestHandler::handleRequest();
+Gatekeeper\ApiRequestHandler::handleRequest();

@@ -1,11 +1,13 @@
 <?php
 
+namespace Gatekeeper;
+
 class PoweredByHeader extends PHPUnit_Framework_TestCase
 {
     public function testPoweredByHeader()
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, sprintf('http://%s/api/test-api-status/v1', Site::getConfig('primary_hostname')));
+        curl_setopt($ch, CURLOPT_URL, sprintf('http://%s/api/test-api-status/v1', \Site::getConfig('primary_hostname')));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 1);
         
