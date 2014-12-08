@@ -1,5 +1,9 @@
 <?php
 
+namespace Gatekeeper;
+
+use Cache;
+
 class HitBuckets
 {
     /**
