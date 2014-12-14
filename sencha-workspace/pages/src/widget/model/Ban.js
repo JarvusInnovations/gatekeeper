@@ -3,7 +3,7 @@ Ext.define('Site.widget.model.Ban', {
     extend: 'Site.widget.model.AbstractModel',
     singleton: true,
     alias: [
-        'modelwidget.Ban'
+        'modelwidget.Gatekeeper\\Ban'
     ],
 
     collectionTitleTpl: 'Bans',
