@@ -1,5 +1,8 @@
 <?php
 
+namespace Gatekeeper;
+
+
 // build request URL from remaining path stack
 $path = '/' . implode('/', $_EVENT['request']->getPathStack());
 

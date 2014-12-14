@@ -1,6 +1,7 @@
 <?php
 
-use Gatekeeper\Metrics;
+namespace Gatekeeper;
+
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 $userIdentifier = $_EVENT['request']->getUserIdentifier();

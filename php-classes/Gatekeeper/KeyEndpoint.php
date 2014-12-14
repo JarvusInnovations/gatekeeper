@@ -1,6 +1,10 @@
 <?php
 
-class KeyEndpoint extends ActiveRecord
+namespace Gatekeeper;
+
+use Cache;
+
+class KeyEndpoint extends \ActiveRecord
 {
     // ActiveRecord configuration
     public static $tableName = 'key_endpoints';

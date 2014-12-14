@@ -1,8 +1,12 @@
 <?php
 
-class KeysRequestHandler extends RecordsRequestHandler
+namespace Gatekeeper;
+
+use ActiveRecord;
+
+class KeysRequestHandler extends \RecordsRequestHandler
 {
-    public static $recordClass = 'Key';
+    public static $recordClass = Key::class;
 
     public static $accountLevelRead = 'Staff';
     public static $accountLevelComment = 'Staff';

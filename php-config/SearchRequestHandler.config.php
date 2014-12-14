@@ -1,7 +1,7 @@
 <?php
 
 if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
-    SearchRequestHandler::$searchClasses['User'] = array(
+    SearchRequestHandler::$searchClasses[User::class] = array(
         'fields' => array(
             array(
                 'field' => 'FirstName'
@@ -24,7 +24,7 @@ if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
         ,'conditions' => array('AccountLevel != "Deleted"')
     );
 
-    SearchRequestHandler::$searchClasses['Endpoint'] = array(
+    SearchRequestHandler::$searchClasses[Gatekeeper\Endpoint::class] = array(
         'fields' => array(
             array(
                 'field' => 'Title'
@@ -45,7 +45,7 @@ if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
         )
     );
 
-    SearchRequestHandler::$searchClasses['Key'] = array(
+    SearchRequestHandler::$searchClasses[Gatekeeper\Key::class] = array(
         'fields' => array(
             array(
                 'field' => 'OwnerName'
@@ -66,7 +66,7 @@ if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
         )
     );
 
-    SearchRequestHandler::$searchClasses['Ban'] = array(
+    SearchRequestHandler::$searchClasses[Gatekeeper\Ban::class] = array(
         'fields' => array(
             'Notes'
             ,array(

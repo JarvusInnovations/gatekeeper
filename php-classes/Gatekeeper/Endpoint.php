@@ -1,6 +1,10 @@
 <?php
 
-use Gatekeeper\Metrics;
+namespace Gatekeeper;
+
+use Cache;
+use ActiveRecord;
+use HandleBehavior;
 
 class Endpoint extends ActiveRecord
 {
@@ -77,7 +81,7 @@ class Endpoint extends ActiveRecord
     public static $relationships = array(
         'Rewrites' => array(
             'type' => 'one-many'
-            ,'class' => 'EndpointRewrite'
+            ,'class' => EndpointRewrite::class
             ,'order' => 'Priority'
         )
     );
@@ -217,7 +221,7 @@ class Endpoint extends ActiveRecord
     public function getCounterMetric($counterName)
     {
         if (!array_key_exists($counterName, $this->_metricsCache['counters'])) {
-            $this->_metricsCache['counters'][$counterName] = Gatekeeper\Metrics::estimateCounter("endpoints/$this->ID/$counterName");
+            $this->_metricsCache['counters'][$counterName] = Metrics::estimateCounter("endpoints/$this->ID/$counterName");
         }
 
         return $this->_metricsCache['counters'][$counterName];
@@ -226,7 +230,7 @@ class Endpoint extends ActiveRecord
     public function getAverageMetric($averageName, $counterName)
     {
         if (!array_key_exists($averageName, $this->_metricsCache['averages'])) {
-            $this->_metricsCache['averages'][$averageName] = Gatekeeper\Metrics::estimateAverage("endpoints/$this->ID/$averageName", "endpoints/$this->ID/$counterName");
+            $this->_metricsCache['averages'][$averageName] = Metrics::estimateAverage("endpoints/$this->ID/$averageName", "endpoints/$this->ID/$counterName");
         }
 
         return $this->_metricsCache['averages'][$averageName];

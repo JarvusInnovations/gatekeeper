@@ -2,6 +2,7 @@
 
 namespace Gatekeeper;
 
+
 $Endpoint = $_EVENT['request']->getEndpoint();
 
 

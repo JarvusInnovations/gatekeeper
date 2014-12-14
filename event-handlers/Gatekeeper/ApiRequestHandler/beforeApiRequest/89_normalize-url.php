@@ -1,5 +1,8 @@
 <?php
 
+namespace Gatekeeper;
+
+
 $url = $_EVENT['request']->getUrl();
 
 

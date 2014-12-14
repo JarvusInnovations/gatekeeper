@@ -1,6 +1,10 @@
 <?php
 
-class EndpointRewrite extends ActiveRecord
+namespace Gatekeeper;
+
+use Cache;
+
+class EndpointRewrite extends \ActiveRecord
 {
     // ActiveRecord configuration
     public static $tableName = 'endpoint_rewrites';

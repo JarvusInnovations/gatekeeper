@@ -1,5 +1,9 @@
 <?php
 
+namespace Gatekeeper;
+
+use JSON;
+
 class Gatekeeper
 {
     public static $apiHostname;

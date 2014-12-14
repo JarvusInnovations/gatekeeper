@@ -1,8 +1,10 @@
 <?php
 
-class LogsRequestHandler extends RecordsRequestHandler
+namespace Gatekeeper;
+
+class LogsRequestHandler extends \RecordsRequestHandler
 {
-    public static $recordClass = 'LoggedRequest';
+    public static $recordClass = LoggedRequest::class;
 
     public static $accountLevelRead = 'Staff';
     public static $accountLevelComment = 'Staff';

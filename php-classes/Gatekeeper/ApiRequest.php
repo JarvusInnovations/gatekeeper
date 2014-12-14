@@ -2,10 +2,6 @@
 
 namespace Gatekeeper;
 
-use Endpoint;
-use Key;
-use LoggedRequest;
-
 class ApiRequest
 {
     protected $startTime;

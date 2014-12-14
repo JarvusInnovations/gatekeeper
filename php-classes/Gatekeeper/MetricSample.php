@@ -2,7 +2,9 @@
 
 namespace Gatekeeper;
 
-class MetricSample extends \ActiveRecord
+use ActiveRecord;
+
+class MetricSample extends ActiveRecord
 {
     // ActiveRecord configuration
     public static $tableName = 'metric_samples';

@@ -1,3 +1,3 @@
 <?php
 
-KeysRequestHandler::handleRequest();
+Gatekeeper\KeysRequestHandler::handleRequest();

@@ -1,8 +1,10 @@
 <?php
 
-class BansRequestHandler extends RecordsRequestHandler
+namespace Gatekeeper;
+
+class BansRequestHandler extends \RecordsRequestHandler
 {
-    public static $recordClass = 'Ban';
+    public static $recordClass = Ban::class;
 
     public static $accountLevelRead = 'Staff';
     public static $accountLevelComment = 'Staff';
@@ -10,7 +12,7 @@ class BansRequestHandler extends RecordsRequestHandler
     public static $accountLevelWrite = 'Staff';
     public static $accountLevelAPI = 'Staff';
 
-    protected static function applyRecordDelta(ActiveRecord $Ban, $data)
+    protected static function applyRecordDelta(\ActiveRecord $Ban, $data)
     {
         if (isset($data['IP']) && !is_numeric($data['IP'])) {
             $data['IP'] = ip2long($data['IP']);

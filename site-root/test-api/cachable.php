@@ -1,6 +1,6 @@
 <?php
 
-Gatekeeper::authorizeTestApiAccess();
+Gatekeeper\Gatekeeper::authorizeTestApiAccess();
 
 $cacheSecs = !empty($_GET['secs']) && ctype_digit($_GET['secs']) ? $_GET['secs'] : 30;
 

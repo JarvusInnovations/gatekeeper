@@ -1,8 +1,12 @@
 <?php
 
-class EndpointsRequestHandler extends RecordsRequestHandler
+namespace Gatekeeper;
+
+use ActiveRecord;
+
+class EndpointsRequestHandler extends \RecordsRequestHandler
 {
-    public static $recordClass = 'Endpoint';
+    public static $recordClass = Endpoint::class;
     public static $browseOrder = ['ID' => 'DESC'];
 
     public static $accountLevelRead = 'Staff';

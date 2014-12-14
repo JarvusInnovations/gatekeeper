@@ -1,6 +1,8 @@
 <?php
 
-class LoggedRequest extends ActiveRecord
+namespace Gatekeeper;
+
+class LoggedRequest extends \ActiveRecord
 {
     // ActiveRecord configuration
     public static $tableName = 'requests_log';
@@ -39,11 +41,11 @@ class LoggedRequest extends ActiveRecord
     public static $relationships = array(
         'Endpoint' => array(
             'type' => 'one-one'
-            ,'class' => 'Endpoint'
+            ,'class' => Endpoint::class
         )
         ,'Key' => array(
             'type' => 'one-one'
-            ,'class' => 'Key'
+            ,'class' => Key::class
         )
     );
 }

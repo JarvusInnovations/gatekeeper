@@ -1,6 +1,11 @@
 <?php
 
-class Key extends ActiveRecord
+namespace Gatekeeper;
+
+use DB;
+use Cache;
+
+class Key extends \ActiveRecord
 {
     public static $metricTTL = 60;
 
@@ -34,8 +39,8 @@ class Key extends ActiveRecord
     public static $relationships = array(
         'Endpoints' => array(
             'type' => 'many-many'
-            ,'class' => 'Endpoint'
-            ,'linkClass' => 'KeyEndpoint'
+            ,'class' => Endpoint::class
+            ,'linkClass' => KeyEndpoint::class
         )
     );
 

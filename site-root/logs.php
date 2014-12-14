@@ -1,3 +1,3 @@
 <?php
 
-LogsRequestHandler::handleRequest();
+Gatekeeper\LogsRequestHandler::handleRequest();

@@ -1,6 +1,9 @@
 <?php
 
-use Gatekeeper\Metrics;
+namespace Gatekeeper;
+
+use Cache;
+
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 $url = $_EVENT['request']->getUrl();
@@ -21,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint->CachingEnabled) {
             print($cachedResponse['body']);
             
             $_EVENT['metrics']['endpoint-responses-cached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/responses-cached");
-            Site::finishRequest();
+            \Site::finishRequest();
         }
     }
 }

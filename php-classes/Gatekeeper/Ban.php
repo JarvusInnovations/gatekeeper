@@ -1,6 +1,10 @@
 <?php
 
-class Ban extends ActiveRecord
+namespace Gatekeeper;
+
+use Cache;
+
+class Ban extends \ActiveRecord
 {
     public static $tableCachePeriod = 300;
 
@@ -33,7 +37,7 @@ class Ban extends ActiveRecord
     public static $relationships = array(
         'Key' => array(
             'type' => 'one-one'
-            ,'class' => 'Key'
+            ,'class' => Key::class
         )
     );
 
