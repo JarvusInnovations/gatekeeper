@@ -3,4 +3,4 @@
 namespace Gatekeeper;
 
 
-$_EVENT['LoggedRequest']->save();
+$_EVENT['Transaction']->save();

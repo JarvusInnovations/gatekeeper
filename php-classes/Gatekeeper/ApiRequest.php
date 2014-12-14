@@ -9,7 +9,7 @@ class ApiRequest
     protected $endpoint;
     protected $key;
     protected $url = '';
-    protected $logRecord;
+    protected $transaction;
 
     public function __construct(array $pathStack = null)
     {
@@ -75,14 +75,14 @@ class ApiRequest
         $this->url = is_array($url) ? implode('/', $url) : $url;
     }
 
-    public function getLogRecord()
+    public function getTransaction()
     {
-        return $this->logRecord;
+        return $this->transaction;
     }
 
-    public function setLogRecord(LoggedRequest $LogRecord)
+    public function setTransaction(Transaction $Transaction)
     {
-        $this->logRecord = $LogRecord;
+        $this->transaction = $Transaction;
     }
 
     public function isReady()

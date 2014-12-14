@@ -66,7 +66,7 @@ class ApiRequestHandler extends \RequestHandler
 
 
                 // initialize log record
-                $LoggedRequest = LoggedRequest::create([
+                $Transaction = Transaction::create([
                     'Endpoint' => $request->getEndpoint()
                     ,'Key' => $request->getKey()
                     ,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
@@ -86,7 +86,7 @@ class ApiRequestHandler extends \RequestHandler
                     'beforeEvent' => &$beforeEvent,
                     'curlHandle' => $curlHandle,
                     'curlInfo' => $curlInfo,
-                    'LoggedRequest' => $LoggedRequest,
+                    'Transaction' => $Transaction,
                     'responseCode' => $curlInfo['http_code'],
                     'responseHeaders' => &$responseHeaders,
                     'responseBody' => &$responseBody

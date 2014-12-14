@@ -147,11 +147,11 @@ class Key extends \ActiveRecord
         switch($metricName)
         {
             case 'calls-total':
-                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE KeyID = `Key`.ID)', LoggedRequest::$tableName);
+                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE KeyID = `Key`.ID)', Transaction::$tableName);
             case 'calls-week':
-                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE KeyID = `Key`.ID AND Created >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK))', LoggedRequest::$tableName);
+                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE KeyID = `Key`.ID AND Created >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK))', Transaction::$tableName);
             case 'calls-day-avg':
-                return sprintf('(SELECT COUNT(*) / (DATEDIFF(MAX(Created), MIN(Created)) + 1) FROM `%s` WHERE KeyID = `Key`.ID)', LoggedRequest::$tableName);
+                return sprintf('(SELECT COUNT(*) / (DATEDIFF(MAX(Created), MIN(Created)) + 1) FROM `%s` WHERE KeyID = `Key`.ID)', Transaction::$tableName);
             case 'endpoints':
                 return sprintf('IF(`Key`.AllEndpoints, (SELECT COUNT(*) FROM `%s`), (SELECT COUNT(*) FROM `%s` WHERE KeyID = `Key`.ID))', Endpoint::$tableName, KeyEndpoint::$tableName);
             default:

@@ -2,9 +2,9 @@
 
 namespace Gatekeeper;
 
-class LogsRequestHandler extends \RecordsRequestHandler
+class TransactionsRequestHandler extends \RecordsRequestHandler
 {
-    public static $recordClass = LoggedRequest::class;
+    public static $recordClass = Transaction::class;
 
     public static $accountLevelRead = 'Staff';
     public static $accountLevelComment = 'Staff';

@@ -127,15 +127,15 @@
             </thead>
 
             <tbody>
-            {foreach item=Request from=LoggedRequest::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
+            {foreach item=Transaction from=Transaction::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
                 <tr>
-                    <td class="col-request">{$Request->Method} <small>{$Request->Path|escape|default:/}{tif $Request->Query ? "?$Request->Query"|query_string}</small></td>
-                    <td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
-                    <td class="col-response-code">{$Request->ResponseCode}</td>
-                    <td class="col-response-time">{$Request->ResponseTime|number_format}&nbsp;ms</td>
-                    <td class="col-response-size">{$Request->ResponseBytes|number_format}&nbsp;B</td>
-                    <td class="col-client-ip">{$Request->ClientIP|long2ip}</td>
-                    <td class="col-key">{if $Request->Key}{apiKey $Request->Key}{else}<small class="muted">&mdash;</small></td>
+                    <td class="col-request">{$Transaction->Method} <small>{$Transaction->Path|escape|default:/}{tif $Request->Query ? "?$Transaction->Query"|query_string}</small></td>
+                    <td class="col-timestamp">{$Transaction->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+                    <td class="col-response-code">{$Transaction->ResponseCode}</td>
+                    <td class="col-response-time">{$Transaction->ResponseTime|number_format}&nbsp;ms</td>
+                    <td class="col-response-size">{$Transaction->ResponseBytes|number_format}&nbsp;B</td>
+                    <td class="col-client-ip">{$Transaction->ClientIP|long2ip}</td>
+                    <td class="col-key">{if $Transaction->Key}{apiKey $Transaction->Key}{else}<small class="muted">&mdash;</small></td>
                 </tr>
             {foreachelse}
                 <tr>
@@ -144,6 +144,6 @@
             {/foreach}
             </tbody>
         </table>
-        <a class="button" href="/logs?endpoint={$Endpoint->Handle}&endpointVersion={$Endpoint->Version}">View Full Log &rarr;</a>
+        <a class="button" href="/transactions?endpoint={$Endpoint->Handle}&endpointVersion={$Endpoint->Version}">View Full Log &rarr;</a>
     </section>
 {/block}

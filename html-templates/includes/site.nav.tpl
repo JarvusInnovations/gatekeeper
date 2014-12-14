@@ -3,7 +3,7 @@
         <li><a href="/endpoints" class="{tif $.responseId == endpoints ? current}">Endpoints</a></li>
         <li><a href="/keys" class="{tif $.responseId == keys ? current}">Keys</a></li>
         <li><a href="/bans" class="{tif $.responseId == bans ? current}">Bans</a></li>
-        <li><a href="/logs" class="{tif $.responseId == loggedRequests ? current}">Request Log</a></li>
+        <li><a href="/transactions" class="{tif $.responseId == loggedRequests ? current}">Request Log</a></li>
         <li><a href="/reports/top-users" class="{tif $.responseId == topUsers ? current}">Top Users</a></li>
 	</ul>
 </nav>

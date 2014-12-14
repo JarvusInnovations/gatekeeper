@@ -47,11 +47,11 @@ foreach ($_EVENT['responseHeaders'] AS $headerKey => $headerValue) {
 
 // save response to cache
 $url = $_EVENT['request']->getUrl();
-$LoggedRequest = $_EVENT['LoggedRequest'];
+$Transaction = $_EVENT['Transaction'];
 
 Cache::store("response:$Endpoint->ID:$url", array(
-    'path' => $LoggedRequest->Path
-    ,'query' => $LoggedRequest->Query
+    'path' => $Transaction->Path
+    ,'query' => $Transaction->Query
     ,'expires' => $expires
     ,'headers' => $cachableHeaders
     ,'body' => $_EVENT['responseBody']

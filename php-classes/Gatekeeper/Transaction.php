@@ -2,12 +2,12 @@
 
 namespace Gatekeeper;
 
-class LoggedRequest extends \ActiveRecord
+class Transaction extends \ActiveRecord
 {
     // ActiveRecord configuration
-    public static $tableName = 'requests_log';
-    public static $singularNoun = 'logged request';
-    public static $pluralNoun = 'logged requests';
+    public static $tableName = 'transactions';
+    public static $singularNoun = 'transaction';
+    public static $pluralNoun = 'transactions';
 
     public static $fields = [
         'CreatorID' => null,
