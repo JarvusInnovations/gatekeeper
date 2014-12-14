@@ -14,7 +14,7 @@ if (
     ($endpointVersion = $_EVENT['request']->peekPathStack()) &&
     $endpointVersion[0] == 'v' &&
     ($endpointVersion = substr($endpointVersion, 1)) &&
-    preg_match(Endpoint::$versionPattern, $endpointVersion) &&
+    preg_match(Endpoint::$validators['Version']['pattern'], $endpointVersion) &&
     ($Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion))
 ) {
     $_EVENT['request']->shiftPathStack();

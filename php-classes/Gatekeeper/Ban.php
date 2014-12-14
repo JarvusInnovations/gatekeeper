@@ -41,6 +41,13 @@ class Ban extends \ActiveRecord
         ]
     ];
 
+    public static $validators = [
+        'ExpirationDate' => [
+            'validator' => 'datetime',
+            'required' => false
+        ]
+    ];
+
     public static $sorters = [
         'created' => [__CLASS__, 'sortCreated'],
         'expiration' => [__CLASS__, 'sortExpiration']
@@ -53,12 +60,6 @@ class Ban extends \ActiveRecord
         if (!$this->KeyID == !$this->IP) {
             $this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
         }
-
-        $this->_validator->validate([
-            'field' => 'ExpirationDate',
-            'validator' => 'datetime',
-            'required' => false
-        ]);
 
         return $this->finishValidation();
     }

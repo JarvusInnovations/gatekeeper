@@ -44,6 +44,17 @@ class Key extends \ActiveRecord
         ]
     ];
 
+    public static $validators = [
+        'OwnerName' => [
+            'minlength' => 2
+        ],
+        'ContactEmail' => [
+            'validator' => 'email',
+            'required' => false
+        ]
+        // TODO: validate expiration date
+    ];
+
     public static $sorters = [
         'calls-total' => [__CLASS__, 'sortMetric'],
         'calls-week' => [__CLASS__, 'sortMetric'],
@@ -68,26 +79,6 @@ class Key extends \ActiveRecord
         }
 
         parent::save($deep);
-    }
-
-    public function validate($deep = true)
-    {
-        parent::validate($deep);
-
-        $this->_validator->validate([
-            'field' => 'OwnerName',
-            'minlength' => 2
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'ContactEmail',
-            'validator' => 'email',
-            'required' => false
-        ]);
-
-        // TODO: validate expiration date
-
-        return $this->finishValidation();
     }
 
     public function getUnlinkedEndpoints()

@@ -9,7 +9,6 @@ use HandleBehavior;
 class Endpoint extends ActiveRecord
 {
     public static $metricTTL = 60;
-    public static $versionPattern = '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/';
     protected $_metricsCache = [
         'counters' => [],
         'averages' => []
@@ -89,6 +88,52 @@ class Endpoint extends ActiveRecord
         ]
     ];
 
+    public static $validators = [
+        'Title' => [
+            'minlength' => 2
+        ],
+        'Handle' => [
+            'required' => false,
+            'validator' => 'handle',
+            'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
+        ],
+        'Version' => [
+            'validator' => 'handle',
+            'allowNumeric' => true,
+            'pattern' => '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/',
+            'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
+        ],
+        'InternalEndpoint' => 'URL',
+        'AdminEmail' => [
+            'validator' => 'email',
+            'required' => false
+        ],
+        'DeprecationDate' => [
+            'validator' => 'datetime',
+            'required' => false
+        ],
+        'GlobalRateCount' => [
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ],
+        'GlobalRatePeriod' => [
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ],
+        'UserRateCount' => [
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ],
+        'UserRatePeriod' => [
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ]
+    ];
+
     public static $indexes = [
         'HandleVersion' => [
             'fields' => ['Handle', 'Version'],
@@ -147,78 +192,6 @@ class Endpoint extends ActiveRecord
                 $otherDefault->save();
             }
         }
-    }
-
-    public function validate($deep = true)
-    {
-        parent::validate($deep);
-
-        $this->_validator->validate([
-            'field' => 'Title',
-            'minlength' => 2
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'Handle',
-            'required' => false,
-            'validator' => 'handle',
-            'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'Version',
-            'validator' => 'handle',
-            'allowNumeric' => true,
-            'pattern' => static::$versionPattern,
-            'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'InternalEndpoint',
-            'validator' => 'URL'
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'AdminEmail',
-            'validator' => 'email',
-            'required' => false
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'DeprecationDate',
-            'validator' => 'datetime',
-            'required' => false
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'GlobalRateCount',
-            'validator' => 'number',
-            'required' => false,
-            'min' => 1
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'GlobalRatePeriod',
-            'validator' => 'number',
-            'required' => false,
-            'min' => 1
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'UserRateCount',
-            'validator' => 'number',
-            'required' => false,
-            'min' => 1
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'UserRatePeriod',
-            'validator' => 'number',
-            'required' => false,
-            'min' => 1
-        ]);
-
-        return $this->finishValidation();
     }
     
     public function getCounterMetric($counterName)

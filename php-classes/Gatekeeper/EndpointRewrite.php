@@ -33,31 +33,20 @@ class EndpointRewrite extends \ActiveRecord
         ]
     ];
 
-    public function validate($deep = true)
-    {
-        parent::validate($deep);
-
-        if (!$this->EndpointID) {
-            $this->_validator->addError('Endpoint', 'EndpointID must be specified');
-        }
-
-        $this->_validator->validate([
-            'field' => 'Pattern',
+    public static $validators = [
+        'Endpoint' => 'require-relationship',
+        'Pattern' => [
             'validator' => 'regexp',
             'regexp' => '/^(.).+\1[a-zA-Z]*$/',
             'errorMessage' => 'Pattern must include matching delimiters'
-        ]);
-
-        $this->_validator->validate([
-            'field' => 'Priority',
+        ],
+        'Priority' => [
             'required' => false,
             'validator' => 'number',
             'min' => 0,
             'errorMessage' => 'Priority must be integer > 0'
-        ]);
-
-        return $this->finishValidation();
-    }
+        ]
+    ];
 
     public function save($deep = true)
     {
