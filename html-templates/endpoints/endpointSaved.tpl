@@ -5,7 +5,7 @@
 {block "content"}
     {$Endpoint = $data}
 
-    <p class="lead">API endpoint <a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">{$Endpoint->Title|escape}</a> saved.</p>
+    <p class="lead">API endpoint {endpoint $Endpoint} {tif $Endpoint->isNew ? created : saved}.</p>
 
     <p>
         <a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">&larr;&nbsp;Back to {$Endpoint->Title|escape}</a><br>

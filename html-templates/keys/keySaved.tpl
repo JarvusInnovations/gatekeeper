@@ -5,7 +5,7 @@
 {block "content"}
     {$Key = $data}
 
-    <p class="lead">API key <a href="/keys/{$Key->Key}">{$Key->Key}</a> {tif $Key->isNew ? created : saved} for {$Key->OwnerName|escape}.</p>
+    <p class="lead">API key {apiKey $Key->Key} {tif $Key->isNew ? created : saved} for {$Key->OwnerName|escape}.</p>
 
     <p>
         <a href="/keys/{$Key->Key}">&larr;&nbsp;Back to {$Key->OwnerName}</a><br>
