@@ -19,11 +19,11 @@ class KeyEndpoint extends \ActiveRecord
     public static $relationships = array(
         'Key' => array(
             'type' => 'one-one'
-            ,'class' => 'Key'
+            ,'class' => Key::class
         )
         ,'Endpoint' => array(
             'type' => 'one-one'
-            ,'class' => 'Endpoint'
+            ,'class' => Endpoint::class
         )
     );
 

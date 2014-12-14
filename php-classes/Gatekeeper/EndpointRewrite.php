@@ -29,7 +29,7 @@ class EndpointRewrite extends \ActiveRecord
     public static $relationships = array(
         'Endpoint' => array(
             'type' => 'one-one'
-            ,'class' => 'Endpoint'
+            ,'class' => Endpoint::class
         )
     );
 
