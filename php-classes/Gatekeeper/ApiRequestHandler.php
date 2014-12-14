@@ -14,7 +14,7 @@ class ApiRequestHandler extends \RequestHandler
     public static $sourceInterface = null; // string=hostname or IP, null=http hostname, false=let cURL pick
     public static $defaultTimeout = 30;
     public static $defaultTimeoutConnect = 5;
-    public static $passthruHeaders = array(
+    public static $passthruHeaders = [
         '/^HTTP\//'
         ,'/^Content-Type:/i'
         ,'/^Date:/i'
@@ -25,7 +25,7 @@ class ApiRequestHandler extends \RequestHandler
         ,'/^Cache-Control:/i'
         ,'/^Pragma:/i'
         ,'/^Expires:/i'
-    );
+    ];
 
     public static $responseMode = 'json'; // override RequestHandler::$responseMode
 
@@ -33,7 +33,7 @@ class ApiRequestHandler extends \RequestHandler
 
         // initialize request object
         $request = new ApiRequest(static::getPath());
-        $metrics = array();
+        $metrics = [];
 
 
         // fire beforeApiRequest event to configure request
@@ -50,7 +50,7 @@ class ApiRequestHandler extends \RequestHandler
 
 
         // execute request against internal API
-        HttpProxy::relayRequest(array(
+        HttpProxy::relayRequest([
             'autoAppend' => false
             ,'autoQuery' => false
             ,'url' => rtrim($request->getEndpoint()->InternalEndpoint, '/') . $request->getUrl()
@@ -66,7 +66,7 @@ class ApiRequestHandler extends \RequestHandler
 
 
                 // initialize log record
-                $LoggedRequest = LoggedRequest::create(array(
+                $LoggedRequest = LoggedRequest::create([
                     'Endpoint' => $request->getEndpoint()
                     ,'Key' => $request->getKey()
                     ,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
@@ -76,7 +76,7 @@ class ApiRequestHandler extends \RequestHandler
                     ,'ResponseTime' => $curlInfo['starttransfer_time'] * 1000
                     ,'ResponseCode' => $curlInfo['http_code']
                     ,'ResponseBytes' => $curlInfo['size_download']
-                ));
+                ]);
 
 
                 // fire afterApiRequest
@@ -92,7 +92,7 @@ class ApiRequestHandler extends \RequestHandler
                     'responseBody' => &$responseBody
                 ]);
             }
-        ));
+        ]);
     }
 
     public static function throwRateError($retryAfter = null, $error = 'Rate limit exceeded')

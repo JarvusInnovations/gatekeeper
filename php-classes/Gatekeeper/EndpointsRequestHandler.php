@@ -50,17 +50,17 @@ class EndpointsRequestHandler extends \RecordsRequestHandler
     {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
-                return static::respond('endpointRewrites', array(
+                return static::respond('endpointRewrites', [
                     'data' => $Endpoint->Rewrites
-                ));
+                ]);
             case 'POST':
                 if (!is_array($_POST['rewrites'])) {
                     return static::throwInvalidRequestError('POST method expects "rewrites" array');
                 }
 
-                $saved = array();
-                $deleted = array();
-                $invalid = array();
+                $saved = [];
+                $deleted = [];
+                $invalid = [];
 
                 foreach ($_POST['rewrites'] AS $key => $data) {
                     $nonEmptyData = array_filter($data);
@@ -70,9 +70,9 @@ class EndpointsRequestHandler extends \RecordsRequestHandler
                             continue;
                         }
 
-                        $Rewrite = EndpointRewrite::create(array(
+                        $Rewrite = EndpointRewrite::create([
                             'Endpoint' => $Endpoint
-                        ));
+                        ]);
                     } else {
                         $Rewrite = EndpointRewrite::getByID($key);
 
@@ -103,13 +103,13 @@ class EndpointsRequestHandler extends \RecordsRequestHandler
                     }
                 }
 
-                return static::respond('endpointRewritesSaved', array(
-                    'success' => count($saved) > 0
-                    ,'saved' => $saved
-                    ,'invalid' => $invalid
-                    ,'deleted' => $deleted
-                    ,'Endpoint' => $Endpoint
-                ));
+                return static::respond('endpointRewritesSaved', [
+                    'success' => count($saved) > 0,
+                    'saved' => $saved,
+                    'invalid' => $invalid,
+                    'deleted' => $deleted,
+                    'Endpoint' => $Endpoint
+                ]);
             default:
                 return static::throwInvalidRequestError('Only GET/POST methods are supported');
         }

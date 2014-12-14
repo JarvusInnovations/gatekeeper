@@ -15,41 +15,41 @@ class Key extends \ActiveRecord
     public static $pluralNoun = 'keys';
     public static $useCache = true;
 
-    public static $fields = array(
-        'Key' => array(
+    public static $fields = [
+        'Key' => [
             'unique' => true
-        )
-        ,'OwnerName'
-        ,'ContactName' => array(
+        ],
+        'OwnerName',
+        'ContactName' => [
             'notnull' => false
-        )
-        ,'ContactEmail' => array(
+        ],
+        'ContactEmail' => [
             'notnull' => false
-        )
-        ,'ExpirationDate' => array(
-            'type' => 'timestamp'
-            ,'notnull' => false
-        )
-        ,'AllEndpoints' => array(
-            'type' => 'boolean'
-            ,'default' => false
-        )
-    );
+        ],
+        'ExpirationDate' => [
+            'type' => 'timestamp',
+            'notnull' => false
+        ],
+        'AllEndpoints' => [
+            'type' => 'boolean',
+            'default' => false
+        ]
+    ];
 
-    public static $relationships = array(
-        'Endpoints' => array(
-            'type' => 'many-many'
-            ,'class' => Endpoint::class
-            ,'linkClass' => KeyEndpoint::class
-        )
-    );
+    public static $relationships = [
+        'Endpoints' => [
+            'type' => 'many-many',
+            'class' => Endpoint::class,
+            'linkClass' => KeyEndpoint::class
+        ]
+    ];
 
-    public static $sorters = array(
-        'calls-total' => array(__CLASS__, 'sortMetric')
-        ,'calls-week' => array(__CLASS__, 'sortMetric')
-        ,'calls-day-avg' => array(__CLASS__, 'sortMetric')
-        ,'endpoints' => array(__CLASS__, 'sortMetric')
-    );
+    public static $sorters = [
+        'calls-total' => [__CLASS__, 'sortMetric'],
+        'calls-week' => [__CLASS__, 'sortMetric'],
+        'calls-day-avg' => [__CLASS__, 'sortMetric'],
+        'endpoints' => [__CLASS__, 'sortMetric']
+    ];
 
     public static function getByKey($key)
     {
@@ -74,16 +74,16 @@ class Key extends \ActiveRecord
     {
         parent::validate($deep);
 
-        $this->_validator->validate(array(
-            'field' => 'OwnerName'
-            ,'minlength' => 2
-        ));
+        $this->_validator->validate([
+            'field' => 'OwnerName',
+            'minlength' => 2
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'ContactEmail'
-            ,'validator' => 'email'
-            ,'required' => false
-        ));
+        $this->_validator->validate([
+            'field' => 'ContactEmail',
+            'validator' => 'email',
+            'required' => false
+        ]);
 
         // TODO: validate expiration date
 
@@ -107,11 +107,11 @@ class Key extends \ActiveRecord
             return $metricValue;
         }
 
-        $metricValue = DB::oneValue('SELECT %s FROM `%s` `Key` WHERE `Key`.ID = %u', array(
-            static::getMetricSQL($metricName)
-            ,static::$tableName
-            ,$this->ID
-        ));
+        $metricValue = DB::oneValue('SELECT %s FROM `%s` `Key` WHERE `Key`.ID = %u', [
+            static::getMetricSQL($metricName),
+            static::$tableName,
+            $this->ID
+        ]);
 
         Cache::store($cacheKey, $metricValue, static::$metricTTL);
 
@@ -127,12 +127,12 @@ class Key extends \ActiveRecord
         $cacheKey = "keys/$this->ID/endpoints";
         if (false == ($allowedEndpoints = Cache::fetch($cacheKey))) {
             $allowedEndpoints = DB::allValues(
-                'EndpointID'
-                ,'SELECT EndpointID FROM `%s` KeyEndpoint WHERE KeyID = %u'
-                ,array(
-                    KeyEndpoint::$tableName
-                    ,$this->ID
-                )
+                'EndpointID',
+                'SELECT EndpointID FROM `%s` KeyEndpoint WHERE KeyID = %u',
+                [
+                    KeyEndpoint::$tableName,
+                    $this->ID
+                ]
             );
 
             Cache::store($cacheKey, $allowedEndpoints);

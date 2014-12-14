@@ -11,21 +11,21 @@ class KeyEndpoint extends \ActiveRecord
     public static $singularNoun = 'key endpoint';
     public static $pluralNoun = 'key endpoints';
 
-    public static $fields = array(
-        'KeyID' => 'uint'
-        ,'EndpointID' => 'uint'
-    );
+    public static $fields = [
+        'KeyID' => 'uint',
+        'EndpointID' => 'uint'
+    ];
 
-    public static $relationships = array(
-        'Key' => array(
-            'type' => 'one-one'
-            ,'class' => Key::class
-        )
-        ,'Endpoint' => array(
-            'type' => 'one-one'
-            ,'class' => Endpoint::class
-        )
-    );
+    public static $relationships = [
+        'Key' => [
+            'type' => 'one-one',
+            'class' => Key::class
+        ],
+        'Endpoint' => [
+            'type' => 'one-one',
+            'class' => Endpoint::class
+        ]
+    ];
 
     public function validate($deep = true)
     {

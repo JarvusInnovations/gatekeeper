@@ -9,43 +9,43 @@ class LoggedRequest extends \ActiveRecord
     public static $singularNoun = 'logged request';
     public static $pluralNoun = 'logged requests';
 
-    public static $fields = array(
-        'CreatorID' => null
-        ,'EndpointID' => array(
-            'type' => 'uint'
-            ,'index' => true
-        )
-        ,'KeyID' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-            ,'index' => true
-        )
-        ,'ClientIP' => 'uint'
-        ,'Method'
-        ,'Path'
-        ,'Query' => 'clob'
-        ,'ResponseTime' => array(
-            'type' => 'mediumint'
-            ,'unsigned' => true
-        )
-        ,'ResponseCode' => array(
-            'type' => 'smallint'
-            ,'unsigned' => true
-        )
-        ,'ResponseBytes' => array(
-            'type' => 'mediumint'
-            ,'unsigned' => true
-        )
-    );
+    public static $fields = [
+        'CreatorID' => null,
+        'EndpointID' => [
+            'type' => 'uint',
+            'index' => true
+        ],
+        'KeyID' => [
+            'type' => 'uint',
+            'notnull' => false,
+            'index' => true
+        ],
+        'ClientIP' => 'uint',
+        'Method',
+        'Path',
+        'Query' => 'clob',
+        'ResponseTime' => [
+            'type' => 'mediumint',
+            'unsigned' => true
+        ],
+        'ResponseCode' => [
+            'type' => 'smallint',
+            'unsigned' => true
+        ],
+        'ResponseBytes' => [
+            'type' => 'mediumint',
+            'unsigned' => true
+        ]
+    ];
 
-    public static $relationships = array(
-        'Endpoint' => array(
-            'type' => 'one-one'
-            ,'class' => Endpoint::class
-        )
-        ,'Key' => array(
-            'type' => 'one-one'
-            ,'class' => Key::class
-        )
-    );
+    public static $relationships = [
+        'Endpoint' => [
+            'type' => 'one-one',
+            'class' => Endpoint::class
+        ],
+        'Key' => [
+            'type' => 'one-one',
+            'class' => Key::class
+        ]
+    ];
 }

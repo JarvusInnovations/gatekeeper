@@ -5,7 +5,7 @@ namespace Gatekeeper;
 class ApiRequest
 {
     protected $startTime;
-    protected $pathStack = array();
+    protected $pathStack = [];
     protected $endpoint;
     protected $key;
     protected $url = '';

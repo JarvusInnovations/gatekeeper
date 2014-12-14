@@ -12,26 +12,26 @@ class EndpointRewrite extends \ActiveRecord
     public static $pluralNoun = 'endpoint rewrites';
     public static $useCache = true;
 
-    public static $fields = array(
-        'EndpointID' => 'uint'
-        ,'Pattern'
-        ,'Replace'
-        ,'Last' => array(
-            'type' => 'boolean'
-            ,'default' => false
-        )
-        ,'Priority' => array(
-            'type' => 'uint'
-            ,'default' => 100
-        )
-    );
+    public static $fields = [
+        'EndpointID' => 'uint',
+        'Pattern',
+        'Replace',
+        'Last' => [
+            'type' => 'boolean',
+            'default' => false
+        ],
+        'Priority' => [
+            'type' => 'uint',
+            'default' => 100
+        ]
+    ];
 
-    public static $relationships = array(
-        'Endpoint' => array(
-            'type' => 'one-one'
-            ,'class' => Endpoint::class
-        )
-    );
+    public static $relationships = [
+        'Endpoint' => [
+            'type' => 'one-one',
+            'class' => Endpoint::class
+        ]
+    ];
 
     public function validate($deep = true)
     {
@@ -41,20 +41,20 @@ class EndpointRewrite extends \ActiveRecord
             $this->_validator->addError('Endpoint', 'EndpointID must be specified');
         }
 
-        $this->_validator->validate(array(
-            'field' => 'Pattern'
-            ,'validator' => 'regexp'
-            ,'regexp' => '/^(.).+\1[a-zA-Z]*$/'
-            ,'errorMessage' => 'Pattern must include matching delimiters'
-        ));
+        $this->_validator->validate([
+            'field' => 'Pattern',
+            'validator' => 'regexp',
+            'regexp' => '/^(.).+\1[a-zA-Z]*$/',
+            'errorMessage' => 'Pattern must include matching delimiters'
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'Priority'
-            ,'required' => false
-            ,'validator' => 'number'
-            ,'min' => 0
-            ,'errorMessage' => 'Priority must be integer > 0'
-        ));
+        $this->_validator->validate([
+            'field' => 'Priority',
+            'required' => false,
+            'validator' => 'number',
+            'min' => 0,
+            'errorMessage' => 'Priority must be integer > 0'
+        ]);
 
         return $this->finishValidation();
     }

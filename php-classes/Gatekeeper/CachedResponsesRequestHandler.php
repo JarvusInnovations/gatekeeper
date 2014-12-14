@@ -7,10 +7,10 @@ use Endpoint;
 class CachedResponsesRequestHandler extends \RequestHandler
 {
     public static $defaultLimit = 20;
-    public static $userResponseModes = array(
+    public static $userResponseModes = [
         'application/json' => 'json'
         ,'text/csv' => 'csv'
-    );
+    ];
 
     public static function handleRequest()
     {
@@ -26,13 +26,13 @@ class CachedResponsesRequestHandler extends \RequestHandler
     	$limit = isset($_GET['limit']) && ctype_digit($_GET['limit']) ? (integer)$_GET['limit'] : static::$defaultLimit;
 		$offset = isset($_GET['offset']) && ctype_digit($_GET['offset']) ? (integer)$_GET['offset'] : 0;
 
-        return static::respond('cachedResponses', array(
+        return static::respond('cachedResponses', [
             'success' => true
             ,'data' => $limit ? array_slice($cachedResponses, $offset, $limit) : $cachedResponses
             ,'total' => count($cachedResponses)
             ,'limit' => $limit
             ,'offset' => $offset
             ,'Endpoint' => $Endpoint
-        ));
+        ]);
     }
 }

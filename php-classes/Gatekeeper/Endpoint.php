@@ -10,7 +10,10 @@ class Endpoint extends ActiveRecord
 {
     public static $metricTTL = 60;
     public static $versionPattern = '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/';
-    protected $_metricsCache = ['counters' => [], 'averages' => []];
+    protected $_metricsCache = [
+        'counters' => [],
+        'averages' => []
+    ];
 
     // ActiveRecord configuration
     public static $tableName = 'endpoints';
@@ -18,80 +21,80 @@ class Endpoint extends ActiveRecord
     public static $pluralNoun = 'endpoints';
     public static $useCache = true;
 
-    public static $fields = array(
-        'Title'
-        ,'Handle' => array(
-            'type' => 'varchar'
-            ,'length' => 32
-        )
-        ,'Version' => array(
-            'type' => 'varchar'
-            ,'length' => 32
-        )
-        ,'InternalEndpoint'
-        ,'AdminName' => array(
+    public static $fields = [
+        'Title',
+        'Handle' => [
+            'type' => 'varchar',
+            'length' => 32
+        ],
+        'Version' => [
+            'type' => 'varchar',
+            'length' => 32
+        ],
+        'InternalEndpoint',
+        'AdminName' => [
             'notnull' => false
-        )
-        ,'AdminEmail' => array(
+        ],
+        'AdminEmail' => [
             'notnull' => false
-        )
-        ,'DeprecationDate' => array(
-            'type' => 'timestamp'
-            ,'notnull' => false
-        )
-        ,'GlobalRateCount' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'GlobalRatePeriod' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'UserRateCount' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'UserRatePeriod' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'KeyRequired' => array(
-            'type' => 'boolean'
-            ,'default' => false
-        )
-        ,'CachingEnabled' => array(
-            'type' => 'boolean'
-            ,'default' => true
-        )
-        ,'AlertOnError' => array(
-            'type' => 'boolean'
-            ,'default' => true
-        )
-        ,'AlertNearMaxRequests' => array(
-            'type' => 'decimal'
-            ,'length' => '3,2'
-            ,'notnull' => false
-        )
-        ,'DefaultVersion' => array(
-            'type' => 'boolean'
-            ,'default' => false
-        )
-    );
+        ],
+        'DeprecationDate' => [
+            'type' => 'timestamp',
+            'notnull' => false
+        ],
+        'GlobalRateCount' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'GlobalRatePeriod' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'UserRateCount' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'UserRatePeriod' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'KeyRequired' => [
+            'type' => 'boolean',
+            'default' => false
+        ],
+        'CachingEnabled' => [
+            'type' => 'boolean',
+            'default' => true
+        ],
+        'AlertOnError' => [
+            'type' => 'boolean',
+            'default' => true
+        ],
+        'AlertNearMaxRequests' => [
+            'type' => 'decimal',
+            'length' => '3,2',
+            'notnull' => false
+        ],
+        'DefaultVersion' => [
+            'type' => 'boolean',
+            'default' => false
+        ]
+    ];
 
-    public static $relationships = array(
-        'Rewrites' => array(
-            'type' => 'one-many'
-            ,'class' => EndpointRewrite::class
-            ,'order' => 'Priority'
-        )
-    );
+    public static $relationships = [
+        'Rewrites' => [
+            'type' => 'one-many',
+            'class' => EndpointRewrite::class,
+            'order' => 'Priority'
+        ]
+    ];
 
-    public static $indexes = array(
-        'HandleVersion' => array(
-            'fields' => array('Handle', 'Version')
-            ,'unique' => true
-        )
-    );
+    public static $indexes = [
+        'HandleVersion' => [
+            'fields' => ['Handle', 'Version'],
+            'unique' => true
+        ]
+    ];
 
 #    public static $sorters = array(
 #        'calls-total' => array(__CLASS__, 'sortMetric')
@@ -108,7 +111,7 @@ class Endpoint extends ActiveRecord
         if ($endpointID = Cache::fetch($cacheKey)) {
             $Endpoint = static::getByID($endpointID);
         } else {
-            $where = array('Handle' => $handle);
+            $where = ['Handle' => $handle];
 
             if ($version) {
                 $where['Version'] = $version;
@@ -133,11 +136,11 @@ class Endpoint extends ActiveRecord
 
         // if this is endpoint is being set to the default version, unset it from sibling endpoints
         if ($this->isFieldDirty('DefaultVersion') && $this->DefaultVersion) {
-            $otherDefault = static::getByWhere(array(
-                'DefaultVersion' => true
-                ,'Handle' => $this->Handle
-                ,'ID != ' . $this->ID
-            ));
+            $otherDefault = static::getByWhere([
+                'DefaultVersion' => true,
+                'Handle' => $this->Handle,
+                'ID != ' . $this->ID
+            ]);
 
             if ($otherDefault) {
                 $otherDefault->DefaultVersion = false;
@@ -150,70 +153,70 @@ class Endpoint extends ActiveRecord
     {
         parent::validate($deep);
 
-        $this->_validator->validate(array(
-            'field' => 'Title'
-            ,'minlength' => 2
-        ));
+        $this->_validator->validate([
+            'field' => 'Title',
+            'minlength' => 2
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'Handle'
-            ,'required' => false
-            ,'validator' => 'handle'
-            ,'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
-        ));
+        $this->_validator->validate([
+            'field' => 'Handle',
+            'required' => false,
+            'validator' => 'handle',
+            'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'Version'
-            ,'validator' => 'handle'
-            ,'allowNumeric' => true
-            ,'pattern' => static::$versionPattern
-            ,'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
-        ));
+        $this->_validator->validate([
+            'field' => 'Version',
+            'validator' => 'handle',
+            'allowNumeric' => true,
+            'pattern' => static::$versionPattern,
+            'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'InternalEndpoint'
-            ,'validator' => 'URL'
-        ));
+        $this->_validator->validate([
+            'field' => 'InternalEndpoint',
+            'validator' => 'URL'
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'AdminEmail'
-            ,'validator' => 'email'
-            ,'required' => false
-        ));
+        $this->_validator->validate([
+            'field' => 'AdminEmail',
+            'validator' => 'email',
+            'required' => false
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'DeprecationDate'
-            ,'validator' => 'datetime'
-            ,'required' => false
-        ));
+        $this->_validator->validate([
+            'field' => 'DeprecationDate',
+            'validator' => 'datetime',
+            'required' => false
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'GlobalRateCount'
-            ,'validator' => 'number'
-            ,'required' => false
-            ,'min' => 1
-        ));
+        $this->_validator->validate([
+            'field' => 'GlobalRateCount',
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'GlobalRatePeriod'
-            ,'validator' => 'number'
-            ,'required' => false
-            ,'min' => 1
-        ));
+        $this->_validator->validate([
+            'field' => 'GlobalRatePeriod',
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'UserRateCount'
-            ,'validator' => 'number'
-            ,'required' => false
-            ,'min' => 1
-        ));
+        $this->_validator->validate([
+            'field' => 'UserRateCount',
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ]);
 
-        $this->_validator->validate(array(
-            'field' => 'UserRatePeriod'
-            ,'validator' => 'number'
-            ,'required' => false
-            ,'min' => 1
-        ));
+        $this->_validator->validate([
+            'field' => 'UserRatePeriod',
+            'validator' => 'number',
+            'required' => false,
+            'min' => 1
+        ]);
 
         return $this->finishValidation();
     }
@@ -285,7 +288,7 @@ class Endpoint extends ActiveRecord
 
     public function getCachedResponses($limit = null)
     {
-        $cachedResponses = array();
+        $cachedResponses = [];
         foreach (Cache::getIterator("/^response\:{$this->ID}/") AS $cachedResponse) {
             $cachedResponses[] = $cachedResponse;
         }

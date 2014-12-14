@@ -14,37 +14,37 @@ class Ban extends \ActiveRecord
     public static $pluralNoun = 'bans';
     public static $useCache = true;
 
-    public static $fields = array(
-        'KeyID' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'IP' => array(
-            'type' => 'uint'
-            ,'notnull' => false
-        )
-        ,'ExpirationDate' => array(
-            'type' => 'timestamp'
-            ,'notnull' => false
-        )
-        ,'Notes' => array(
-            'type' => 'clob'
-            ,'notnull' => false
-            ,'fulltext' => true
-        )
-    );
+    public static $fields = [
+        'KeyID' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'IP' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'ExpirationDate' => [
+            'type' => 'timestamp',
+            'notnull' => false
+        ],
+        'Notes' => [
+            'type' => 'clob',
+            'notnull' => false,
+            'fulltext' => true
+        ]
+    ];
 
-    public static $relationships = array(
-        'Key' => array(
-            'type' => 'one-one'
-            ,'class' => Key::class
-        )
-    );
+    public static $relationships = [
+        'Key' => [
+            'type' => 'one-one',
+            'class' => Key::class
+        ]
+    ];
 
-    public static $sorters = array(
-        'created' => array(__CLASS__, 'sortCreated')
-        ,'expiration' => array(__CLASS__, 'sortExpiration')
-    );
+    public static $sorters = [
+        'created' => [__CLASS__, 'sortCreated'],
+        'expiration' => [__CLASS__, 'sortExpiration']
+    ];
 
     public function validate($deep = true)
     {
@@ -54,11 +54,11 @@ class Ban extends \ActiveRecord
             $this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
         }
 
-        $this->_validator->validate(array(
-            'field' => 'ExpirationDate'
-            ,'validator' => 'datetime'
-            ,'required' => false
-        ));
+        $this->_validator->validate([
+            'field' => 'ExpirationDate',
+            'validator' => 'datetime',
+            'required' => false
+        ]);
 
         return $this->finishValidation();
     }
@@ -100,10 +100,10 @@ class Ban extends \ActiveRecord
             return static::$_activeBans;
         }
 
-        static::$_activeBans = array(
-            'ips' => array()
-            ,'keys' => array()
-        );
+        static::$_activeBans = [
+            'ips' => []
+            ,'keys' => []
+        ];
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
             if ($Ban->IP) {

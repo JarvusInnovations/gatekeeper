@@ -37,24 +37,24 @@ class KeysRequestHandler extends \RecordsRequestHandler
 
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
-                return static::respond('keyEndpoints', array(
-                    'data' => KeyEndpoint::getAllByWhere(array('KeyID' => $Key->ID))
-                ));
+                return static::respond('keyEndpoints', [
+                    'data' => KeyEndpoint::getAllByWhere(['KeyID' => $Key->ID])
+                ]);
             case 'POST':
                 if (empty($_POST['EndpointID']) || !($Endpoint = Endpoint::getByID($_POST['EndpointID']))) {
                     return static::throwInvalidRequestError('Valid EndpointID must be provided');
                 }
 
-                if (KeyEndpoint::getByWhere(array('KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID))) {
+                if (KeyEndpoint::getByWhere(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID])) {
                     return static::throwInvalidRequestError('Provided endpoint already added to this key');
                 }
 
-                $KeyEndpoint = KeyEndpoint::create(array('KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID), true);
+                $KeyEndpoint = KeyEndpoint::create(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID], true);
 
-                return static::respond('keyEndpointAdded', array(
-                    'success' => true
-                    ,'data' => $KeyEndpoint
-                ));
+                return static::respond('keyEndpointAdded', [
+                    'success' => true,
+                    'data' => $KeyEndpoint
+                ]);
 
                 break;
             default:
@@ -70,9 +70,9 @@ class KeysRequestHandler extends \RecordsRequestHandler
 
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
-                return static::respond('keyEndpoint', array(
-                    'data' => KeyEndpoint::getByWhere(array('KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID))
-                ));
+                return static::respond('keyEndpoint', [
+                    'data' => KeyEndpoint::getByWhere(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID])
+                ]);
             default:
                 return static::throwInvalidRequestError('Method not supported');
         }
@@ -80,24 +80,24 @@ class KeysRequestHandler extends \RecordsRequestHandler
 
     public static function handleEndpointRemoveRequest(Key $Key, Endpoint $Endpoint)
     {
-        $KeyEndpoint = KeyEndpoint::getByWhere(array('KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID));
+        $KeyEndpoint = KeyEndpoint::getByWhere(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID]);
 
         if (!$KeyEndpoint) {
             return static::throwNotFoundError('Requested endpoint not added to this key');
         }
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            return static::respond('confirm', array(
-                'question' => 'Are you sure you want to remove endpoint <strong>'.htmlspecialchars($Endpoint->Title).'</strong> from key '.$Key->Key.'?'
-                ,'data' => KeyEndpoint::getByWhere(array('KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID))
-            ));
+            return static::respond('confirm', [
+                'question' => 'Are you sure you want to remove endpoint <strong>'.htmlspecialchars($Endpoint->Title).'</strong> from key '.$Key->Key.'?',
+                'data' => KeyEndpoint::getByWhere(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID])
+            ]);
         }
 
         $KeyEndpoint->destroy();
 
-        return static::respond('keyEndpointRemoved', array(
-            'success' => true
-            ,'data' => $KeyEndpoint
-        ));
+        return static::respond('keyEndpointRemoved', [
+            'success' => true,
+            'data' => $KeyEndpoint
+        ]);
     }
 }

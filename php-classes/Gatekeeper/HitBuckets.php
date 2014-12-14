@@ -33,6 +33,9 @@ class HitBuckets
 
         $hitsRemaining = Cache::decrease("$cacheKey/$bucketStamp");
 
-        return array('hits' => $hitsRemaining, 'seconds' => $bucketStamp - $now);
+        return [
+            'hits' => $hitsRemaining,
+            'seconds' => $bucketStamp - $now
+        ];
     }
 }
