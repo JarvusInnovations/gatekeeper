@@ -39,12 +39,14 @@ class TopUsersRequestHandler extends AbstractReportRequestHandler
             .'  `Timestamp` BETWEEN "%s" AND "%s" AND '
             .'  `Key` LIKE "endpoints/%s/users/%%/requests"'
             .' GROUP BY User'
-            .' ORDER BY TotalRequests DESC',
+            .' ORDER BY TotalRequests DESC'
+            .' LIMIT %u',
             [
                 MetricSample::$tableName,
                 date('Y-m-d H:i:s', $timeMin),
                 date('Y-m-d H:i:s', $timeMax),
-                $Endpoint ? $Endpoint->ID : '%'
+                $Endpoint ? $Endpoint->ID : '%',
+                !empty($_GET['limit']) && ctype_digit($_GET['limit']) ? $_GET['limit'] : 20
             ]
         );
 

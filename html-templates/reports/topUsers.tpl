@@ -30,6 +30,8 @@
         	
         	{labeledField html=$endpointSelectHtml type=select label='Endpoint'}
 
+            {field inputName=limit type=number label='Limit' default='20' attribs='min="0"' fieldClass="tiny"}
+
             <div class="submit-area"><input type="submit" value="Apply Filters"></div>
         </fieldset>
     </form>
