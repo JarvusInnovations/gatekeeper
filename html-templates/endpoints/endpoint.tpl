@@ -50,17 +50,17 @@
             <tbody>
                 {foreach item=Rewrite from=$Endpoint->Rewrites}
                     <tr>
-                        <td class="col-priority">{field name="rewrites[$Rewrite->ID][Priority]" default=$Rewrite->Priority}</td>
-                        <td class="col-pattern">{field name="rewrites[$Rewrite->ID][Pattern]" default=$Rewrite->Pattern}</td>
-                        <td class="col-replace">{field name="rewrites[$Rewrite->ID][Replace]" default=$Rewrite->Replace}</td>
-                        <td class="col-last">{checkbox name="rewrites[$Rewrite->ID][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
+                        <td class="col-priority">{field inputName="rewrites[$Rewrite->ID][Priority]" default=$Rewrite->Priority}</td>
+                        <td class="col-pattern">{field inputName="rewrites[$Rewrite->ID][Pattern]" default=$Rewrite->Pattern}</td>
+                        <td class="col-replace">{field inputName="rewrites[$Rewrite->ID][Replace]" default=$Rewrite->Replace}</td>
+                        <td class="col-last">{checkbox inputName="rewrites[$Rewrite->ID][Last]" value=1 unsetValue=0 default=$Rewrite->Last}</td>
                     </tr>
                 {/foreach}
                 <tr>
-                    <td class="col-priority">{field name="rewrites[new][Priority]" placeholder=EndpointRewrite::getFieldOptions(Priority, default)}</td>
-                    <td class="col-pattern">{field name="rewrites[new][Pattern]" placeholder="|^/routes/([^/]+)|i"}</td>
-                    <td class="col-replace">{field name="rewrites[new][Replace]" placeholder="/?route=\$1"}</td>
-                    <td class="col-last">{checkbox name="rewrites[new][Last]" value=1 unsetValue=0}</td>
+                    <td class="col-priority">{field inputName="rewrites[new][Priority]" placeholder=Gatekeeper\EndpointRewrite::getFieldOptions(Priority, default)}</td>
+                    <td class="col-pattern">{field inputName="rewrites[new][Pattern]" placeholder="|^/routes/([^/]+)|i"}</td>
+                    <td class="col-replace">{field inputName="rewrites[new][Replace]" placeholder="/?route=\$1"}</td>
+                    <td class="col-last">{checkbox inputName="rewrites[new][Last]" value=1 unsetValue=0}</td>
                 </tr>
             </tbody>
         </table>
@@ -127,7 +127,7 @@
             </thead>
 
             <tbody>
-            {foreach item=Transaction from=Transaction::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
+            {foreach item=Transaction from=Gatekeeper\Transaction::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
                 <tr>
                     <td class="col-request">{$Transaction->Method} <small>{$Transaction->Path|escape|default:/}{tif $Request->Query ? "?$Transaction->Query"|query_string}</small></td>
                     <td class="col-timestamp">{$Transaction->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
