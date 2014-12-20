@@ -18,6 +18,15 @@ It provides a central facility for logging, analyzing, rate-limiting, and creden
 - **Top users report**: View top users by IP or key over any given time period, globally or for a given endpoint
 
 ## Roadmap
+These features are currently under development for the next release:
+- Historical metrics
+- Bandwidth limits for endpoints
+- Email subscriptions for the public to receive notices about specific endpoints
+- Email alerts for endpoint administrator when internal API times out
+- Active availability monitoring and uptime reporting for internal API endpoints
+- Public portal endpoints' status, documentation, and test consoles
+- Public portal for obtaining API keys
+- Advanced filtering, sorting, and searching for transactions log
 
 ## Requirements
 The GateKeeper application is built on the Emergence PHP framework and deployement engine, and requires an Emergence server to host it.
