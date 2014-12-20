@@ -3,6 +3,22 @@
 GateKeeper is a web application designed to sit between internal API endpoints and public users.
 It provides a central facility for logging, analyzing, rate-limiting, and credentialing access.
 
+## Features
+- **Dashboard**: List of all mapped endpoints ordered by current traffic. Charts request count, response time, and cache hit ratio in real-time
+- **Create and configure endpoint mappings**: Create new or configure existing public endpoints that map to internal API endpoints from the web GUI
+- **Versioning**: Optionally maintain multiple versions for any endpoint
+- **Email alerts**: Configure an administrative contact for each endpoint to receive email alerts when it fails
+- **Deprecation**: Set a deprecation date for an API and an appropriate HTTP status will be returned once that date is reached
+- **Rewrites**: Rewrites can be created and managed from the web GUI for any endpoint
+- **Caching**: Duplicate requests are served from memory without hitting the internal API endpoint again if the original response included caching headers. Cached responses can be browsed by endpoint
+- **Rate limiting**: Global and per-user rate limits configurable for each endpoint
+- **Key management**: Configure endpoints to require keys, issue keys, and grant keys access to individual or all endpoints with an optional expiration date.
+- **Ban manegement**: Ban a key or an IP permenantly or until a given date
+- **Logging**: Exportable logs record endpoint, path, response code, response time, response size, client IP, and key if provided for every transaction
+- **Top users report**: View top users by IP or key over any given time period, globally or for a given endpoint
+
+## Roadmap
+
 ## Requirements
 The GateKeeper application is built on the Emergence PHP framework and deployement engine, and requires an Emergence server to host it.
 
