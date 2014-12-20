@@ -2224,290 +2224,59 @@ table.row-highlight tbody > tr:hover > td, table.row-highlight tbody > tr:hover 
   background: rgba(71, 113, 166, 0.12);
 }
 
-/* line 3, ../sass/site/modules/_endpoints.scss */
-.endpoint, .key, .ban {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid #d5d2cd;
-  -moz-box-shadow: 0 0.5em 0.5em -0.5em rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 0.5em 0.5em -0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0.5em 0.5em -0.5em rgba(0, 0, 0, 0.2);
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-  margin: 1em 0;
-  padding: 1em;
+/* line 2, ../sass/site/modules/_endpoints.scss */
+.endpoint {
+  margin-bottom: 0.5em;
 }
-/* line 11, ../sass/site/modules/_endpoints.scss */
-.endpoint .title, .key .title, .ban .title {
-  margin-bottom: 0.25em;
-  margin-top: 0;
+/* line 5, ../sass/site/modules/_endpoints.scss */
+.endpoint header {
+  position: relative;
+  height: 3em;
 }
-/* line 16, ../sass/site/modules/_endpoints.scss */
-.endpoint > .details, .key > .details, .ban > .details {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  padding: 1em;
-}
-/* line 21, ../sass/site/modules/_endpoints.scss */
-.endpoint > footer, .key > footer, .ban > footer {
-  -webkit-box-align: stretch;
-  -moz-box-align: stretch;
-  -ms-box-align: stretch;
-  box-align: stretch;
-  -webkit-box-pack: start;
-  -moz-box-pack: start;
-  -ms-box-pack: start;
-  box-pack: start;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  box-orient: vertical;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-}
-/* line 27, ../sass/site/modules/_endpoints.scss */
-.endpoint > footer > a, .key > footer > a, .ban > footer > a {
-  display: block;
-}
-/* line 30, ../sass/site/modules/_endpoints.scss */
-.endpoint > footer > a + a, .key > footer > a + a, .ban > footer > a + a {
-  margin-top: .25em;
-}
-
-/* line 37, ../sass/site/modules/_endpoints.scss */
-.key-metric {
-  background: rgba(0, 0, 0, 0.1);
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  box-orient: vertical;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -ms-box-pack: center;
-  box-pack: center;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-  font-size: large;
-  line-height: 1;
-  margin-right: 1em;
-  text-align: center;
-  width: 10em;
-}
-/* line 48, ../sass/site/modules/_endpoints.scss */
-.key-metric strong {
-  display: block;
-  font-size: x-large;
-}
-/* line 58, ../sass/site/modules/_endpoints.scss */
-.key-metric.good {
-  background: rgba(0, 255, 0, 0.2);
-  color: #1e841e;
-}
-/* line 59, ../sass/site/modules/_endpoints.scss */
-.key-metric.mid {
-  background: rgba(255, 255, 0, 0.2);
-  color: #84841e;
-}
-/* line 60, ../sass/site/modules/_endpoints.scss */
-.key-metric.bad {
-  background: rgba(255, 0, 0, 0.2);
-  color: #841e1e;
-}
-
-/* line 63, ../sass/site/modules/_endpoints.scss */
-.endpoint-urls {
+/* line 9, ../sass/site/modules/_endpoints.scss */
+.endpoint header h3 {
+  line-height: 3em;
   margin: 0;
 }
-/* line 66, ../sass/site/modules/_endpoints.scss */
-.endpoint-urls dt {
-  color: #959390;
-  float: left;
+/* line 14, ../sass/site/modules/_endpoints.scss */
+.endpoint header .metric-primary-bar {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #06C;
+  opacity: 0.5;
+  -webkit-transition: width 250ms ease-out;
+  transition: width 250ms ease-out;
+}
+/* line 26, ../sass/site/modules/_endpoints.scss */
+.endpoint header .metric-primary-value {
+  float: right;
+}
+/* line 30, ../sass/site/modules/_endpoints.scss */
+.endpoint header .metric-secondary-ct {
+  float: right;
   width: 4em;
-}
-
-/* line 73, ../sass/site/modules/_endpoints.scss */
-.other-metrics {
-  color: #959390;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-  line-height: 1;
-  margin: 1em 0 0;
-  padding: 0;
-}
-/* line 80, ../sass/site/modules/_endpoints.scss */
-.other-metrics > li {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  display: block;
-  list-style: none;
-}
-/* line 86, ../sass/site/modules/_endpoints.scss */
-.other-metrics strong {
-  color: #333333;
-  display: block;
-}
-
-/* line 94, ../sass/site/modules/_endpoints.scss */
-.col-options {
-  display: inline;
-  margin: 0 0 0 .5em;
-  padding: 0;
-}
-
-/* line 100, ../sass/site/modules/_endpoints.scss */
-.col-option {
-  background: no-repeat center;
-  -moz-background-size: 16px;
-  -o-background-size: 16px;
-  -webkit-background-size: 16px;
-  background-size: 16px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  display: inline-block;
-  height: 16px;
-  overflow: hidden;
-  text-indent: 100%;
-  vertical-align: -.2em;
-  white-space: nowrap;
-  width: 16px;
-  image-rendering: optimizeSpeed;
-  /* Legal fallback                 */
-  image-rendering: -moz-crisp-edges;
-  /* Firefox                        */
-  image-rendering: -o-crisp-edges;
-  /* Opera                          */
-  image-rendering: -webkit-optimize-contrast;
-  /* Chrome (and eventually Safari) */
-  image-rendering: crisp-edges;
-  /* CSS3 Proposed                  */
-  -ms-interpolation-mode: bicubic;
-  /* IE8+                           */
-}
-/* line 121, ../sass/site/modules/_endpoints.scss */
-.col-option:hover, .col-option:focus {
-  border-color: rgba(51, 51, 51, 0.2);
-}
-/* line 126, ../sass/site/modules/_endpoints.scss */
-.col-option:active, .col-option.selected {
-  background-color: rgba(51, 51, 51, 0.1);
-  border-color: rgba(51, 51, 51, 0.2);
-}
-/* line 132, ../sass/site/modules/_endpoints.scss */
-.col-option.query-inline {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAAnRSTlMAAQGU/a4AAAAdSURBVHgBY/gPBOQSH5gZ+JkYgAC7LAMPkiyZBACMNXGiAa+NPgAAAABJRU5ErkJggg==');
-}
-/* line 136, ../sass/site/modules/_endpoints.scss */
-.col-option.query-list {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAABbAUdZAAAAAnRSTlMAAQGU/a4AAAAjSURBVHgBY/gPBLiJzwz2YAKXLD+YwCXLACZwyDJDCfwuAABPB3HRvu3UngAAAABJRU5ErkJggg==');
-}
-
-/* line 141, ../sass/site/modules/_endpoints.scss */
-.col-request {
-  word-break: break-all;
-  word-break: break-word;
-}
-
-/* line 145, ../sass/site/modules/_endpoints.scss */
-.col-response-code {
+  height: 100%;
   text-align: center;
+  position: relative;
 }
-
-/* line 149, ../sass/site/modules/_endpoints.scss */
-.col-response-time,
-.col-response-size {
-  text-align: right;
+/* line 37, ../sass/site/modules/_endpoints.scss */
+.endpoint header .metric-secondary-ct .metric-secondary-bar {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background: #06C;
+  opacity: 0.5;
+  -webkit-transition: height 250ms ease-out;
+  transition: height 250ms ease-out;
 }
-
-/* line 154, ../sass/site/modules/_endpoints.scss */
-.col-key {
-  width: 1%;
+/* line 51, ../sass/site/modules/_endpoints.scss */
+.endpoint footer {
+  display: none;
 }
-
-/* line 158, ../sass/site/modules/_endpoints.scss */
-.col-priority {
-  text-align: right;
-  width: 10%;
-}
-
-/* line 163, ../sass/site/modules/_endpoints.scss */
-.col-last {
-  text-align: center;
-  width: 1%;
-}
-/* line 167, ../sass/site/modules/_endpoints.scss */
-.col-last input {
-  float: none;
-}
-
-/* line 174, ../sass/site/modules/_endpoints.scss */
-.col-pattern > .field,
-.col-replace > .field {
-  font-family: Consolas, monospace;
-}
-
-/* line 179, ../sass/site/modules/_endpoints.scss */
-.query-pair {
-  color: #959390;
-  display: inline-block;
-  margin-right: .4em;
-}
-/* line 184, ../sass/site/modules/_endpoints.scss */
-.query-expand .query-pair {
-  display: list-item;
-  list-style: square;
-  margin-left: 1.25em;
-}
-
-/* line 191, ../sass/site/modules/_endpoints.scss */
-.query-key {
-  color: #8f4f9e;
-  display: inline-block;
-}
-
-/* line 196, ../sass/site/modules/_endpoints.scss */
-.query-value {
-  color: #4f9e67;
-  display: inline-block;
-  font-weight: normal;
-}
-
-/* line 5, ../sass/site/modules/_keys.scss */
-.key-string {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  display: inline-block;
-  font-family: Consolas, monospace;
-  padding: .25em .25em 0;
-}
-
-/* line 4, ../sass/site/modules/_bans.scss */
-.ban > .details {
-  padding: .5em;
-}
-
-/* line 9, ../sass/site/modules/_bans.scss */
-.ban-term {
-  color: #959390;
-}
-
-/* line 13, ../sass/site/modules/_bans.scss */
-.ban-notes {
-  color: #a00;
-  margin: 1em 1em 0 0;
-}
-
-/* line 18, ../sass/site/modules/_bans.scss */
-textarea[name=Notes] {
-  font-family: Consolas, monospace;
+/* line 55, ../sass/site/modules/_endpoints.scss */
+.endpoint.expanded footer {
+  display: block;
 }
