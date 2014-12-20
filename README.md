@@ -18,5 +18,5 @@ This video walks through the complete process of installing emergence and then i
 [![Walkthrough Video](http://b.vimeocdn.com/ts/455/313/455313620_640.jpg)](https://vimeo.com/79587819)
 
 ## Installation from Git
--  Create an emergence site that extends http://Mw7U1bUeVZJbACka@ryon-sandbox.sites.emr.ge
+-  Create an emergence site that extends http://lKhjNhwXoM8rLbXw@skeleton-v2.emr.ge
 -  Upload contents of git repository using WebDAV client (CyberDuck is the best open-source option)
