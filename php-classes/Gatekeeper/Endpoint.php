@@ -331,6 +331,11 @@ class Endpoint extends ActiveRecord
         return $url;
     }
 
+    public function getExternalPath()
+    {
+        return "/$this->Handle/v$this->Version";
+    }
+
     public function getExternalUrl()
     {
         $url = 'http://';
@@ -341,7 +346,7 @@ class Endpoint extends ActiveRecord
             $url .= $_SERVER['HTTP_HOST'] . '/api';
         }
 
-        $url .= "/$this->Handle/v$this->Version";
+        $url .= $this->getExternalPath();
 
         return $url;
     }

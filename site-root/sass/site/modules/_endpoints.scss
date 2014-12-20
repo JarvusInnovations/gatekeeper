@@ -1,200 +1,58 @@
-@import 'compass/css3/box';
 
 .endpoint {
-    background: rgba(white, .8);
-    border: 1px solid $border-color;
-    @include box-shadow(0 .5em .5em -.5em rgba(black, .2));
-    @include display-box;
-    margin: 1em 0;
-    padding: 1em;
-    
-    .title {
-        margin-bottom: 0.25em;
-        margin-top: 0;
-    }
-    
-    > .details {
-        @include box-flex(1);
-        padding: 1em;
-    }
-    
-    > footer {
-        @include box-align(stretch);
-        @include box-pack(start);
-        @include box-orient(vertical);
-        @include display-box;
-        
-        > a {
-            display: block;
+    margin-bottom: 0.5em;
 
-            + a {
-                margin-top: .25em;
+    header {
+        position: relative;
+        height: 3em;
+        
+        h3 {
+            line-height: 3em;
+            margin: 0;
+        }
+        
+        .metric-primary-bar {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #06C;
+            opacity: 0.5;
+            
+            -webkit-transition: width 250ms ease-out;
+            transition: width 250ms ease-out;
+        }
+        
+        .metric-primary-value {
+            float: right;
+        }
+        
+        .metric-secondary-ct {
+            float: right;
+            width: 4em;
+            height: 100%;
+            text-align: center;
+            position: relative;
+            
+            .metric-secondary-bar {
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+                left: 0;
+                background: #06C;
+                opacity: 0.5;
+                
+                -webkit-transition: height 250ms ease-out;
+                transition: height 250ms ease-out;
             }
         }
     }
-}
 
-.key-metric {
-    background: rgba(black, .1);
-    @include box-orient(vertical);
-    @include box-pack(center);
-    @include display-box;
-    font-size: large;
-    line-height: 1;
-    margin-right: 1em;
-    text-align: center;
-    width: 10em;
-
-    strong {
+    footer {
+        display: none;
+    }
+    
+    &.expanded footer {
         display: block;
-        font-size: x-large;
     }
-    
-    @mixin tint-color($color) {
-        background: rgba($color, .2);
-        color: mix($text-color, $color, 60%);
-    }
-    
-    &.good { @include tint-color(lime); }
-    &.mid  { @include tint-color(yellow); }
-    &.bad  { @include tint-color(red); }
-}
-
-.endpoint-urls {
-    margin: 0;
-
-    dt {
-        color: $muted-color;
-        float: left;
-        width: 4em;
-    }
-}
-
-.other-metrics {
-    color: $muted-color;
-    @include display-box;
-    line-height: 1;
-    margin: 1em 0 0;
-    padding: 0;
-    
-    > li {
-        @include box-flex(1);
-        display: block;
-        list-style: none;
-    }
-    
-    strong {
-        color: $text-color;
-        display: block;
-    }    
-}
-
-// tables
-
-.col-options {
-    display: inline;
-    margin: 0 0 0 .5em;
-    padding: 0;
-}
-
-.col-option {
-    background: no-repeat center;
-    @include background-size(16px);
-    border: 1px solid transparent;
-    cursor: pointer;
-    display: inline-block;
-    height: 16px;
-    overflow: hidden;
-    text-indent: 100%;
-    vertical-align: -.2em;
-    white-space: nowrap;
-    width: 16px;
-    
-    // gimme crisp pixels
-    image-rendering:optimizeSpeed;              /* Legal fallback                 */
-    image-rendering:-moz-crisp-edges;           /* Firefox                        */
-    image-rendering:-o-crisp-edges;             /* Opera                          */
-    image-rendering:-webkit-optimize-contrast;  /* Chrome (and eventually Safari) */
-    image-rendering:crisp-edges;                /* CSS3 Proposed                  */
-    -ms-interpolation-mode:bicubic;             /* IE8+                           */
-    
-    &:hover,
-    &:focus {
-        border-color: rgba($text-color, .2);
-    }
-    
-    &:active,
-    &.selected {
-        background-color: rgba($text-color, .1);
-        border-color: rgba($text-color, .2);
-    }
-
-    &.query-inline {
-        background-image: inline-image('query-inline.png');
-    }
-
-    &.query-list {
-        background-image: inline-image('query-list.png');
-    }
-}
-
-.col-request {
-    @include word-break(break-all);
-}
-
-.col-response-code {
-    text-align: center;
-}
-
-.col-response-time,
-.col-response-size {
-	text-align: right;
-}
-
-.col-key {
-    width: 1%;
-}
-
-.col-priority {
-    text-align: right;
-    width: 10%;
-}
-
-.col-last {
-    text-align: center;
-    width: 1%;
-
-    input {
-        float: none;
-    }
-}
-
-.col-pattern,
-.col-replace {
-    > .field {
-        font-family: $mono-font;
-    }
-}
-
-.query-pair {
-    color: $muted-color;
-    display: inline-block;
-    margin-right: .4em;
-
-    .query-expand & {
-        display: list-item;
-        list-style: square;
-        margin-left: 1.25em;
-    }
-}
-
-.query-key {
-    color: adjust-color($accent-color, $hue: 75, $saturation: 15);
-    display: inline-block;
-}
-
-.query-value {
-    color: adjust-color($accent-color, $hue: -75, $saturation: 15);
-    display: inline-block;
-    font-weight: normal;
 }
