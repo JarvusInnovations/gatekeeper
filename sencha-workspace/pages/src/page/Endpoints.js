@@ -9,15 +9,25 @@ Ext.define('Site.page.Endpoints', {
         'Ext.util.Format'
     ],
 
+
+    // template methods
     constructor: function() {
         var me = this;
 
-        me.endpoints = new Ext.util.Collection();
+        me.endpoints = new Ext.util.Collection({
+            listeners: {
+                scope: me,
+                sort: 'onSort'
+            }
+        });
+
         me.requestsRenderer = Ext.util.Format.numberRenderer('0,000');
 
         Ext.onReady(me.onDocReady, me);
     },
 
+
+    // event handlers
     onDocReady: function() {
         var me = this,
             endpoints = me.endpoints,
@@ -97,16 +107,47 @@ Ext.define('Site.page.Endpoints', {
         });
 
 
+        // initialize sorters but suspend sort event until first load
+        endpoints.suspendEvent('sort');
+        endpoints.setSorters(function(a, b) {
+            var aMetrics = a.lastMetrics,
+                aRequests = aMetrics && aMetrics.requests,
+                bMetrics = b.lastMetrics,
+                bRequests = bMetrics && bMetrics.requests;
+
+            if (aRequests == bRequests) {
+                return 0;
+            }
+
+            return aRequests > bRequests ? -1 : 1;
+        });
+
+
         // load initial metrics
-        me.loadMetrics();
+        me.loadMetrics(function() {
+            endpoints.resumeEvent('sort');
+        });
     },
     
-    loadMetrics: function() {
+    onSort: function(endpoints) {
+        var me = this,
+            i = 0,
+            endpointsCt = me.endpointsCt,
+            endpointsCount = endpoints.getCount();
+
+        // write new order to DOM
+        // TODO: only move elements as needed instead of moving all of them? animate? use calculated top values instead of DOM ordering?
+        for (; i < endpointsCount; i++) {
+            endpointsCt.appendChild(endpoints.getAt(i).el);
+        }
+    },
+
+    // internal methods
+    loadMetrics: function(metricsUpdatedCallback, scope) {
         var me = this,
             requestsRenderer = me.requestsRenderer,
             endpoints = me.endpoints,
-            endpointsCount = endpoints.getCount(),
-            endpointsCt = me.endpointsCt;
+            endpointsCount = endpoints.getCount();
 
         Ext.Ajax.request({
             url: '/metrics/endpoints-current',
@@ -134,21 +175,12 @@ Ext.define('Site.page.Endpoints', {
                 }
 
 
+                // fire metricsUpdated callback before sorting
+                Ext.callback(metricsUpdatedCallback, scope);
+
+
                 // sort metrics
-                endpoints.sortItems(function(a, b) {
-                    if (a.lastMetrics.requests == b.lastMetrics.requests) {
-                        return 0;
-                    }
-
-                    return a.lastMetrics.requests > b.lastMetrics.requests ? -1 : 1;
-                });
-
-
-                // write new order to DOM
-                // TODO: only move elements as needed instead of moving all of them? animate? use calculated top values instead of DOM ordering?
-                for (i = 0; i < endpointsCount; i++) {
-                    endpointsCt.appendChild(endpoints.getAt(i).el);
-                }
+                endpoints.sort();
 
 
                 // update metrics (deferred so reordering is flushed to DOM first, otherwise CSS transitions don't work)
