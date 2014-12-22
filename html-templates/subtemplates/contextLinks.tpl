@@ -24,10 +24,10 @@
             {/if}{$suffix}
         </a>
     {elseif is_a($Context, Gatekeeper\Key::class)}
-        {$prefix}{apiKey $Context}
+        {$prefix}{apiKey $Context}{$suffix}
     {elseif is_a($Context, Gatekeeper\Endpoint::class)}
-        {$prefix}{endpoint $Context}
+        {$prefix}{endpoint $Context}{$suffix}
     {else}
-        <a href="/{Router::getClassPath($Context)}/{tif $Context->Handle ? $Context->Handle : $Context->ID}" class="{$class}">{$Context->Title|escape}</a>
+        <a href="{$Context->getURL()|escape}" class="{$class}">{$prefix}{$Context->getTitle()|escape}{$suffix}</a>
     {/if}
 {/strip}{/template}
