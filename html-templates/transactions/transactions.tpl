@@ -3,7 +3,7 @@
 {block title}Transactions Log &mdash; {$dwoo.parent}{/block}
 
 {block content}
-{load_templates subtemplates/paging.tpl}
+    {load_templates subtemplates/paging.tpl}
 
     <header class="page-header">
         <h2 class="page-title">Logged Requests {if $Endpoint}for {endpoint $Endpoint}{/if}</h2>
@@ -39,7 +39,7 @@
                 <td class="col-response-time">{$Request->ResponseTime|number_format} ms</td>
                 <td class="col-response-size">{$Request->ResponseBytes|number_format} B</td>
                 <td class="col-client-ip">{$Request->ClientIP|long2ip}</td>
-                <td class="col-key">{if $Request->Key}{apiKey $Request->Key}{else}<small class="muted">&mdash;</small></td>
+                <td class="col-key">{if $Request->Key}{apiKey $Request->Key}{else}<small class="muted">&mdash;</small>{/if}</td>
             </tr>
         {foreachelse}
             <tr>
