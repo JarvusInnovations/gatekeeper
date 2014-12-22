@@ -92,9 +92,12 @@ Ext.define('Site.page.Endpoints', {
                     }]
                 });
 
+            endpointEl.setVisibilityMode(Ext.Element.DISPLAY);
+
             endpoints.add({
                 id: parseInt(endpointEl.getAttribute('data-id'), 10),
                 el: endpointEl,
+                title: endpointEl.down('.title').dom.innerText,
                 responseTimeBarEl: responseTimeCt.down('.metric-secondary-bar'),
                 responseTimeValueEl: responseTimeCt.down('.metric-secondary-value .number'),
                 cacheHitRatioBarEl: cacheHitRatioCt.down('.metric-secondary-bar'),
@@ -105,6 +108,10 @@ Ext.define('Site.page.Endpoints', {
                 requestsValueEl: requestsValueCt.down('.number')
             });
         });
+
+
+        // wire filter field
+        endpointsCt.down('input[type=search]').on('keyup', 'onFilterKeyUp', me);
 
 
         // initialize sorters but suspend sort event until first load
@@ -141,6 +148,16 @@ Ext.define('Site.page.Endpoints', {
             endpointsCt.appendChild(endpoints.getAt(i).el);
         }
     },
+
+    onFilterKeyUp: function(ev, t) {
+        var query = t.value,
+            regexp = new RegExp(query, 'i');
+
+        this.endpoints.each(function(endpoint) {
+            endpoint.el.setVisible(regexp.test(endpoint.title));
+        });
+    },
+
 
     // internal methods
     loadMetrics: function(metricsUpdatedCallback, scope) {
