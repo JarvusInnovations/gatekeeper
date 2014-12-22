@@ -1,5 +1,6 @@
 {load_templates subtemplates/keys.tpl}
 {load_templates subtemplates/endpoints.tpl}
+{load_templates subtemplates/alerts.tpl}
 
 {template contextLink Context prefix='' suffix='' class=''}{strip}
     {if !$Context}
@@ -27,6 +28,8 @@
         {$prefix}{apiKey $Context}{$suffix}
     {elseif is_a($Context, Gatekeeper\Endpoint::class)}
         {$prefix}{endpoint $Context}{$suffix}
+    {elseif is_a($Context, Gatekeeper\Alerts\AbstractAlert::class)}
+        {$prefix}{alert $Context}{$suffix}
     {else}
         <a href="{$Context->getURL()|escape}" class="{$class}">{$prefix}{$Context->getTitle()|escape}{$suffix}</a>
     {/if}
