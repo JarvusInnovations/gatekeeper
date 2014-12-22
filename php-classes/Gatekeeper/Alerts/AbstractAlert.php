@@ -33,6 +33,10 @@ abstract class AbstractAlert extends \ActiveRecord
             'type' => 'timestamp',
             'notnull' => false
         ],
+        'Repetitions' => [
+            'type' => 'uint',
+            'default' => 0
+        ],
         'AcknowledgerID' => [
             'type' => 'uint',
             'notnull' => false

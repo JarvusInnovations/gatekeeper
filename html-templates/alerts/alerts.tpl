@@ -45,6 +45,7 @@
                 <th class="col-class">Type</th>
                 <th class="col-status">Status</th>
                 <th class="col-opened">Opened</th>
+                <th class="col-repetitions">Repetitions</th>
                 <th class="col-closed">Closed</th>
                 <th class="col-endpoint">Endpoint</th>
                 <th class="col-acknowledger">Acknowledger</th>
@@ -59,6 +60,7 @@
                 <td class="col-class">{$Alert->Class|regex_replace:'/^(.+\\\\)([^\\\\]+)\$/':'<small>\$1</small><br>\$2'}</td>
                 <td class="col-status">{$Alert->Status}</td>
                 <td class="col-opened">{$Alert->Opened|date_format:'%Y-%m-%d %H:%M:%S'}</td>
+                <td class="col-repetitions">{$Alert->Repetitions|number_format}</td>
                 <td class="col-closed">{$Alert->Closed|date_format:'%Y-%m-%d %H:%M:%S'|default:'<small class="muted">&mdash;</small>'}</td>
                 <td class="col-endpoint">{if $Alert->Endpoint}{endpoint $Alert->Endpoint}{else}<small class="muted">&mdash;</small>{/if}</td>
                 <td class="col-acknowledger">{if $Alert->Acknowledger}{personLink $Alert->Acknowledger}{else}<small class="muted">&mdash;</small>{/if}</td>
