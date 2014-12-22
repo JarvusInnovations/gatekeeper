@@ -36,7 +36,7 @@
                             {/if}
                         </h3>
 
-                        <div class="ban-term">Banned {if $Ban->ExpirationDate}until {$Ban->ExpirationDate|date_format}{else}indefinitely{/if}.</div>
+                        <div class="meta ban-term">Banned {if $Ban->ExpirationDate}until {$Ban->ExpirationDate|date_format}{else}indefinitely{/if}.</div>
                     </header>
                     {if $Ban->Notes}
                         <pre class="ban-notes">{$Ban->Notes|escape}</pre>

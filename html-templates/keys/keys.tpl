@@ -40,11 +40,11 @@
             )}
 
             <article class="key">
-                <div class="key-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
+                <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                 <div class="details">
                     <header>
                         <h3 class="title">{apiKey $Key}</h3>
-                        <div class="owner">{if $Key->ContactEmail}
+                        <div class="meta owner">{if $Key->ContactEmail}
                             {$recipient = $Key->ContactEmail}
                             {if $Key->ContactName}
                                 {$recipient = "$Key->ContactName <$recipient>"}
@@ -56,8 +56,8 @@
                         </div>
                     </header>
                     <ul class="other-metrics">
-                        <li><strong>{$metrics.callsWeek|number_format} call{tif $metrics.callsWeek != 1 ? s}</strong> this week</li>
-                        <li><strong>{$metrics.callsDayAvg|number_format} call{tif $metrics.callsDayAvg != 1 ? s}</strong> avg per day</li>
+                        <li><strong>{$metrics.callsWeek|number_format} call{tif round($metrics.callsWeek) != 1 ? s}</strong> this week</li>
+                        <li><strong>{$metrics.callsDayAvg|number_format} call{tif round($metrics.callsDayAvg) != 1 ? s}</strong> avg per day</li>
                         <li><strong>{tif $Key->AllEndpoints ? 'All' : $metrics.endpoints|number_format} endpoint{tif $Key->AllEndpoints || $metrics.endpoints != 1 ? s}</strong> permitted</li>
                     </ul>
                 </div>

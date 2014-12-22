@@ -1,7 +1,9 @@
+.keys {
+    @extend %cardlist !optional;
+}
 
-// TODO: extend a generic base class instead of .endpoint
 .key {
-    @extend .endpoint;
+    @extend %cardlist-item;
 }
 
 .key-string {

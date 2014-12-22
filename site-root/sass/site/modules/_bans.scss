@@ -1,19 +1,16 @@
+.bans {
+    @extend %cardlist !optional;
+}
 
-// TODO: extend a generic base class instead of .endpoint
 .ban {
-    @extend .endpoint;
+    @extend %cardlist-item;
     
     & > .details {
         padding: .5em;
     }
 }
 
-.ban-term {
-    color: $muted-color;
-}
-
 .ban-notes {
-    color: #a00;
     margin: 1em 1em 0 0;
 }
 
