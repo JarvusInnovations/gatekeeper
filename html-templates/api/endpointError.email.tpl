@@ -2,8 +2,12 @@
 {load_templates "subtemplates/keys.tpl"}
 {load_templates "subtemplates/endpoints.tpl"}
 <html>
-    <body
-        <p>The status code {$Transaction->ResponseCode} was received from <a href="http://{Site::getConfig('primary_hostname')}/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">{$Endpoint->Title|escape} v{$Endpoint->Version|escape}</a> at {$.now|date_format:'%Y-%m-%d %H:%M:%S'}.
+    <body>
+        <p>
+            The status code {$Transaction->ResponseCode} was received
+            from <a href="http://{Site::getConfig('primary_hostname')}/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">{$Endpoint->Title|escape} v{$Endpoint->Version|escape}</a>
+            at {$.now|date_format:'%Y-%m-%d %H:%M:%S'}.
+        </p>
 
         <dl>
             {if $Transaction->Key}
