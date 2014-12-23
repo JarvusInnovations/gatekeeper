@@ -145,13 +145,32 @@ Ext.define('Site.page.Endpoints', {
     
     onSort: function(endpoints) {
         var me = this,
-            i = 0,
             endpointsCt = me.endpointsCt,
-            endpointsCount = endpoints.getCount();
+            endpointsCount = endpoints.getCount(),
+            lastOrder = me.lastOrder,
+            order = me.lastOrder = Ext.Array.pluck(endpoints.items, 'id'),
+            orderUnchanged = true,
+            i;
+
+
+        // determine if order is the same and we can entirely skip rewriting the DOM
+        if (order && lastOrder) {
+            for (i = 0; i < endpointsCount; i++) {
+                if (order[i] != lastOrder[i]) {
+                    orderUnchanged = false;
+                    break;
+                }
+            }
+
+            if (orderUnchanged) {
+                return;
+            }
+        }
+
 
         // write new order to DOM
         // TODO: only move elements as needed instead of moving all of them? animate? use calculated top values instead of DOM ordering?
-        for (; i < endpointsCount; i++) {
+        for (i = 0; i < endpointsCount; i++) {
             endpointsCt.appendChild(endpoints.getAt(i).el);
         }
     },
