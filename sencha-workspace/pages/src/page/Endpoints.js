@@ -36,16 +36,21 @@ Ext.define('Site.page.Endpoints', {
 
         // toggle expanded class when an endpoint is clicked
         Ext.getBody().on('click', function(ev, t) {
+            if (ev.getTarget('a')) {
+                return;
+            }
+
             var endpointEl = ev.getTarget('.endpoint', null, true);
 
             endpointEl.toggleCls('expanded');
-        }, null, { delegate: '.endpoint' });
+        }, null, { delegate: '.endpoint .summary' });
 
 
         // build list of endpoints
         endpointsCt.select('.endpoint', true).each(function(endpointEl) {
-            var headerEl = endpointEl.down('header'),
-                requestsValueCt = headerEl.insertFirst({
+            var summaryEl = endpointEl.down('.summary'),
+                titleEl =  endpointEl.down('.title'),
+                requestsValueCt = titleEl.appendChild({
                     cls: 'metric-primary-value',
                     cn: [{
                         tag: 'span',
@@ -57,7 +62,7 @@ Ext.define('Site.page.Endpoints', {
                         html: 'requests'
                     }]
                 }),
-                responseTimeCt = headerEl.insertFirst({
+                responseTimeCt = summaryEl.appendChild({
                     cls: 'metric-secondary-ct',
                     cn: [{
                         cls: 'metric-secondary-bar'
@@ -74,7 +79,7 @@ Ext.define('Site.page.Endpoints', {
                         }]
                     }]
                 }),
-                cacheHitRatioCt = headerEl.insertFirst({
+                cacheHitRatioCt = summaryEl.appendChild({
                     cls: 'metric-secondary-ct',
                     cn: [{
                         cls: 'metric-secondary-bar'
@@ -97,12 +102,14 @@ Ext.define('Site.page.Endpoints', {
             endpoints.add({
                 id: parseInt(endpointEl.getAttribute('data-id'), 10),
                 el: endpointEl,
-                title: endpointEl.down('.title').dom.innerText,
+                title: titleEl.dom.innerText,
+                responseTimeCt: responseTimeCt,
                 responseTimeBarEl: responseTimeCt.down('.metric-secondary-bar'),
                 responseTimeValueEl: responseTimeCt.down('.metric-secondary-value .number'),
+                cacheHitRatioCt: cacheHitRatioCt,
                 cacheHitRatioBarEl: cacheHitRatioCt.down('.metric-secondary-bar'),
                 cacheHitRatioValueEl: cacheHitRatioCt.down('.metric-secondary-value .number'),
-                requestsBarEl: headerEl.insertFirst({
+                requestsBarEl: titleEl.insertFirst({
                     cls: 'metric-primary-bar'
                 }),
                 requestsValueEl: requestsValueCt.down('.number')

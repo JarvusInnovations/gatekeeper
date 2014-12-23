@@ -17,19 +17,21 @@
         </header>
         {foreach item=Endpoint from=$data}
             <article class="endpoint" {html_attributes_encode $Endpoint->getData() prefix="data-"}>
-                <header>
+                <div class="summary">
                     <h3 class="title"><a href="{$Endpoint->getUrl()|escape}">{$Endpoint->getExternalPath()|escape}</a></h3>
-                </header>
-                <footer>
-                    Internal URL: <a class="endpoint-internal-url" href="{$Endpoint->InternalEndpoint|escape}">{$Endpoint->InternalEndpoint|escape}</a>
-                    <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit</a>
-                    <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-docs">View Docs</a>
-                    <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-cache">View Cache</a>
-                    <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-log">View Log</a>
-                </footer>
+                </div>
+
+                <div class="details">
+                    <div class="info internal-url">Internal URL: <a class="endpoint-internal-url" href="{$Endpoint->InternalEndpoint|escape}">{$Endpoint->InternalEndpoint|escape}</a></div>
+                    <div class="buttons">
+                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit</a>
+                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-docs">View Docs</a>
+                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-cache">View Cache</a>
+                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-log">View Log</a>
+                    </div>
+                </div>
             </article>
         {/foreach}
-
     </section>
 
 {/block}
