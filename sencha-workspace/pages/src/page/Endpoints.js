@@ -9,6 +9,11 @@ Ext.define('Site.page.Endpoints', {
         'Ext.util.Format'
     ],
 
+    responseTimeClsLevels: {
+        good: 0,
+        mid: 150,
+        bad: 1000
+    },
 
     // template methods
     constructor: function() {
@@ -190,7 +195,10 @@ Ext.define('Site.page.Endpoints', {
         var me = this,
             requestsRenderer = me.requestsRenderer,
             endpoints = me.endpoints,
-            endpointsCount = endpoints.getCount();
+            endpointsCount = endpoints.getCount(),
+            responseTimeClsLevels = me.responseTimeClsLevels,
+            responseTimeBarMax = Ext.Array.max(Ext.Object.getValues(responseTimeClsLevels)),
+            responseTimeClasses = Ext.Object.getKeys(responseTimeClsLevels);
 
         Ext.Ajax.request({
             url: '/metrics/endpoints-current',
@@ -217,6 +225,8 @@ Ext.define('Site.page.Endpoints', {
                     endpoints.getByKey(endpointMetrics.EndpointID).lastMetrics = endpointMetrics;
                 }
 
+                maxResponseTime = Math.min(maxResponseTime, responseTimeBarMax);
+
 
                 // fire metricsUpdated callback before sorting
                 Ext.callback(metricsUpdatedCallback, scope);
@@ -229,7 +239,7 @@ Ext.define('Site.page.Endpoints', {
                 // update metrics (deferred so reordering is flushed to DOM first, otherwise CSS transitions don't work)
                 Ext.defer(function() {
                     var i = 0,
-                        endpoint, metrics, responseTime, requests, cacheHitRatio;
+                        endpoint, metrics, responseTime, requests, cacheHitRatio, responseTimeCt;
 
                     for (; i < endpointsCount; i++) {
                         endpoint = endpoints.getAt(i);
@@ -240,8 +250,13 @@ Ext.define('Site.page.Endpoints', {
                         endpoint.requestsValueEl.update(requestsRenderer(requests));
 
                         responseTime = metrics.responseTime;
-                        endpoint.responseTimeBarEl.setStyle('height', Math.round(responseTime / maxResponseTime * 100) + '%');
-                        endpoint.responseTimeValueEl.update(responseTime);
+                        responseTimeCt = endpoint.responseTimeCt;
+                        endpoint.responseTimeBarEl.setStyle('height', Math.min(Math.round(responseTime / maxResponseTime * 100), 100) + '%');
+                        endpoint.responseTimeValueEl.update(responseTime || '&mdash;');
+                        responseTimeCt.removeCls(responseTimeClasses);
+                        if (responseTime) {
+                            responseTimeCt.addCls(me.getResponseTimeCls(responseTime));
+                        }
 
                         cacheHitRatio = requests ? Math.round(metrics.responsesCached / requests * 100) : 0;
                         endpoint.cacheHitRatioBarEl.setStyle('height', cacheHitRatio + '%');
@@ -256,5 +271,24 @@ Ext.define('Site.page.Endpoints', {
                 }
             }
         });
+    },
+
+    getResponseTimeCls: function(responseTime) {
+        var responseTimeClsLevels = this.responseTimeClsLevels,
+            responseTimeClsLevel, returnLevel;
+
+        for (responseTimeClsLevel in responseTimeClsLevels) {
+            if (!responseTimeClsLevels.hasOwnProperty(responseTimeClsLevel)) {
+                continue;
+            }
+
+            if (responseTime >= responseTimeClsLevels[responseTimeClsLevel]) {
+                returnLevel = responseTimeClsLevel;
+            } else {
+                break;
+            }
+        }
+
+        return returnLevel;
     }
 });
