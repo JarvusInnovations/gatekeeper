@@ -16,8 +16,8 @@
         <h3 class="section-title">Filters</h3>
         <fieldset class="inline-fields">
 
-            {field inputName=time-max label='Time (max)' default='now'}
-            {field inputName=time-min label='Time (min)' default='1 week ago'}
+            {field inputName=time-max label='Time (max)' fieldClass="small" default='now'}
+            {field inputName=time-min label='Time (min)' fieldClass="small" default='1 week ago'}
 
             {capture assign=endpointSelectHtml}
                 <select name="endpoint" class="field-control">

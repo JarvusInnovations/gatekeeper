@@ -7,7 +7,7 @@
     <header class="page-header">
         <h2 class="header-title">Bans</h2>
         <div class="header-buttons">
-            <a class="button primary" href="/bans/create">Create Ban</a>
+            <a class="button primary" href="/bans/create">Issue Ban</a>
         </div>
     </header>
 

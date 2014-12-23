@@ -19,7 +19,7 @@
                 </select>
             {/capture}
             
-        	{labeledField html=$statusSelectHtml type=select label='Status'}
+            {labeledField html=$statusSelectHtml type=select label='Status' class="auto-width"}
 
             {capture assign=endpointSelectHtml}
                 <select name="endpoint" class="field-control">
@@ -30,7 +30,7 @@
                 </select>
             {/capture}
         	
-        	{labeledField html=$endpointSelectHtml type=select label='Endpoint'}
+            {labeledField html=$endpointSelectHtml type=select label='Endpoint' class="auto-width"}
 
             <div class="submit-area">
                 <input type="submit" value="Apply Filters">
