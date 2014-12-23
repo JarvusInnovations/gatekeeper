@@ -6,7 +6,6 @@ use Cache;
 use Exception;
 use HttpProxy;
 use Emergence\EventBus;
-use Emergence\Mailer\Mailer;
 
 class ApiRequestHandler extends \RequestHandler
 {
@@ -104,22 +103,6 @@ class ApiRequestHandler extends \RequestHandler
             $error .= ", retry after $retryAfter seconds";
         }
 
-        JSON::error($error);
-    }
-
-    public static function sendAdminNotification(Endpoint $Endpoint, $templateName, $data, $throttleKey = null, $throttleTime = 1800)
-    {
-        // send notification email to staff
-        if (!$throttleKey || !Cache::fetch($throttleKey)) {
-            $data['Endpoint'] = $Endpoint;
-
-            if ($emailTo = $Endpoint->getNotificationEmailRecipient()) {
-                Mailer::sendFromTemplate($emailTo, $templateName, $data);
-            }
-
-            if ($throttleKey) {
-                Cache::store($throttleKey, true, $throttleTime);
-            }
-        }
+        \JSON::error($error);
     }
 }
