@@ -18,6 +18,7 @@ class Endpoint extends ActiveRecord
     public static $tableName = 'endpoints';
     public static $singularNoun = 'endpoint';
     public static $pluralNoun = 'endpoints';
+    public static $collectionRoute = '/endpoints';
     public static $useCache = true;
 
     public static $fields = [
@@ -171,6 +172,19 @@ class Endpoint extends ActiveRecord
         }
 
         return $Endpoint;
+    }
+
+    public function getTitle()
+    {
+        return $this->Title . ' v' . $this->Version;
+    }
+
+    public function getURL($suffix = '/', $params = [])
+    {
+        $suffix = ltrim($suffix, '/');
+        $suffix = 'v' . $this->Version . ($suffix ? '/' . $suffix : '');
+
+        return parent::getURL($suffix, $params);
     }
 
     public function save($deep = true)
