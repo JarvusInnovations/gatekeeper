@@ -33,7 +33,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
         return ApiRequestHandler::throwRateError($bucket['seconds'], 'The global rate limit for this endpoint has been exceeded');
     }
 
-    if ($bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
+    if ($Endpoint->AlertNearMaxRequests && $bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
         Alerts\RateLimitApproached::open($Endpoint, [
             'request' => [
                 'uri' => $_EVENT['request']->getUrl()
