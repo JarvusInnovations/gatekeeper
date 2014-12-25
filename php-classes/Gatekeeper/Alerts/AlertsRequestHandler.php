@@ -112,8 +112,8 @@ class AlertsRequestHandler extends \RecordsRequestHandler
 
         print '<h2>Email</h2>';
         print '<pre>';
-        print 'From: ' . ($email['from'] ?: \Emergence\Mailer\AbstractMailer::getDefaultFrom()) . PHP_EOL;
-        print 'Subject: ' . $email['subject'] . PHP_EOL . PHP_EOL;
+        print 'From: ' . htmlspecialchars($email['from'] ?: \Emergence\Mailer\AbstractMailer::getDefaultFrom()) . PHP_EOL;
+        print 'Subject: ' . htmlspecialchars($email['subject']) . PHP_EOL . PHP_EOL;
         print htmlspecialchars($email['body']);
         print '</pre>';
 
