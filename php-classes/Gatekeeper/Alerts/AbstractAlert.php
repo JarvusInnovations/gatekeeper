@@ -14,7 +14,7 @@ abstract class AbstractAlert extends \ActiveRecord
     public static $singularNoun = 'alert';
     public static $pluralNoun = 'alerts';
     public static $collectionRoute = '/alerts';
-    
+
     public static $subClasses = [
         BandwidthLimitApproached::class,
         BandwidthLimitExceeded::class,
