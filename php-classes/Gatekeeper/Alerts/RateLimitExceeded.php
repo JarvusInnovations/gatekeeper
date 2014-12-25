@@ -4,6 +4,12 @@ namespace Gatekeeper\Alerts;
 
 class RateLimitExceeded extends AbstractAlert
 {
+    public static $notificationTemplate = 'rateLimitExceeded';
+
+    public static $relationships = [
+        'Alert' => 'require-relationship'
+    ];
+
     public function save($deep = true)
     {
         parent::save($deep);
