@@ -56,7 +56,7 @@
         <tbody>
         {foreach item=Alert from=$data}
             <tr>
-                <td class="col-id">{$Alert->ID}</td>
+                <td class="col-id"><a href="{$Alert->getURL()}">{$Alert->ID}</a></td>
                 <td class="col-class">{$Alert->Class|regex_replace:'/^(.+\\\\)([^\\\\]+)\$/':'<small>\$1</small><br>\$2'}</td>
                 <td class="col-status">{$Alert->Status}</td>
                 <td class="col-opened">{$Alert->Opened|date_format:'%Y-%m-%d %H:%M:%S'}</td>
