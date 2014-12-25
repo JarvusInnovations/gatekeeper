@@ -7,5 +7,5 @@ if (
     $Alert->Endpoint &&
     ($emailTo = $Alert->Endpoint->getNotificationEmailRecipient())
 ) {
-    \Emergence\Mailer\Mailer::sendFromTemplate($emailTo, 'alert-notifications/' . $Alert::$notificationTemplate, ['Alert' => $Alert]);
+    \Emergence\Mailer\Mailer::sendFromTemplate($emailTo, 'alerts/notifications/' . $Alert::$notificationTemplate, ['Alert' => $Alert]);
 }

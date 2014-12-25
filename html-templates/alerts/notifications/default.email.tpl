@@ -8,7 +8,7 @@
     {if $Alert->Endpoint}
         for {$Alert->Endpoint->getTitle()}
     {/if}
-    at {$.now|date_format:'%Y-%m-%d %H:%M:%S'}
+    at {tif($Alert->Status == 'open' ? $Alert->Opened : $Alert->Closed)|date_format:'%Y-%m-%d %H:%M:%S'}
 {/capture}
 {load_templates "subtemplates/endpoints.tpl"}
 <html>
@@ -36,6 +36,5 @@
                 <dd><pre>{$Alert->Metadata|print_r:true|escape}</pre></dd>
             {/if}
         </dl>
-
     </body>
 </html>
