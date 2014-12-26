@@ -78,6 +78,18 @@ class Endpoint extends ActiveRecord
         'DefaultVersion' => [
             'type' => 'boolean',
             'default' => false
+        ],
+        'PingFrequency' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'PingURI' => [
+            'type' => 'string',
+            'notnull' => false
+        ],
+        'PingTestPattern' => [
+            'type' => 'string',
+            'notnull' => false
         ]
     ];
 
