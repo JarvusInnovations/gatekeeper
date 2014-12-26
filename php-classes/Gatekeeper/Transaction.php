@@ -8,6 +8,7 @@ class Transaction extends \ActiveRecord
     public static $tableName = 'transactions';
     public static $singularNoun = 'transaction';
     public static $pluralNoun = 'transactions';
+    public static $subClasses = [__CLASS__, PingTransaction::class];
 
     public static $fields = [
         'CreatorID' => null,
