@@ -10,6 +10,7 @@ Git::$repositories['GateKeeper'] = [
         'html-templates',
         'php-classes',
         'php-config',
+        'php-migrations',
         'phpunit-tests',
         'site-root',
         'sencha-workspace',
