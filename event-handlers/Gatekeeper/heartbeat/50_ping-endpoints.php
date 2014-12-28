@@ -22,6 +22,7 @@ foreach ($endpoints AS $Endpoint) {
     printf('Testing endpoint %s...', $Endpoint->getTitle());
 
     // execute and capture request
+    // TODO: use curl_multi_exec somehow?
     $response = HttpProxy::relayRequest([
         'autoAppend' => false,
         'autoQuery' => false,

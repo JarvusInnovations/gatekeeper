@@ -57,7 +57,8 @@ class ApiRequestHandler extends \RequestHandler
             ,'passthruHeaders' => static::$passthruHeaders
             ,'timeout' => static::$defaultTimeout
             ,'timeoutConnect' => static::$defaultTimeoutConnect
-            ,'afterResponseSync' => true // uncomment to debug afterResponse code from browser
+#            ,'debug' => true // uncomment to debug proxy process and see output following response
+#            ,'afterResponseSync' => true // uncomment to debug afterResponse code from browser
             ,'afterResponse' => function($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
 
                 $curlInfo = curl_getinfo($curlHandle);
