@@ -7,7 +7,7 @@ It provides a central facility for logging, analyzing, rate-limiting, and creden
 - **Dashboard**: List of all mapped endpoints ordered by current traffic. Charts request count, response time, and cache hit ratio in real-time
 - **Create and configure endpoint mappings**: Create new or configure existing public endpoints that map to internal API endpoints from the web GUI
 - **Versioning**: Optionally maintain multiple versions for any endpoint
-- **Email alerts**: Configure an administrative contact for each endpoint to receive email alerts when it fails
+- **Email alerts**: Configure an administrative contact for each endpoint to receive email alerts when it returns a 5xx error or times out
 - **Deprecation**: Set a deprecation date for an API and an appropriate HTTP status will be returned once that date is reached
 - **Rewrites**: Regex-powered rewrites can be created and managed from the web GUI for any endpoint
 - **Caching**: Duplicate requests are served from memory without hitting the internal API endpoint again if the original response included caching headers. Cached responses can be browsed by endpoint
@@ -23,7 +23,6 @@ These features are currently under development for the next release:
 - Historical metrics
 - Bandwidth limits for endpoints
 - Email subscriptions for the public to receive notices about specific endpoints
-- Email alerts for endpoint administrator when internal API times out
 - Public portal endpoints' status, documentation, and test consoles
 - Public portal for obtaining API keys
 - Advanced filtering, sorting, and searching for transactions log
