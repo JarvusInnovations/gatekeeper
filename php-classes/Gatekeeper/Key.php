@@ -4,6 +4,7 @@ namespace Gatekeeper;
 
 use DB;
 use Cache;
+use Gatekeeper\Keys\InvalidKeyException;
 
 class Key extends \ActiveRecord
 {
@@ -162,5 +163,24 @@ class Key extends \ActiveRecord
     public static function sortMetric($dir, $name)
     {
         return static::getMetricSQL($name) . ' ' . $dir;
+    }
+
+    public static function getFromRequest()
+    {
+        if (!empty($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Gatekeeper-Key\s+(\w+)$/i', $_SERVER['HTTP_AUTHORIZATION'], $keyMatches)) {
+            $keyString = $keyMatches[1];
+        } elseif (!empty($_REQUEST['gatekeeperKey'])) {
+            $keyString = $_REQUEST['gatekeeperKey'];
+        }
+
+        if (empty($keyString)) {
+            return null;
+        }
+
+        if (!$Key = Key::getByKey($keyString)) {
+            throw new InvalidKeyException();
+        }
+
+        return $Key;
     }
 }
