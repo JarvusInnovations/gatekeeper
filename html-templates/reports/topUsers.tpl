@@ -22,7 +22,7 @@
             {capture assign=endpointSelectHtml}
                 <select name="endpoint" class="field-control">
                     <option value="">All endpoints</option>
-                    {foreach item=AvailableEndpoint from=Gatekeeper\Endpoint::getAll()}
+                    {foreach item=AvailableEndpoint from=Gatekeeper\Endpoints\Endpoint::getAll()}
                         <option value="{$AvailableEndpoint->ID}" {refill field=endpoint selected=$AvailableEndpoint->ID default=$Endpoint->ID}>{$AvailableEndpoint->Title|escape} v{$AvailableEndpoint->Version|escape}</option>
                     {/foreach}
                 </select>

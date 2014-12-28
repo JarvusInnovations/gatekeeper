@@ -29,7 +29,7 @@
     </form>
 
     <section class="keys">
-        <p class="muted">Metrics are updated every {Gatekeeper\Key::$metricTTL} seconds.</p>
+        <p class="muted">Metrics are updated every {Gatekeeper\Keys\Key::$metricTTL} seconds.</p>
 
         {foreach item=Key from=$data}
             {$metrics = array(

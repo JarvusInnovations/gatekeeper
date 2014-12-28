@@ -2,13 +2,16 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Alerts\TransactionFailed;
+use Gatekeeper\Alerts\ResponseTimeLimitExceeded;
+
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 
 
 // send email alert if response code is 500+ and alerts are enabled
 if ($_EVENT['responseCode'] >= 500 AND $Endpoint->AlertOnError) {
-    Alerts\TransactionFailed::open($Endpoint, [
+    TransactionFailed::open($Endpoint, [
         'transactionId' => $_EVENT['Transaction']->ID,
         'request' => [
             'uri' => $_EVENT['request']->getUrl()
@@ -22,7 +25,7 @@ if ($_EVENT['responseCode'] >= 500 AND $Endpoint->AlertOnError) {
         ]
     ]);
 } elseif ($_EVENT['responseCode'] == 0 && $_EVENT['curlError'] == CURLE_OPERATION_TIMEOUTED) {
-    Alerts\ResponseTimeLimitExceeded::open($Endpoint, [
+    ResponseTimeLimitExceeded::open($Endpoint, [
         'transactionId' => $_EVENT['Transaction']->ID,
         'request' => [
             'uri' => $_EVENT['request']->getUrl()

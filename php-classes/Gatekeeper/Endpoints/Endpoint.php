@@ -1,10 +1,11 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Endpoints;
 
 use Cache;
 use ActiveRecord;
 use HandleBehavior;
+use Gatekeeper\Metrics\Metrics;
 
 class Endpoint extends ActiveRecord
 {

@@ -3,8 +3,8 @@
 namespace Gatekeeper\Reports;
 
 use DB;
-use Endpoint;
-use Gatekeeper\MetricSample;
+use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Metrics\MetricSample;
 
 class TopUsersRequestHandler extends AbstractReportRequestHandler
 {

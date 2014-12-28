@@ -1,6 +1,8 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Transactions;
+
+use Gatekeeper\Endpoints\Endpoint;
 
 class TransactionsRequestHandler extends \RecordsRequestHandler
 {

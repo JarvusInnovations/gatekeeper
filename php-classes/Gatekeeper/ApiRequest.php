@@ -2,6 +2,10 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Keys\Key;
+use Gatekeeper\Transactions\Transaction;
+
 class ApiRequest
 {
     protected $startTime;

@@ -1,4 +1,4 @@
-{$Transaction = Gatekeeper\Transaction::getByID($Alert->Metadata.transactionId)}
+{$Transaction = Gatekeeper\Transactions\Transaction::getByID($Alert->Metadata.transactionId)}
 
 {capture assign=subject}
     Alert {tif $Alert->Status == 'open' ? opened : $Alert->Status} for {$Alert->Endpoint->getTitle()}

@@ -1,3 +1,3 @@
 <?php
 
-Gatekeeper\BansRequestHandler::handleRequest();
+Gatekeeper\Bans\BansRequestHandler::handleRequest();

@@ -2,6 +2,8 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Endpoints\Endpoint;
+
 
 // read endpoint handle from path
 if (!$endpointHandle = $_EVENT['request']->shiftPathStack()) {

@@ -2,6 +2,9 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Keys\Key;
+use Gatekeeper\Keys\InvalidKeyException;
+
 
 // load key if present
 try {
@@ -9,6 +12,6 @@ try {
         $_EVENT['request']->setKey($Key);
     }
 
-} catch (\Gatekeeper\Keys\InvalidKeyException $e) {
+} catch (InvalidKeyException $e) {
     \JSON::error('provided gatekeeper key is invalid', 401);
 }

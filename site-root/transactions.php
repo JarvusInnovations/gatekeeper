@@ -1,3 +1,3 @@
 <?php
 
-Gatekeeper\TransactionsRequestHandler::handleRequest();
+Gatekeeper\Transactions\TransactionsRequestHandler::handleRequest();

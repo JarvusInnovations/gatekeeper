@@ -2,7 +2,7 @@
 
 namespace Gatekeeper\Alerts;
 
-use Gatekeeper\Endpoint;
+use Gatekeeper\Endpoints\Endpoint;
 
 abstract class AbstractAlert extends \ActiveRecord
 {

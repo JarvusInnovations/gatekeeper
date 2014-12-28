@@ -2,7 +2,7 @@
 
 namespace Gatekeeper;
 
-use Endpoint;
+use Gatekeeper\Endpoints\Endpoint;
 
 class CachedResponsesRequestHandler extends \RequestHandler
 {

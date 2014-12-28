@@ -1,6 +1,6 @@
 <?php
 
-$tableName = Gatekeeper\Endpoint::$tableName;
+$tableName = Gatekeeper\Endpoints\Endpoint::$tableName;
 
 // skip conditions
 $skipped = true;

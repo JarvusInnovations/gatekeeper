@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Metrics;
 
 use Cache;
 

@@ -57,7 +57,7 @@
                     </tr>
                 {/foreach}
                 <tr>
-                    <td class="col-priority">{field inputName="rewrites[new][Priority]" placeholder=Gatekeeper\EndpointRewrite::getFieldOptions(Priority, default)}</td>
+                    <td class="col-priority">{field inputName="rewrites[new][Priority]" placeholder=Gatekeeper\Endpoints\EndpointRewrite::getFieldOptions(Priority, default)}</td>
                     <td class="col-pattern">{field inputName="rewrites[new][Pattern]" placeholder="|^/routes/([^/]+)|i"}</td>
                     <td class="col-replace">{field inputName="rewrites[new][Replace]" placeholder="/?route=\$1"}</td>
                     <td class="col-last">{checkbox inputName="rewrites[new][Last]" value=1 unsetValue=0}</td>
@@ -127,7 +127,7 @@
             </thead>
 
             <tbody>
-            {foreach item=Transaction from=Gatekeeper\Transaction::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
+            {foreach item=Transaction from=Gatekeeper\Transactions\Transaction::getAllByField('EndpointID', $Endpoint->ID, array(order="ID DESC", limit=15))}
                 <tr>
                     <td class="col-request">{$Transaction->Method} <small>{$Transaction->Path|escape|default:/}{tif $Request->Query ? "?$Transaction->Query"|query_string}</small></td>
                     <td class="col-timestamp">{$Transaction->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>

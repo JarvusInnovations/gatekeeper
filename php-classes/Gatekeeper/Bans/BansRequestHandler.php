@@ -1,6 +1,8 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Bans;
+
+use Gatekeeper\Keys\Key;
 
 class BansRequestHandler extends \RecordsRequestHandler
 {

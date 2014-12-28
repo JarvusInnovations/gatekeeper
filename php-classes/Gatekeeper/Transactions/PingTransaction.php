@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Transactions;
 
 class PingTransaction extends Transaction
 {

@@ -1,3 +1,3 @@
 <?php
 
-Gatekeeper\MetricsRequestHandler::handleRequest();
+Gatekeeper\Metrics\MetricsRequestHandler::handleRequest();

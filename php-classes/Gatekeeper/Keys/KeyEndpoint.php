@@ -1,8 +1,9 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Keys;
 
 use Cache;
+use Gatekeeper\Endpoints\Endpoint;
 
 class KeyEndpoint extends \ActiveRecord
 {

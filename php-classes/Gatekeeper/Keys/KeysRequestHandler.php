@@ -1,8 +1,9 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Keys;
 
 use ActiveRecord;
+use Gatekeeper\Endpoints\Endpoint;
 
 class KeysRequestHandler extends \RecordsRequestHandler
 {

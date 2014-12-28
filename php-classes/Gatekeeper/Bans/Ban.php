@@ -1,8 +1,9 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Bans;
 
 use Cache;
+use Gatekeeper\Keys\Key;
 
 class Ban extends \ActiveRecord
 {

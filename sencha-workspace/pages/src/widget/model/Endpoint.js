@@ -3,7 +3,7 @@ Ext.define('Site.widget.model.Endpoint', {
     extend: 'Site.widget.model.AbstractModel',
     singleton: true,
     alias: [
-        'modelwidget.Gatekeeper\\Endpoint'
+        'modelwidget.Gatekeeper\\Endpoints\\Endpoint'
     ],
 
     collectionTitleTpl: 'Endpoints',

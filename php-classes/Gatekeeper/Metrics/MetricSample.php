@@ -1,10 +1,8 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Metrics;
 
-use ActiveRecord;
-
-class MetricSample extends ActiveRecord
+class MetricSample extends \ActiveRecord
 {
     // ActiveRecord configuration
     public static $tableName = 'metric_samples';

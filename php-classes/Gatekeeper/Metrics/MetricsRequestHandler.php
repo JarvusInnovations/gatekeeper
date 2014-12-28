@@ -1,8 +1,9 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Metrics;
 
 use DB;
+use Gatekeeper\Endpoints\Endpoint;
 
 class MetricsRequestHandler extends \RequestHandler
 {

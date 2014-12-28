@@ -1,6 +1,9 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Transactions;
+
+use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Keys\Key;
 
 class Transaction extends \ActiveRecord
 {

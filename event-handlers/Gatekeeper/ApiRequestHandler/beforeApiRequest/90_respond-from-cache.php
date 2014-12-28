@@ -3,6 +3,7 @@
 namespace Gatekeeper;
 
 use Cache;
+use Gatekeeper\Metrics\Metrics;
 
 
 $Endpoint = $_EVENT['request']->getEndpoint();

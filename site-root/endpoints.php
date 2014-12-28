@@ -1,3 +1,3 @@
 <?php
 
-Gatekeeper\EndpointsRequestHandler::handleRequest();
+Gatekeeper\Endpoints\EndpointsRequestHandler::handleRequest();

@@ -1,10 +1,11 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Keys;
 
 use DB;
 use Cache;
-use Gatekeeper\Keys\InvalidKeyException;
+use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Transactions\Transaction;
 
 class Key extends \ActiveRecord
 {

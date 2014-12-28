@@ -1,6 +1,6 @@
 <?php
 
-namespace Gatekeeper;
+namespace Gatekeeper\Endpoints;
 
 use ActiveRecord;
 

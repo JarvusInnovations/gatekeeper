@@ -1,7 +1,15 @@
 <?php
 
+namespace Gatekeeper;
+
+use HttpProxy;
+use Gatekeeper\Alerts\TestFailed;
+use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Transactions\PingTransaction;
+
+
 // find all endpoints that are overdue or near due for a ping
-$endpoints = Gatekeeper\Endpoint::getAllByQuery(
+$endpoints = Endpoint::getAllByQuery(
     'SELECT Endpoint.*'
     .' FROM `%s` Endpoint'
     .' WHERE'
@@ -10,9 +18,9 @@ $endpoints = Gatekeeper\Endpoint::getAllByQuery(
     .'    SELECT Created FROM `%s` Transaction WHERE EndpointID = Endpoint.ID AND Class = "%s" ORDER BY ID DESC LIMIT 1'
     .'  ), 0) < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL (Endpoint.PingFrequency * 0.7) MINUTE)'
     ,[
-        Gatekeeper\Endpoint::$tableName,
-        Gatekeeper\PingTransaction::$tableName,
-        DB::escape(Gatekeeper\PingTransaction::class)
+        Endpoint::$tableName,
+        PingTransaction::$tableName,
+        DB::escape(PingTransaction::class)
     ]
 );
 
@@ -27,7 +35,7 @@ foreach ($endpoints AS $Endpoint) {
         'autoAppend' => false,
         'autoQuery' => false,
         'url' => rtrim($Endpoint->InternalEndpoint, '/') . '/' . ltrim($Endpoint->PingURI, '/'),
-        'interface' => Gatekeeper\ApiRequestHandler::$sourceInterface,
+        'interface' => ApiRequestHandler::$sourceInterface,
         'timeout' => 15,
         'timeoutConnect' => 5,
         'returnResponse' => true
@@ -46,7 +54,7 @@ foreach ($endpoints AS $Endpoint) {
     // record transaction
     list($path, $query) = explode('?', $Endpoint->PingURI);
 
-    $Transaction = Gatekeeper\PingTransaction::create([
+    $Transaction = PingTransaction::create([
         'Endpoint' => $Endpoint,
         'ClientIP' => ip2long($response['info']['local_ip']),
         'Method' => 'GET',
@@ -61,7 +69,7 @@ foreach ($endpoints AS $Endpoint) {
 
     // open alert if necessary, or close any existing one
     if (!$testPassed) {
-        Gatekeeper\Alerts\TestFailed::open($Endpoint, [
+        TestFailed::open($Endpoint, [
             'transactionId' => $Transaction->ID,
             'request' => [
                 'uri' => $Endpoint->PingURI
@@ -75,8 +83,8 @@ foreach ($endpoints AS $Endpoint) {
             ]
         ]);
     } else {
-        $OpenAlert = Gatekeeper\Alerts\TestFailed::getByWhere([
-            'Class' => Gatekeeper\Alerts\TestFailed::class,
+        $OpenAlert = TestFailed::getByWhere([
+            'Class' => TestFailed::class,
             'EndpointID' => $Endpoint->ID,
             'Status' => 'open'
         ]);

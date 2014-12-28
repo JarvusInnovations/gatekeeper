@@ -63,7 +63,7 @@
             </thead>
 
             <tbody>
-            {foreach item=Request from=Transaction::getAllByField('KeyID', $Key->ID, array(order="ID DESC", limit=30))}
+            {foreach item=Transaction from=Gatekeeper\Transactions\Transaction::getAllByField('KeyID', $Key->ID, array(order="ID DESC", limit=30))}
                 <tr>
                     <td class="col-endpoint">{endpoint $Transaction->Endpoint}</td>
                     <td class="col-request">{$Transaction->Method} <small>{$Transaction->Path}{tif $Request->Query ? "?$Transaction->Query"}</small></td>

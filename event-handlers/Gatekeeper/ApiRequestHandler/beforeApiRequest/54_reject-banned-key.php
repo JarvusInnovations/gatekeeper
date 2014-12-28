@@ -2,6 +2,8 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Bans\Ban;
+
 
 $Key = $_EVENT['request']->getKey();
 

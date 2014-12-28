@@ -1,12 +1,16 @@
 <?php
 
-$tableName = Gatekeeper\Transactions\Transaction::$tableName;
-$newClassType = 'enum(\'Gatekeeper\\\\Transaction\',\'Gatekeeper\\\\PingTransaction\')';
+namespace Gatekeeper\Endpoints;
+
+use DB;
+
+$tableName = EndpointRewrite::$tableName;
+$newClassType = 'enum(\'Gatekeeper\\\\Endpoints\\\\EndpointRewrite\')';
 
 
 // skip conditions
 if (!static::tableExists($tableName)) {
-    printf("Skipping migration because table `%s` does not exist\n", $tableName);
+    printf("Skipping migration because table `%s` does not exist yet\n", $tableName);
     return static::STATUS_SKIPPED;
 }
 
@@ -18,6 +22,7 @@ if (static::getColumnType($tableName, 'Class') == $newClassType) {
 
 // migration
 DB::nonQuery('ALTER TABLE `%s` CHANGE `Class` `Class` %s NOT NULL', [$tableName, $newClassType]);
+DB::nonQuery('UPDATE `%s` SET `Class` = "%s"', [$tableName, DB::escape(EndpointRewrite::class)]);
 
 
 // done

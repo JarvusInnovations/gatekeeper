@@ -3,6 +3,8 @@
 namespace Gatekeeper;
 
 use Cache;
+use Gatekeeper\Alerts\RateLimitApproached;
+use Gatekeeper\Alerts\RateLimitExceeded;
 
 
 $Endpoint = $_EVENT['request']->getEndpoint();
@@ -20,7 +22,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
     });
 
     if ($bucket['hits'] < 0) {
-        Alerts\RateLimitExceeded::open($Endpoint, [
+        RateLimitExceeded::open($Endpoint, [
             'request' => [
                 'uri' => $_EVENT['request']->getUrl()
             ],
@@ -34,7 +36,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
     }
 
     if ($Endpoint->AlertNearMaxRequests && $bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
-        Alerts\RateLimitApproached::open($Endpoint, [
+        RateLimitApproached::open($Endpoint, [
             'request' => [
                 'uri' => $_EVENT['request']->getUrl()
             ],
@@ -48,7 +50,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
 
         // automatically close any open alerts if there is a flag in the cache
         // TODO: maybe do this in a cron job instead?
-        foreach ([Alerts\RateLimitExceeded::class, Alerts\RateLimitApproached::class] AS $alertClass) {
+        foreach ([RateLimitExceeded::class, RateLimitApproached::class] AS $alertClass) {
             $OpenAlert = $alertClass::getByWhere([
                 'Class' => $alertClass,
                 'EndpointID' => $Endpoint->ID,

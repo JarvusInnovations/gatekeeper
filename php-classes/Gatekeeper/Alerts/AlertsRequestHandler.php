@@ -3,7 +3,7 @@
 namespace Gatekeeper\Alerts;
 
 use ActiveRecord;
-use Gatekeeper\Endpoint;
+use Gatekeeper\Endpoints\Endpoint;
 
 class AlertsRequestHandler extends \RecordsRequestHandler
 {
