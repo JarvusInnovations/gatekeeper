@@ -85,6 +85,7 @@ class ApiRequestHandler extends \RequestHandler
                     'beforeEvent' => &$beforeEvent,
                     'curlHandle' => $curlHandle,
                     'curlInfo' => $curlInfo,
+                    'curlError' => curl_errno($curlHandle),
                     'Transaction' => $Transaction,
                     'responseCode' => $curlInfo['http_code'],
                     'responseHeaders' => &$responseHeaders,

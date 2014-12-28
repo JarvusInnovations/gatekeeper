@@ -21,4 +21,14 @@ if ($_EVENT['responseCode'] >= 500 AND $Endpoint->AlertOnError) {
             'time' => $_EVENT['Transaction']->ResponseTime
         ]
     ]);
+} elseif ($_EVENT['responseCode'] == 0 && $_EVENT['curlError'] == CURLE_OPERATION_TIMEOUTED) {
+    Alerts\ResponseTimeLimitExceeded::open($Endpoint, [
+        'transactionId' => $_EVENT['Transaction']->ID,
+        'request' => [
+            'uri' => $_EVENT['request']->getUrl()
+        ],
+        'response' => [
+            'time' => round($_EVENT['curlInfo']['total_time'] * 1000)
+        ]
+    ]);
 }
