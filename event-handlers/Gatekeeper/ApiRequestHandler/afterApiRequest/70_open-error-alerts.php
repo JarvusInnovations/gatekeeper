@@ -11,6 +11,8 @@ $Endpoint = $_EVENT['request']->getEndpoint();
 
 // send email alert if response code is 500+ and alerts are enabled
 if ($_EVENT['responseCode'] >= 500 AND $Endpoint->AlertOnError) {
+    $_EVENT['metrics']['endpointResponsesFailed'] = Metrics::appendCounter("endpoints/$Endpoint->ID/responsesFailed");
+
     TransactionFailed::open($Endpoint, [
         'transactionId' => $_EVENT['Transaction']->ID,
         'request' => [
@@ -25,6 +27,8 @@ if ($_EVENT['responseCode'] >= 500 AND $Endpoint->AlertOnError) {
         ]
     ]);
 } elseif ($_EVENT['responseCode'] == 0 && $_EVENT['curlError'] == CURLE_OPERATION_TIMEOUTED) {
+    $_EVENT['metrics']['endpointResponsesTimedOut'] = Metrics::appendCounter("endpoints/$Endpoint->ID/responsesTimedOut");
+
     ResponseTimeLimitExceeded::open($Endpoint, [
         'transactionId' => $_EVENT['Transaction']->ID,
         'request' => [
