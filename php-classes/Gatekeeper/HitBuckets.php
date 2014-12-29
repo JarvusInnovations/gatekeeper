@@ -13,10 +13,11 @@ class HitBuckets
      * @param callable $getBucketLimits A function that will be called if a current
      *    bucket does not exist. It should return an array containing the keys
      *    'seconds' and 'hits' defining the parameters of the next bucket
+     * @param int $step How many hits to remove from the bucket
      *
      * @return int[] Array containing # of hits and seconds remaining
      */
-    public static function drip($bucketKey, callable $getBucketLimits)
+    public static function drip($bucketKey, callable $getBucketLimits, $step = 1)
     {
         $now = time();
         $cacheKey = "buckets/$bucketKey";
@@ -31,7 +32,7 @@ class HitBuckets
             Cache::store($cacheKey, $bucketStamp);
         }
 
-        $hitsRemaining = Cache::decrease("$cacheKey/$bucketStamp");
+        $hitsRemaining = Cache::decrease("$cacheKey/$bucketStamp", $step);
 
         return [
             'hits' => $hitsRemaining,
