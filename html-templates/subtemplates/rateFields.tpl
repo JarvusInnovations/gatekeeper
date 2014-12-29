@@ -1,15 +1,15 @@
 {load_templates subtemplates/forms.tpl}
 
-{template ratefields baseName countDefault='' periodDefault='' label='' error='' hint='' required=false}
+{template ratefields baseName countDefault='' periodDefault='' unit='requests' label='' error='' hint='' required=false numberClass='tiny' numberSize=2 numberStep=10}
     {$countField = cat($baseName, "Count")}
     {$periodField = cat($baseName, "Period")}
     {$periodPresets = array(Minute=60,Hour=3600,Day=86400,Week=604800,Month=2592000)}
 
     {capture assign=html}{strip}
-        <input type="number" class="tiny" size=2 name="{$countField}" value="{refill field=$countField default=$countDefault}">
-        &nbsp;requests&nbsp;per&nbsp;
+        <input type="number" class="{$numberClass}" size={$numberSize} name="{$countField}" value="{refill field=$countField default=$countDefault}" min="0" step="{$numberStep}">
+        &nbsp;{$unit}&nbsp;per&nbsp;
         {if $periodDefault && !in_array($periodDefault, $periodPresets)}
-            <input type="number" name="{$periodField}" value="{refill field=$periodField default=$periodDefault}"> seconds
+            <input type="number" name="{$periodField}" value="{refill field=$periodField default=$periodDefault}" min="0"> seconds
         {else}
             <select name="{$periodField}">
                 <option value="">Select</option>

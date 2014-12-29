@@ -59,6 +59,14 @@ class Endpoint extends ActiveRecord
             'type' => 'uint',
             'notnull' => false
         ],
+        'GlobalBandwidthCount' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
+        'GlobalBandwidthPeriod' => [
+            'type' => 'uint',
+            'notnull' => false
+        ],
         'KeyRequired' => [
             'type' => 'boolean',
             'default' => false

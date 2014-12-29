@@ -73,6 +73,8 @@
             {ratefields baseName=GlobalRate countDefault=$Endpoint->GlobalRateCount periodDefault=$Endpoint->GlobalRatePeriod label='Rate Limit (Global)' error=default($errors.GlobalRateCount, $errors.GlobalRatePeriod) hint="Leave blank if none"}
 
             {ratefields baseName=UserRate countDefault=$Endpoint->UserRateCount periodDefault=$Endpoint->UserRatePeriod label='Rate Limit (Per User)' error=default($errors.UserRateCount, $errors.UserRatePeriod) hint="Leave blank if none"}
+
+            {ratefields baseName=GlobalBandwidth countDefault=$Endpoint->GlobalBandwidthCount periodDefault=$Endpoint->GlobalBandwidthPeriod unit='bytes' numberClass='' numberSize=7 numberStep=1000 label='Bandwidth Limit (Global)' error=default($errors.GlobalBandwidthCount, $errors.GlobalBandwidthPeriod) hint="Leave blank if none"}
         </fieldset>
 
         <fieldset class="shrink">
