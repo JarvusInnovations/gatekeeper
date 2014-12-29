@@ -47,6 +47,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
         Cache::store($flagKey, true);
 
     } elseif (Cache::fetch($flagKey)) {
+        Cache::delete($flagKey);
 
         // automatically close any open alerts if there is a flag in the cache
         // TODO: maybe do this in a cron job instead?
@@ -62,7 +63,5 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
                 $OpenAlert->save();
             }
         }
-
-        Cache::delete($flagKey);
     }
 }
