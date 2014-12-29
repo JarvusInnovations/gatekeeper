@@ -19,16 +19,16 @@ class Metrics
         return static::$_currentSampleIndex;
     }
 
-    public static function appendCounter($counterKey)
+    public static function appendCounter($counterKey, $step = 1)
     {
         $sampleIndex = static::getCurrentSampleIndex();
         $cacheKey = "metrics/$counterKey/$sampleIndex";
 
-        $newValue = Cache::increase($cacheKey);
+        $newValue = Cache::increase($cacheKey, $step);
 
         if ($newValue === false) {
-            Cache::store($cacheKey, 1);
-            $newValue = 1;
+            Cache::store($cacheKey, $step);
+            $newValue = $step;
         }
 
         return $newValue;
