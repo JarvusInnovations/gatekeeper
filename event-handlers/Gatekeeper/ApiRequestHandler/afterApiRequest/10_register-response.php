@@ -2,6 +2,8 @@
 
 namespace Gatekeeper;
 
+use Gatekeeper\Metrics\Metrics;
+
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 
