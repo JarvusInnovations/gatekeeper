@@ -1,5 +1,5 @@
-/* jshint undef: true, unused: true, browser: true, quotmark: single, curly: true */
-/* global Ext */
+/*jshint undef: true, unused: true, browser: true, curly: true*/
+/*global Ext*/
 Ext.define('Site.page.Endpoints', {
     singleton: true,
     requires: [
@@ -26,7 +26,7 @@ Ext.define('Site.page.Endpoints', {
             }
         });
 
-        me.requestsRenderer = Ext.util.Format.numberRenderer('0,000');
+        me.requestsRenderer = me.bytesRenderer = Ext.util.Format.numberRenderer('0,000');
 
         Ext.onReady(me.onDocReady, me);
     },
@@ -36,7 +36,8 @@ Ext.define('Site.page.Endpoints', {
     onDocReady: function() {
         var me = this,
             endpoints = me.endpoints,
-            endpointsCt = me.endpointsCt = Ext.getBody().down('.endpoints');
+            endpointsCt = me.endpointsCt = Ext.getBody().down('.endpoints'),
+            checkedModeRadioEl;
 
 
         // toggle expanded class when an endpoint is clicked
@@ -55,7 +56,7 @@ Ext.define('Site.page.Endpoints', {
         endpointsCt.select('.endpoint', true).each(function(endpointEl) {
             var summaryEl = endpointEl.down('.summary'),
                 titleEl =  endpointEl.down('.title'),
-                requestsValueCt = titleEl.appendChild({
+                primaryValueCt = titleEl.appendChild({
                     cls: 'metric-primary-value',
                     cn: [{
                         tag: 'span',
@@ -63,8 +64,7 @@ Ext.define('Site.page.Endpoints', {
                         html: '&mdash;'
                     },{
                         tag: 'span',
-                        cls: 'unit',
-                        html: 'requests'
+                        cls: 'unit'
                     }]
                 }),
                 responseTimeCt = summaryEl.appendChild({
@@ -114,10 +114,11 @@ Ext.define('Site.page.Endpoints', {
                 cacheHitRatioCt: cacheHitRatioCt,
                 cacheHitRatioBarEl: cacheHitRatioCt.down('.metric-secondary-bar'),
                 cacheHitRatioValueEl: cacheHitRatioCt.down('.metric-secondary-value .number'),
-                requestsBarEl: titleEl.insertFirst({
+                primaryBarEl: titleEl.insertFirst({
                     cls: 'metric-primary-bar'
                 }),
-                requestsValueEl: requestsValueCt.down('.number')
+                primaryValueEl: primaryValueCt.down('.number'),
+                primaryUnitEl: primaryValueCt.down('.unit')
             });
         });
 
@@ -126,19 +127,26 @@ Ext.define('Site.page.Endpoints', {
         endpointsCt.down('input[type=search]').on('keyup', 'onFilterKeyUp', me);
 
 
+        // wire mode radios
+        endpointsCt.select('input[name=mode]', true).on('change', 'onModeChange', me);
+        checkedModeRadioEl = endpointsCt.down('input[name=mode]:checked');
+        me.mode = checkedModeRadioEl ? checkedModeRadioEl.getValue() : 'requests';
+
+
         // initialize sorters but suspend sort event until first load
         endpoints.suspendEvent('sort');
         endpoints.setSorters(function(a, b) {
-            var aMetrics = a.lastMetrics,
-                aRequests = aMetrics && aMetrics.requests,
+            var mode = me.mode,
+                aMetrics = a.lastMetrics,
+                aValue = aMetrics && (mode == 'requests' ? aMetrics.requests : aMetrics.bytesTotal),
                 bMetrics = b.lastMetrics,
-                bRequests = bMetrics && bMetrics.requests;
+                bValue = bMetrics && (mode == 'requests' ? bMetrics.requests : bMetrics.bytesTotal);
 
-            if (aRequests == bRequests) {
+            if (aValue == bValue) {
                 return 0;
             }
 
-            return aRequests > bRequests ? -1 : 1;
+            return aValue > bValue ? -1 : 1;
         });
 
 
@@ -189,16 +197,19 @@ Ext.define('Site.page.Endpoints', {
         });
     },
 
+    onModeChange: function(ev, t) {
+        var me = this;
+
+        me.mode = t.value;
+        me.endpoints.sort();
+        Ext.defer(me.renderMetrics, 1, me);
+    },
+
 
     // internal methods
     loadMetrics: function(metricsUpdatedCallback, scope) {
         var me = this,
-            requestsRenderer = me.requestsRenderer,
-            endpoints = me.endpoints,
-            endpointsCount = endpoints.getCount(),
-            responseTimeClsLevels = me.responseTimeClsLevels,
-            responseTimeBarMax = Ext.Array.max(Ext.Object.getValues(responseTimeClsLevels)),
-            responseTimeClasses = Ext.Object.getKeys(responseTimeClsLevels);
+            endpoints = me.endpoints;
 
         Ext.Ajax.request({
             url: '/metrics/endpoints-current',
@@ -209,7 +220,8 @@ Ext.define('Site.page.Endpoints', {
                 var r = Ext.decode(response.responseText, true),
                     endpointsMetrics = r && r.data,
                     endpointsMetricsLen = endpointsMetrics && endpointsMetrics.length,
-                    i, endpointMetrics, endpoint, totalRequests = 0, maxResponseTime = 0;
+                    i = 0,
+                    endpointMetrics;
 
                 if (!endpointsMetrics) {
                     console.error('Failed to load endpoints');
@@ -217,15 +229,12 @@ Ext.define('Site.page.Endpoints', {
                 }
 
 
-                // initial loop to calculate totals and update lastMetrics
-                for (i = 0; i < endpointsMetricsLen; i++) {
+                // update lastMetrics for each endpoint
+                for (; i < endpointsMetricsLen; i++) {
                     endpointMetrics = endpointsMetrics[i];
-                    totalRequests += endpointMetrics.requests;
-                    maxResponseTime = Math.max(maxResponseTime, endpointMetrics.responseTime);
+                    endpointMetrics.bytesTotal = endpointMetrics.bytesCached + endpointMetrics.bytesExecuted;
                     endpoints.getByKey(endpointMetrics.EndpointID).lastMetrics = endpointMetrics;
                 }
-
-                maxResponseTime = Math.min(maxResponseTime, responseTimeBarMax);
 
 
                 // fire metricsUpdated callback before sorting
@@ -236,33 +245,8 @@ Ext.define('Site.page.Endpoints', {
                 endpoints.sort();
 
 
-                // update metrics (deferred so reordering is flushed to DOM first, otherwise CSS transitions don't work)
-                Ext.defer(function() {
-                    var i = 0,
-                        endpoint, metrics, responseTime, requests, cacheHitRatio, responseTimeCt;
-
-                    for (; i < endpointsCount; i++) {
-                        endpoint = endpoints.getAt(i);
-                        metrics = endpoint.lastMetrics;
-                        requests = metrics.requests;
-
-                        endpoint.requestsBarEl.setStyle('width', Math.round(requests / totalRequests * 100) + '%');
-                        endpoint.requestsValueEl.update(requestsRenderer(requests));
-
-                        responseTime = metrics.responseTime;
-                        responseTimeCt = endpoint.responseTimeCt;
-                        endpoint.responseTimeBarEl.setStyle('height', Math.min(Math.round(responseTime / maxResponseTime * 100), 100) + '%');
-                        endpoint.responseTimeValueEl.update(responseTime || '&mdash;');
-                        responseTimeCt.removeCls(responseTimeClasses);
-                        if (responseTime) {
-                            responseTimeCt.addCls(me.getResponseTimeCls(responseTime));
-                        }
-
-                        cacheHitRatio = requests ? Math.round(metrics.responsesCached / requests * 100) : 0;
-                        endpoint.cacheHitRatioBarEl.setStyle('height', cacheHitRatio + '%');
-                        endpoint.cacheHitRatioValueEl.update(cacheHitRatio.toString());
-                    }
-                }, 1);
+                // render metrics (deferred so reordering is flushed to DOM first, otherwise CSS transitions don't work)
+                Ext.defer(me.renderMetrics, 1, me);
 
 
                 // schedule next call
@@ -271,6 +255,78 @@ Ext.define('Site.page.Endpoints', {
                 }
             }
         });
+    },
+
+    renderMetrics: function() {
+        var me = this,
+            mode = me.mode,
+            endpoints = me.endpoints,
+            endpointsCount = endpoints.getCount(),
+            primaryValueRenderer = mode == 'requests' ? me.requestsRenderer : me.bytesRenderer,
+            responseTimeClsLevels = me.responseTimeClsLevels,
+            responseTimeBarMax = Ext.Array.max(Ext.Object.getValues(responseTimeClsLevels)),
+            responseTimeClasses = Ext.Object.getKeys(responseTimeClsLevels),
+            totalRequests = 0,
+            totalBytes = 0,
+            maxResponseTime = 0,
+            i, endpoint, metrics, responseTime, requests, bytes, cacheHitRatio, responseTimeCt;
+
+
+        // initial loop to calculate totals
+        for (i = 0; i < endpointsCount; i++) {
+            endpoint = endpoints.getAt(i);
+            metrics = endpoint.lastMetrics;
+            totalRequests += metrics.requests;
+            totalBytes += metrics.bytesTotal;
+            maxResponseTime = Math.max(maxResponseTime, metrics.responseTime);
+        }
+
+        maxResponseTime = Math.min(maxResponseTime, responseTimeBarMax);
+
+
+        // follow-up loop to render changes to DOM
+        for (i = 0; i < endpointsCount; i++) {
+            endpoint = endpoints.getAt(i);
+            metrics = endpoint.lastMetrics;
+            requests = metrics.requests;
+            bytes = metrics.bytesTotal;
+
+            // update primary column (requests or bytes)
+            endpoint.primaryBarEl.setStyle('width',
+                Math.round(
+                    (
+                        mode == 'requests' ?
+                        requests / totalRequests :
+                        bytes / totalBytes
+                    ) * 100
+                ) + '%'
+            );
+            endpoint.primaryValueEl.update(
+                primaryValueRenderer(mode == 'requests' ? requests : bytes)
+            );
+            endpoint.primaryUnitEl.update(mode);
+
+            // update response time column
+            responseTime = metrics.responseTime;
+            responseTimeCt = endpoint.responseTimeCt;
+            endpoint.responseTimeBarEl.setStyle('height', Math.min(Math.round(responseTime / maxResponseTime * 100), 100) + '%');
+            endpoint.responseTimeValueEl.update(responseTime || '&mdash;');
+            responseTimeCt.removeCls(responseTimeClasses);
+            if (responseTime) {
+                responseTimeCt.addCls(me.getResponseTimeCls(responseTime));
+            }
+
+            // update cache hit ratio column
+            cacheHitRatio = Math.round(
+                (
+                    mode == 'requests' ?
+                    (requests ? metrics.responsesCached / requests : 0) :
+                    (bytes ? metrics.bytesCached / bytes : 0)
+                ) * 100
+            );
+            endpoint.cacheHitRatioBarEl.setStyle('height', cacheHitRatio + '%');
+            endpoint.cacheHitRatioValueEl.update(cacheHitRatio.toString());
+        }
     },
 
     getResponseTimeCls: function(responseTime) {
