@@ -7,11 +7,12 @@
         for {$bucket.seconds|number_format}s
     {/if}
 {/capture}
+{load_templates "subtemplates/endpoints.tpl"}
 <html>
     <body>
         <p>
-            The global rate limit has been exceeded for
-            <a href="http://{Site::getConfig('primary_hostname')}{$Alert->Endpoint->getURL()}">{$Alert->Endpoint->getTitle()|escape}</a>.
+            The global rate limit has been exceeded
+            for {endpoint $Alert->Endpoint useHostname=true}.
         </p>
 
         <p>

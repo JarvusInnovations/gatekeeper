@@ -7,11 +7,12 @@
         with {$bucket.hits} hits in {$bucket.seconds|number_format}s
     {/if}
 {/capture}
+{load_templates "subtemplates/endpoints.tpl"}
 <html>
     <body>
         <p>
-            The global rate limit is being approached for
-            <a href="http://{Site::getConfig('primary_hostname')}{$Alert->Endpoint->getURL()}">{$Alert->Endpoint->getTitle()|escape}</a>.
+            The global rate limit is being approached
+            for {endpoint $Alert->Endpoint useHostname=true}.
         </p>
 
         <p>
