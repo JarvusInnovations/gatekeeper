@@ -39,4 +39,28 @@ class HitBuckets
             'seconds' => $bucketStamp - $now
         ];
     }
+
+    /**
+     * Try to retrieve an existing hit bucket
+     *
+     * @param string $bucketKey A string key used to identify a particular bucket
+     *
+     * @return int[]|null Array containing # of hits and seconds remaining
+     */
+    public static function fetch($bucketKey)
+    {
+        $now = time();
+        $cacheKey = "buckets/$bucketKey";
+        $bucketStamp = Cache::fetch($cacheKey);
+
+        // bucket not found or expired
+        if ($bucketStamp === false || $bucketStamp <= $now) {
+            return null;
+        }
+
+        return [
+            'hits' => Cache::fetch("$cacheKey/$bucketStamp"),
+            'seconds' => $bucketStamp - $now
+        ];
+    }
 }
