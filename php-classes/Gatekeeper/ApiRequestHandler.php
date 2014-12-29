@@ -6,6 +6,7 @@ use Cache;
 use Exception;
 use HttpProxy;
 use Emergence\EventBus;
+use Gatekeeper\Transactions\Transaction;
 
 class ApiRequestHandler extends \RequestHandler
 {
