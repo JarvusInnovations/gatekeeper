@@ -14,6 +14,10 @@
     <section class="endpoints">
         <header>
             <input type="search" class="list-filter" placeholder="Filter endpoints&hellip;">
+            <form>
+                <label><input type="radio" name="mode" value="requests" checked> Requests</label>
+                <label><input type="radio" name="mode" value="bytes"> Bytes</label>
+            </form>
         </header>
         {foreach item=Endpoint from=$data}
             <article class="endpoint" {html_attributes_encode $Endpoint->getData() prefix="data-"}>

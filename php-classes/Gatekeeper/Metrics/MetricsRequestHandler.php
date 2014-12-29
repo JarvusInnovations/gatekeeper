@@ -36,7 +36,9 @@ class MetricsRequestHandler extends \RequestHandler
                 'requests' => $Endpoint->getCounterMetric('requests'),
                 'responseTime' => $Endpoint->getAverageMetric('responseTime', 'requests'),
                 'responsesExecuted' => $Endpoint->getCounterMetric('responsesExecuted'),
-                'responsesCached' => $Endpoint->getCounterMetric('responsesCached')
+                'responsesCached' => $Endpoint->getCounterMetric('responsesCached'),
+                'bytesExecuted' => $Endpoint->getCounterMetric('bytesExecuted'),
+                'bytesCached' => $Endpoint->getCounterMetric('bytesCached')
             ];
         }
 

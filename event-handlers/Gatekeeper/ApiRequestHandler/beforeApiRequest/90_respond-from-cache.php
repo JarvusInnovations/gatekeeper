@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint->CachingEnabled) {
             print($cachedResponse['body']);
             
             $_EVENT['metrics']['endpointResponsesCached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/responsesCached");
+            $_EVENT['metrics']['endpointBytesCached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/bytesCached", strlen($cachedResponse['body']));
             \Site::finishRequest();
         }
     }
