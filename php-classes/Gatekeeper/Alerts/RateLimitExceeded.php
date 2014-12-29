@@ -6,8 +6,8 @@ class RateLimitExceeded extends AbstractAlert
 {
     public static $notificationTemplate = 'rateLimitExceeded';
 
-    public static $relationships = [
-        'Alert' => 'require-relationship'
+    public static $validators = [
+        'Endpoint' => 'require-relationship'
     ];
 
     public function save($deep = true)
