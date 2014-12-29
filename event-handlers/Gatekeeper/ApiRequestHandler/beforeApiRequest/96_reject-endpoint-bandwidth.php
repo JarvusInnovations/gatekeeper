@@ -3,26 +3,20 @@
 namespace Gatekeeper;
 
 use Cache;
-use Gatekeeper\Alerts\RateLimitApproached;
-use Gatekeeper\Alerts\RateLimitExceeded;
+use Gatekeeper\Alerts\BandwidthLimitApproached;
+use Gatekeeper\Alerts\BandwidthLimitExceeded;
 
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 
 
-// drip into endpoint requests bucket
-if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
-    $flagKey = "alerts/endpoints/$Endpoint->ID/rate-flagged";
+// check endpoint bandwidth bucket (unlike requests, it can't be dripped until after the request)
+if ($Endpoint->GlobalBandwidthPeriod && $Endpoint->GlobalBandwidthCount) {
+    $flagKey = "alerts/endpoints/$Endpoint->ID/bandwidth-flagged";
+    $bucket = HitBuckets::fetch("endpoints/$Endpoint->ID/bandwidth");
 
-    $bucket = HitBuckets::drip("endpoints/$Endpoint->ID/requests", function() use ($Endpoint) {
-        return [
-            'seconds' => $Endpoint->GlobalRatePeriod,
-            'count' => $Endpoint->GlobalRateCount
-        ];
-    });
-
-    if ($bucket['hits'] < 0) {
-        RateLimitExceeded::open($Endpoint, [
+    if ($bucket && $bucket['hits'] < 0) {
+        BandwidthLimitExceeded::open($Endpoint, [
             'request' => [
                 'uri' => $_EVENT['request']->getUrl()
             ],
@@ -32,11 +26,11 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
 
         Cache::store($flagKey, true);
 
-        return ApiRequestHandler::throwRateError($bucket['seconds'], 'The global rate limit for this endpoint has been exceeded');
+        return ApiRequestHandler::throwRateError($bucket['seconds'], 'The global bandwidth limit for this endpoint has been exceeded');
     }
 
-    if ($Endpoint->AlertNearMaxRequests && $bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalRateCount) {
-        RateLimitApproached::open($Endpoint, [
+    if ($bucket && $Endpoint->AlertNearMaxRequests && $bucket['hits'] < (1 - $Endpoint->AlertNearMaxRequests) * $Endpoint->GlobalBandwidthCount) {
+        BandwidthLimitApproached::open($Endpoint, [
             'request' => [
                 'uri' => $_EVENT['request']->getUrl()
             ],
@@ -51,7 +45,7 @@ if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
 
         // automatically close any open alerts if there is a flag in the cache
         // TODO: maybe do this in a cron job instead?
-        foreach ([RateLimitExceeded::class, RateLimitApproached::class] AS $alertClass) {
+        foreach ([BandwidthLimitExceeded::class, BandwidthLimitApproached::class] AS $alertClass) {
             $OpenAlert = $alertClass::getByWhere([
                 'Class' => $alertClass,
                 'EndpointID' => $Endpoint->ID,
