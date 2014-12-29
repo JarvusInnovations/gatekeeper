@@ -12,6 +12,7 @@ It provides a central facility for logging, analyzing, rate-limiting, and creden
 - **Rewrites**: Regex-powered rewrites can be created and managed from the web GUI for any endpoint
 - **Caching**: Duplicate requests are served from memory without hitting the internal API endpoint again if the original response included caching headers. Cached responses can be browsed by endpoint
 - **Rate limiting**: Global and per-user rate limits configurable for each endpoint
+- **Bandwidth limiting**: Global bandwidth limits configurable for each endpoint
 - **Key management**: Configure endpoints to require keys, issue keys, and grant keys access to individual or all endpoints with an optional expiration date.
 - **Ban manegement**: Ban a key or an IP permenantly or until a given date
 - **Logging**: Exportable logs record endpoint, path, response code, response time, response size, client IP, and key if provided for every transaction
@@ -21,7 +22,6 @@ It provides a central facility for logging, analyzing, rate-limiting, and creden
 ## Roadmap
 These features are currently under development for the next release:
 - Historical metrics
-- Bandwidth limits for endpoints
 - Email subscriptions for the public to receive notices about specific endpoints
 - Public portal endpoints' status, documentation, and test consoles
 - Public portal for obtaining API keys
