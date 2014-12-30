@@ -1398,6 +1398,14 @@ textarea {
 }
 
 /* line 109, ../sass/skeleton/modules/_forms.scss */
+input[type="checkbox"],
+input[type="radio"] {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* line 114, ../sass/skeleton/modules/_forms.scss */
 select.field-control {
   border: 1px solid #c9c6bf;
   -moz-box-shadow: 0 1px 0 #e1dedb;
@@ -1407,44 +1415,44 @@ select.field-control {
   height: 2.0625em;
   vertical-align: top;
 }
-/* line 116, ../sass/skeleton/modules/_forms.scss */
+/* line 121, ../sass/skeleton/modules/_forms.scss */
 select.field-control.inline {
   vertical-align: baseline;
 }
 
-/* line 121, ../sass/skeleton/modules/_forms.scss */
+/* line 126, ../sass/skeleton/modules/_forms.scss */
 .tiny {
   width: 3em;
 }
 
-/* line 126, ../sass/skeleton/modules/_forms.scss */
+/* line 131, ../sass/skeleton/modules/_forms.scss */
 .checkbox-field .field-label {
   display: inline;
 }
-/* line 130, ../sass/skeleton/modules/_forms.scss */
+/* line 135, ../sass/skeleton/modules/_forms.scss */
 .checkbox-field input {
   float: left;
   margin: .3em .5em 0 0;
   width: auto;
 }
-/* line 136, ../sass/skeleton/modules/_forms.scss */
+/* line 141, ../sass/skeleton/modules/_forms.scss */
 .checkbox-field .hint, .checkbox-field .error-text {
   margin-bottom: 0;
 }
 
 @media screen and (max-width: 568px) {
-  /* line 141, ../sass/skeleton/modules/_forms.scss */
+  /* line 146, ../sass/skeleton/modules/_forms.scss */
   .submit-area {
     margin-top: 2em;
   }
-  /* line 145, ../sass/skeleton/modules/_forms.scss */
+  /* line 150, ../sass/skeleton/modules/_forms.scss */
   .submit-area .button, .submit-area button,
   .submit-area input[type="submit"] {
     display: block;
     min-width: 5em;
     width: 100%;
   }
-  /* line 151, ../sass/skeleton/modules/_forms.scss */
+  /* line 156, ../sass/skeleton/modules/_forms.scss */
   .submit-area .submit-text {
     display: block;
     margin-top: 1em;
@@ -1453,98 +1461,98 @@ select.field-control.inline {
 }
 
 @media screen and (min-width: 569px) {
-  /* line 166, ../sass/skeleton/modules/_forms.scss */
+  /* line 171, ../sass/skeleton/modules/_forms.scss */
   .left-labels {
     display: table;
   }
-  /* line 169, ../sass/skeleton/modules/_forms.scss */
+  /* line 174, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field {
     display: table-row;
   }
-  /* line 172, ../sass/skeleton/modules/_forms.scss */
+  /* line 177, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field > * {
     max-width: 288px;
   }
-  /* line 177, ../sass/skeleton/modules/_forms.scss */
+  /* line 182, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-label,
   .left-labels .field-control {
     display: table-cell;
   }
-  /* line 182, ../sass/skeleton/modules/_forms.scss */
+  /* line 187, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-label {
     padding: .25em 1em 1em 0;
     text-align: right;
     vertical-align: top;
   }
-  /* line 188, ../sass/skeleton/modules/_forms.scss */
+  /* line 193, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-control {
     width: 18em;
   }
-  /* line 192, ../sass/skeleton/modules/_forms.scss */
+  /* line 197, ../sass/skeleton/modules/_forms.scss */
   .left-labels .submit-area {
     margin-top: 1em;
     text-align: right;
   }
 
-  /* line 199, ../sass/skeleton/modules/_forms.scss */
+  /* line 204, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field {
     display: inline-block;
     vertical-align: top;
   }
-  /* line 203, ../sass/skeleton/modules/_forms.scss */
+  /* line 208, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field + .field {
     margin-left: 1em;
   }
-  /* line 208, ../sass/skeleton/modules/_forms.scss */
+  /* line 213, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .or {
     color: #959390;
     display: inline-block;
     margin: 0 .5em;
     vertical-align: -1.5em;
   }
-  /* line 215, ../sass/skeleton/modules/_forms.scss */
+  /* line 220, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .hint, .inline-fields .error-text {
     margin-bottom: 0;
   }
-  /* line 219, ../sass/skeleton/modules/_forms.scss */
+  /* line 224, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field-label + .inline {
     margin-left: .25em;
   }
 
-  /* line 224, ../sass/skeleton/modules/_forms.scss */
+  /* line 229, ../sass/skeleton/modules/_forms.scss */
   .compound-field {
     color: #959390;
     width: auto;
   }
-  /* line 228, ../sass/skeleton/modules/_forms.scss */
+  /* line 233, ../sass/skeleton/modules/_forms.scss */
   .compound-field .field-label {
     color: initial;
     display: block;
   }
-  /* line 233, ../sass/skeleton/modules/_forms.scss */
+  /* line 238, ../sass/skeleton/modules/_forms.scss */
   .compound-field input, .compound-field select {
     display: inline-block;
   }
 
-  /* line 239, ../sass/skeleton/modules/_forms.scss */
+  /* line 244, ../sass/skeleton/modules/_forms.scss */
   .stretch .field {
     width: 100%;
   }
 }
-/* line 248, ../sass/skeleton/modules/_forms.scss */
+/* line 253, ../sass/skeleton/modules/_forms.scss */
 .has-error {
   color: #c00;
 }
-/* line 251, ../sass/skeleton/modules/_forms.scss */
+/* line 256, ../sass/skeleton/modules/_forms.scss */
 .has-error .field-control {
   border-color: red;
 }
 
-/* line 258, ../sass/skeleton/modules/_forms.scss */
+/* line 263, ../sass/skeleton/modules/_forms.scss */
 .show-required .is-required .field-label::after {
   content: '\00a0*';
 }
-/* line 263, ../sass/skeleton/modules/_forms.scss */
+/* line 268, ../sass/skeleton/modules/_forms.scss */
 .show-required .submit-area::after {
   color: #959390;
   content: '* Required';
@@ -1552,7 +1560,7 @@ select.field-control.inline {
   margin: .333em 1em 0 0;
 }
 
-/* line 271, ../sass/skeleton/modules/_forms.scss */
+/* line 276, ../sass/skeleton/modules/_forms.scss */
 input[name='_LOGIN[username]'] {
   background-image: url(/favicon.ico);
   background-repeat: no-repeat;
@@ -1563,12 +1571,12 @@ input[name='_LOGIN[username]'] {
   background-size: 16px;
 }
 
-/* line 281, ../sass/skeleton/modules/_forms.scss */
+/* line 286, ../sass/skeleton/modules/_forms.scss */
 form .hint, form .error-text {
   margin-top: .25em;
 }
 
-/* line 285, ../sass/skeleton/modules/_forms.scss */
+/* line 290, ../sass/skeleton/modules/_forms.scss */
 .error-text {
   color: #af6e6c;
 }
@@ -2348,16 +2356,63 @@ textarea[name=Notes] {
   font-family: Consolas, monospace;
 }
 
-/* line 7, ../sass/site/modules/_endpoints.scss */
+/* line 9, ../sass/site/modules/_endpoints.scss */
 .endpoints header {
   margin-bottom: 1em;
 }
-/* line 10, ../sass/site/modules/_endpoints.scss */
-.endpoints header input {
+/* line 13, ../sass/site/modules/_endpoints.scss */
+.endpoints .list-filter {
   width: 100%;
 }
+/* line 17, ../sass/site/modules/_endpoints.scss */
+.endpoints .radio-set-label {
+  margin-right: .5em;
+}
+/* line 21, ../sass/site/modules/_endpoints.scss */
+.endpoints .radio-set-item {
+  display: inline-block;
+}
+/* line 24, ../sass/site/modules/_endpoints.scss */
+.endpoints .radio-set-item input {
+  margin-right: 0.125em;
+  vertical-align: 0.0625em;
+}
+/* line 30, ../sass/site/modules/_endpoints.scss */
+.endpoints .radio-set-item + .radio-set-item {
+  margin-left: .5em;
+}
 
-/* line 16, ../sass/site/modules/_endpoints.scss */
+/* line 36, ../sass/site/modules/_endpoints.scss */
+.endpoints-col-headers {
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+  display: -webkit-flex;
+  display: flex;
+  margin: 1em 0 -0.5em;
+  padding: 0 2px;
+}
+
+/* line 44, ../sass/site/modules/_endpoints.scss */
+.endpoints-col-header.title-col {
+  -webkit-flex: 1;
+  flex: 1;
+}
+/* line 48, ../sass/site/modules/_endpoints.scss */
+.endpoints-col-header.metric-secondary-col {
+  text-align: center;
+  width: 4em;
+}
+/* line 53, ../sass/site/modules/_endpoints.scss */
+.endpoints-col-header .header-text {
+  color: #959390;
+  display: block;
+  font-size: x-small;
+  font-weight: 500;
+  line-height: 1;
+  padding: .25em;
+}
+
+/* line 63, ../sass/site/modules/_endpoints.scss */
 .endpoint {
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid #d5d2cd;
@@ -2368,31 +2423,31 @@ textarea[name=Notes] {
   -webkit-transition: 250ms;
   transition: 250ms;
 }
-/* line 23, ../sass/site/modules/_endpoints.scss */
+/* line 70, ../sass/site/modules/_endpoints.scss */
 .endpoint + .endpoint {
   border-top-width: 0;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
 }
-/* line 27, ../sass/site/modules/_endpoints.scss */
+/* line 74, ../sass/site/modules/_endpoints.scss */
 .endpoint + .endpoint .metric-primary-bar {
   top: 0;
 }
-/* line 32, ../sass/site/modules/_endpoints.scss */
+/* line 79, ../sass/site/modules/_endpoints.scss */
 .endpoint.expanded {
   border-top-width: 1px;
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.1);
   margin: 1em 0;
 }
-/* line 37, ../sass/site/modules/_endpoints.scss */
+/* line 84, ../sass/site/modules/_endpoints.scss */
 .endpoint.expanded + .endpoint {
   border-top-width: 1px;
 }
-/* line 42, ../sass/site/modules/_endpoints.scss */
+/* line 89, ../sass/site/modules/_endpoints.scss */
 .endpoint .summary {
   display: -webkit-flex;
   display: flex;
 }
-/* line 46, ../sass/site/modules/_endpoints.scss */
+/* line 93, ../sass/site/modules/_endpoints.scss */
 .endpoint .title {
   -webkit-flex: 1;
   flex: 1;
@@ -2400,11 +2455,11 @@ textarea[name=Notes] {
   padding: .5em 1em;
   position: relative;
 }
-/* line 52, ../sass/site/modules/_endpoints.scss */
+/* line 99, ../sass/site/modules/_endpoints.scss */
 .endpoint .title > * {
   position: relative;
 }
-/* line 55, ../sass/site/modules/_endpoints.scss */
+/* line 102, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-primary-bar {
   background-color: #cce1fb;
   box-shadow: 0 0 0 1px #a4b8d1;
@@ -2417,17 +2472,17 @@ textarea[name=Notes] {
   -webkit-transition: width 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
   transition: width 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-/* line 64, ../sass/site/modules/_endpoints.scss */
+/* line 111, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-primary-value {
   color: #959390;
   font-size: small;
   margin-top: .25em;
 }
-/* line 69, ../sass/site/modules/_endpoints.scss */
+/* line 116, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-primary-value .unit {
   margin-left: .25em;
 }
-/* line 72, ../sass/site/modules/_endpoints.scss */
+/* line 119, ../sass/site/modules/_endpoints.scss */
 .endpoint .details {
   -webkit-align-items: stretch;
   align-items: stretch;
@@ -2441,7 +2496,7 @@ textarea[name=Notes] {
   -webkit-transition: 250ms;
   transition: 250ms;
 }
-/* line 82, ../sass/site/modules/_endpoints.scss */
+/* line 129, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-secondary-ct {
   -webkit-align-items: center;
   align-items: center;
@@ -2454,15 +2509,21 @@ textarea[name=Notes] {
   position: relative;
   width: 4em;
 }
-/* line 91, ../sass/site/modules/_endpoints.scss */
+/* line 138, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-secondary-ct > * {
   position: relative;
 }
-/* line 94, ../sass/site/modules/_endpoints.scss */
+/* line 140, ../sass/site/modules/_endpoints.scss */
+.endpoint .metric-secondary-ct .percent {
+  font-size: .75em;
+  font-weight: normal;
+  vertical-align: .125em;
+}
+/* line 147, ../sass/site/modules/_endpoints.scss */
 .endpoint .buttons {
   margin-top: .25em;
 }
-/* line 98, ../sass/site/modules/_endpoints.scss */
+/* line 151, ../sass/site/modules/_endpoints.scss */
 .endpoint .metric-secondary-bar {
   background-color: #cce1fb;
   box-shadow: 0 0 0 1px #a4b8d1;
@@ -2475,22 +2536,22 @@ textarea[name=Notes] {
   transition: width 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
   width: 100%;
 }
-/* line 107, ../sass/site/modules/_endpoints.scss */
+/* line 160, ../sass/site/modules/_endpoints.scss */
 .endpoint .good .metric-secondary-bar {
   background-color: #ccf4cc;
   box-shadow: 0 0 0 1px #7fe57f;
 }
-/* line 108, ../sass/site/modules/_endpoints.scss */
+/* line 161, ../sass/site/modules/_endpoints.scss */
 .endpoint .mid .metric-secondary-bar {
   background-color: #f4f4cc;
   box-shadow: 0 0 0 1px #e5e57f;
 }
-/* line 109, ../sass/site/modules/_endpoints.scss */
+/* line 162, ../sass/site/modules/_endpoints.scss */
 .endpoint .bad .metric-secondary-bar {
   background-color: #ffcccc;
   box-shadow: 0 0 0 1px #ff7f7f;
 }
-/* line 111, ../sass/site/modules/_endpoints.scss */
+/* line 164, ../sass/site/modules/_endpoints.scss */
 .endpoint.expanded .details {
   height: auto;
   padding: .75em 1em;
