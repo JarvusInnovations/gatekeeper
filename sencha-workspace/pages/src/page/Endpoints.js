@@ -77,10 +77,6 @@ Ext.define('Site.page.Endpoints', {
                             tag: 'span',
                             cls: 'number',
                             html: '&mdash;'
-                        },{
-                            tag: 'span',
-                            cls: 'unit',
-                            html: 'ms'
                         }]
                     }]
                 }),
@@ -96,7 +92,7 @@ Ext.define('Site.page.Endpoints', {
                             html: '&mdash;'
                         },{
                             tag: 'span',
-                            cls: 'unit',
+                            cls: 'unit percent',
                             html: '%'
                         }]
                     }]
