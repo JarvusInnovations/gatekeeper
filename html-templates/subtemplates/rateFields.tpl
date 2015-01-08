@@ -3,7 +3,7 @@
 {template ratefields baseName countDefault='' periodDefault='' unit='requests' label='' error='' hint='' required=false numberClass='tiny' numberSize=2 numberStep=10}
     {$countField = cat($baseName, "Count")}
     {$periodField = cat($baseName, "Period")}
-    {$periodPresets = array(Minute=60,Hour=3600,Day=86400,Week=604800,Month=2592000)}
+    {$periodPresets = array(Second=1,Minute=60,Hour=3600,Day=86400,Week=604800,Month=2592000)}
 
     {capture assign=html}{strip}
         <input type="number" class="{$numberClass}" size={$numberSize} name="{$countField}" value="{refill field=$countField default=$countDefault}" min="0" step="{$numberStep}">
