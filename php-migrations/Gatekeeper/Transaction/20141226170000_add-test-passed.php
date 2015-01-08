@@ -1,6 +1,6 @@
 <?php
 
-$tableName = Gatekeeper\PingTransaction::$tableName;
+$tableName = Gatekeeper\Transactions\PingTransaction::$tableName;
 
 // skip conditions
 if (!static::tableExists($tableName)) {
