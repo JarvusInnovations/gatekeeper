@@ -1014,12 +1014,20 @@ a:hover, a:focus {
 .well > :first-child, fieldset > :first-child {
   margin-top: 0;
 }
-/* line 288, ../sass/skeleton/_content.scss */
+/* line 287, ../sass/skeleton/_content.scss */
+.well > :first-child > :first-child, fieldset > :first-child > :first-child {
+  margin-top: 0;
+}
+/* line 292, ../sass/skeleton/_content.scss */
 .well > :last-child, fieldset > :last-child {
   margin-bottom: 0;
 }
+/* line 295, ../sass/skeleton/_content.scss */
+.well > :last-child > :last-child, fieldset > :last-child > :last-child {
+  margin-bottom: 0;
+}
 @media screen and (min-width: 569px) {
-  /* line 293, ../sass/skeleton/_content.scss */
+  /* line 301, ../sass/skeleton/_content.scss */
   .well.shrink, fieldset.shrink {
     display: inline-block;
   }
@@ -1459,100 +1467,110 @@ select.field-control.inline {
     text-align: center;
   }
 }
+/* line 163, ../sass/skeleton/modules/_forms.scss */
+.submit-area.clear {
+  clear: both;
+}
 
 @media screen and (min-width: 569px) {
-  /* line 171, ../sass/skeleton/modules/_forms.scss */
+  /* line 175, ../sass/skeleton/modules/_forms.scss */
   .left-labels {
     display: table;
   }
-  /* line 174, ../sass/skeleton/modules/_forms.scss */
+  /* line 178, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field {
     display: table-row;
   }
-  /* line 177, ../sass/skeleton/modules/_forms.scss */
+  /* line 181, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field > * {
     max-width: 288px;
   }
-  /* line 182, ../sass/skeleton/modules/_forms.scss */
+  /* line 186, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-label,
   .left-labels .field-control {
     display: table-cell;
   }
-  /* line 187, ../sass/skeleton/modules/_forms.scss */
+  /* line 191, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-label {
     padding: .25em 1em 1em 0;
     text-align: right;
     vertical-align: top;
   }
-  /* line 193, ../sass/skeleton/modules/_forms.scss */
+  /* line 197, ../sass/skeleton/modules/_forms.scss */
   .left-labels .field-control {
     width: 18em;
   }
-  /* line 197, ../sass/skeleton/modules/_forms.scss */
+  /* line 201, ../sass/skeleton/modules/_forms.scss */
   .left-labels .submit-area {
     margin-top: 1em;
     text-align: right;
   }
 
-  /* line 204, ../sass/skeleton/modules/_forms.scss */
+  /* line 208, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field {
     display: inline-block;
     vertical-align: top;
   }
-  /* line 208, ../sass/skeleton/modules/_forms.scss */
+  /* line 212, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field + .field {
     margin-left: 1em;
   }
-  /* line 213, ../sass/skeleton/modules/_forms.scss */
+  /* line 217, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .or {
     color: #959390;
     display: inline-block;
     margin: 0 .5em;
     vertical-align: -1.5em;
   }
-  /* line 220, ../sass/skeleton/modules/_forms.scss */
+  /* line 224, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .hint, .inline-fields .error-text {
     margin-bottom: 0;
   }
-  /* line 224, ../sass/skeleton/modules/_forms.scss */
+  /* line 228, ../sass/skeleton/modules/_forms.scss */
   .inline-fields .field-label + .inline {
     margin-left: .25em;
   }
 
-  /* line 229, ../sass/skeleton/modules/_forms.scss */
+  /* line 233, ../sass/skeleton/modules/_forms.scss */
   .compound-field {
     color: #959390;
     width: auto;
   }
-  /* line 233, ../sass/skeleton/modules/_forms.scss */
+  /* line 237, ../sass/skeleton/modules/_forms.scss */
   .compound-field .field-label {
     color: initial;
     display: block;
   }
-  /* line 238, ../sass/skeleton/modules/_forms.scss */
+  /* line 242, ../sass/skeleton/modules/_forms.scss */
   .compound-field input, .compound-field select {
     display: inline-block;
   }
 
-  /* line 244, ../sass/skeleton/modules/_forms.scss */
+  /* line 248, ../sass/skeleton/modules/_forms.scss */
   .stretch .field {
     width: 100%;
   }
+
+  /* line 253, ../sass/skeleton/modules/_forms.scss */
+  .shrink-break {
+    clear: left;
+    float: left;
+  }
 }
-/* line 253, ../sass/skeleton/modules/_forms.scss */
+/* line 262, ../sass/skeleton/modules/_forms.scss */
 .has-error {
   color: #c00;
 }
-/* line 256, ../sass/skeleton/modules/_forms.scss */
+/* line 265, ../sass/skeleton/modules/_forms.scss */
 .has-error .field-control {
   border-color: red;
 }
 
-/* line 263, ../sass/skeleton/modules/_forms.scss */
+/* line 272, ../sass/skeleton/modules/_forms.scss */
 .show-required .is-required .field-label::after {
   content: '\00a0*';
 }
-/* line 268, ../sass/skeleton/modules/_forms.scss */
+/* line 277, ../sass/skeleton/modules/_forms.scss */
 .show-required .submit-area::after {
   color: #959390;
   content: '* Required';
@@ -1560,7 +1578,7 @@ select.field-control.inline {
   margin: .333em 1em 0 0;
 }
 
-/* line 276, ../sass/skeleton/modules/_forms.scss */
+/* line 285, ../sass/skeleton/modules/_forms.scss */
 input[name='_LOGIN[username]'] {
   background-image: url(/favicon.ico);
   background-repeat: no-repeat;
@@ -1571,12 +1589,12 @@ input[name='_LOGIN[username]'] {
   background-size: 16px;
 }
 
-/* line 286, ../sass/skeleton/modules/_forms.scss */
+/* line 295, ../sass/skeleton/modules/_forms.scss */
 form .hint, form .error-text {
   margin-top: .25em;
 }
 
-/* line 290, ../sass/skeleton/modules/_forms.scss */
+/* line 299, ../sass/skeleton/modules/_forms.scss */
 .error-text {
   color: #af6e6c;
 }
