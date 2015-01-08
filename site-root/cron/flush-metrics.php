@@ -1,7 +1,7 @@
 <?php
 
-use Gatekeeper\Metrics;
-use Gatekeeper\MetricSample;
+use Gatekeeper\Metrics\Metrics;
+use Gatekeeper\Metrics\MetricSample;
 
 $cronKey = Site::getConfig('cron_key');
 
