@@ -25,12 +25,12 @@
             </div>
         {/if}
 
-        <fieldset class="shrink">
+        <fieldset class="shrink-break">
             {field inputName=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
         </fieldset>
 
-        <fieldset class="shrink">
-            <legend>Routing</legend>
+        <fieldset class="shrink-break">
+            <h4>Routing</h4>
 
             {capture assign=urlInputHtml}{strip}
                 http://{tif Gatekeeper\Gatekeeper::$apiHostname ? Gatekeeper\Gatekeeper::$apiHostname : "$.server.HTTP_HOST/api"}/&thinsp;
@@ -47,8 +47,8 @@
             {checkbox inputName=CachingEnabled value=1 unsetValue=0 label='Enable Response Caching' default=$Endpoint->CachingEnabled hint='Internal API must activate via HTTP headers' error=$errors.CachingEnabled}
         </fieldset>
 
-        <fieldset class="shrink">
-            <legend>Administration</legend>
+        <fieldset class="shrink-break">
+            <h4>Administration</h4>
 
             <div class="inline-fields">
                 {field inputName=AdminName label='Admin Name' error=$errors.AdminName default=$Endpoint->AdminName}
@@ -60,16 +60,16 @@
             {field inputName=AlertNearMaxRequests label='Alert Admin at % of Max Requests' type=number default=$Endpoint->AlertNearMaxRequests*100 attribs='min=0 max=100 step=1' hint="Leave blank for no alerts" class="tiny" error=$errors.AlertNearMaxRequests}
         </fieldset>
 
-        <fieldset class="shrink">
-            <legend>Access control</legend>
+        <fieldset class="shrink-break">
+            <h4>Access Control</h4>
 
             {checkbox inputName=KeyRequired value=1 unsetValue=0 label='API Key Required' default=$Endpoint->KeyRequired error=$errors.KeyRequired}
 
             {field inputName=DeprecationDate label='Deprecation Date' type=date default=tif($Endpoint->DeprecationDate, date('Y-m-d', $Endpoint->DeprecationDate)) hint="Leave blank if none" error=$errors.DeprecationDate}
         </fieldset>
 
-        <fieldset class="shrink">
-            <legend>Rate control</legend>
+        <fieldset class="shrink-break">
+            <h4>Rate Control</h4>
             {ratefields baseName=GlobalRate countDefault=$Endpoint->GlobalRateCount periodDefault=$Endpoint->GlobalRatePeriod label='Rate Limit (Global)' error=default($errors.GlobalRateCount, $errors.GlobalRatePeriod) hint="Leave blank if none"}
 
             {ratefields baseName=UserRate countDefault=$Endpoint->UserRateCount periodDefault=$Endpoint->UserRatePeriod label='Rate Limit (Per User)' error=default($errors.UserRateCount, $errors.UserRatePeriod) hint="Leave blank if none"}
@@ -77,8 +77,8 @@
             {ratefields baseName=GlobalBandwidth countDefault=$Endpoint->GlobalBandwidthCount periodDefault=$Endpoint->GlobalBandwidthPeriod unit='bytes' numberClass='' numberSize=7 numberStep=1000 label='Bandwidth Limit (Global)' error=default($errors.GlobalBandwidthCount, $errors.GlobalBandwidthPeriod) hint="Leave blank if none"}
         </fieldset>
 
-        <fieldset class="shrink">
-            <legend>Monitoring</legend>
+        <fieldset class="shrink-break">
+            <h4>Monitoring</h4>
 
             {capture assign=pingFrequencyHtml}{strip}
                 {$frequencyPresets = array(5, 10, 15, 20, 25, 30, 45, 60, 120)}
@@ -102,7 +102,7 @@
 
         </fieldset>
 
-        <div class="submit-area">
+        <div class="submit-area clear">
             <input type="submit" class="button submit" value="{tif $Endpoint->isPhantom ? Create : Update} Endpoint">
         </div>
     </form>
