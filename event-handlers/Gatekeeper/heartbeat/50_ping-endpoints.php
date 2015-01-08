@@ -2,6 +2,7 @@
 
 namespace Gatekeeper;
 
+use DB;
 use HttpProxy;
 use Gatekeeper\Alerts\TestFailed;
 use Gatekeeper\Endpoints\Endpoint;
