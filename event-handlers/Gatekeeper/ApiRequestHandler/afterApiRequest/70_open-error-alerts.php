@@ -4,6 +4,7 @@ namespace Gatekeeper;
 
 use Gatekeeper\Alerts\TransactionFailed;
 use Gatekeeper\Alerts\ResponseTimeLimitExceeded;
+use Gatekeeper\Metrics\Metrics;
 
 
 $Endpoint = $_EVENT['request']->getEndpoint();
