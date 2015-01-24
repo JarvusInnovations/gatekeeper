@@ -13,6 +13,48 @@
 
 {block "js-bottom"}
     {$dwoo.parent}
+
+    {cssmin 'css/screen.css' root='site-root/lib/swagger-ui'}
+
+    {jsmin array(
+        'lib/shred.bundle.js',
+        'lib/jquery-1.8.0.min.js',
+        'lib/jquery.slideto.min.js',
+        'lib/jquery.wiggle.min.js',
+        'lib/jquery.ba-bbq.min.js',
+        'lib/handlebars-1.0.0.js',
+        'lib/underscore-min.js',
+        'lib/backbone-min.js',
+        'lib/swagger.js',
+        'lib/swagger-client.js',
+        'swagger-ui.js',
+        'lib/highlight.7.3.pack.js'
+    ) root='site-root/lib/swagger-ui'}
+
+    <script type="text/javascript">
+    $(function () {
+        window.swaggerUi = new SwaggerUi({
+            url: 'http://petstore.swagger.wordnik.com/v2/swagger.json',
+            dom_id: "swagger-ct",
+            supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
+            onComplete: function(swaggerApi, swaggerUi){
+                log("Loaded SwaggerUI");
+    
+                $('pre code').each(function(i, e) {
+                    hljs.highlightBlock(e)
+                });
+            },
+            onFailure: function(data) {
+                log("Unable to Load SwaggerUI");
+            },
+            docExpansion: "none",
+            sorter : "alpha"
+        });
+
+        window.swaggerUi.load();
+    });
+    </script>
+
 {/block}
 
 {block "content"}
@@ -95,7 +137,7 @@
                     <h2 class="header-title">Paths</h2>
                 </header>
         
-                \{swagger}
+                <div id="swagger-ct" class="swagger-section"></div>
             </section>
         </div>
     </div>
