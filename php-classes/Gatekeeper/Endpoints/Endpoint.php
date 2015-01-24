@@ -44,6 +44,10 @@ class Endpoint extends ActiveRecord
         'AdminEmail' => [
             'notnull' => false
         ],
+        'Public' => [
+            'type' => 'boolean',
+            'default' => false
+        ],
         'DeprecationDate' => [
             'type' => 'timestamp',
             'notnull' => false
