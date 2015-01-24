@@ -12,6 +12,7 @@ class Key extends \ActiveRecord
     public static $metricTTL = 60;
 
     // ActiveRecord configuration
+    public static $collectionRoute = '/keys';
     public static $tableName = 'keys';
     public static $singularNoun = 'key';
     public static $pluralNoun = 'keys';
@@ -183,5 +184,15 @@ class Key extends \ActiveRecord
         }
 
         return $Key;
+    }
+
+    public function getTitle()
+    {
+        return "$this->OwnerName [$this->Key]";
+    }
+
+    public function getHandle()
+    {
+        return $this->Key;
     }
 }
