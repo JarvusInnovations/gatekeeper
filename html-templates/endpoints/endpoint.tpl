@@ -23,7 +23,7 @@
     <header class="page-header">
         <h2 class="header-title">Endpoint: {endpoint $Endpoint}</h2>
         <div class="header-buttons">
-            <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit Endpoint</a>
+            <a class="button" href="{$Endpoint->getURL('/edit')}">Edit Endpoint</a>
         </div>
     </header>
 
@@ -33,7 +33,7 @@
         <p class="muted"><em>Not yet implemented. Either <a href="https://github.com/mashery/iodocs">I/O Docs</a> or <a href="https://github.com/wordnik/swagger-ui">Swagger</a> will be integrated in the future to allow JSON-defined documentation to be entered here.</em></p>
     </section>
 
-    <form class="page-section" id="endpoint-rewrites" action="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/rewrites" method="POST">
+    <form class="page-section" id="endpoint-rewrites" action="{$Endpoint->getURL('/rewrites')}" method="POST">
         <table>
             <caption>
                 <h3>Rewrite Rules</h3>
@@ -99,7 +99,7 @@
                 {/foreach}
             </tbody>
         </table>
-        <a class="button" href="/cached-responses?endpoint={$Endpoint->Handle}&endpointVersion={$Endpoint->Version}">View All Cached Responses &rarr;</a>
+        <a class="button" href="/cached-responses?endpoint={$Endpoint->Handle}">View All Cached Responses &rarr;</a>
     </section>
     {/if}
 
@@ -144,6 +144,6 @@
             {/foreach}
             </tbody>
         </table>
-        <a class="button" href="/transactions?endpoint={$Endpoint->Handle}&endpointVersion={$Endpoint->Version}">View Full Log &rarr;</a>
+        <a class="button" href="/transactions?endpoint={$Endpoint->Handle}">View Full Log &rarr;</a>
     </section>
 {/block}

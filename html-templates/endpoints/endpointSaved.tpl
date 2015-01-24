@@ -8,7 +8,7 @@
     <p class="lead">API endpoint {endpoint $Endpoint} {tif $Endpoint->isNew ? created : saved}.</p>
 
     <p>
-        <a href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}">&larr;&nbsp;Back to {$Endpoint->Title|escape}</a><br>
+        <a href="{$Endpoint->getURL()}">&larr;&nbsp;Back to {$Endpoint->getTitle()|escape}</a><br>
         <a href="/endpoints">&larr;&nbsp;Browse all endpoints</a>
     </p>
 {/block}

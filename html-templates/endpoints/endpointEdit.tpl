@@ -13,7 +13,7 @@
             {if $Endpoint->isPhantom}
                 <a class="button destructive" href="/endpoints/">Cancel</a>
             {else}
-                <a class="button destructive" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/delete">Delete Endpoint</a>
+                <a class="button destructive" href="{$Endpoint->getURL('/delete')}">Delete Endpoint</a>
             {/if}
         </div>
     </header>

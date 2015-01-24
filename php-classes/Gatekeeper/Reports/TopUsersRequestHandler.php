@@ -21,7 +21,7 @@ class TopUsersRequestHandler extends AbstractReportRequestHandler
         }
         
         if (!empty($_GET['endpoint'])) {
-            if (!$Endpoint = Endpoint::getByID($_GET['endpoint'])) {
+            if (!$Endpoint = Endpoint::getByHandle($_GET['endpoint'])) {
                 return static::throwNotFoundError('endpoint not found');
             }
         }

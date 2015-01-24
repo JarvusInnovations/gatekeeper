@@ -29,12 +29,8 @@ class AlertsRequestHandler extends \RecordsRequestHandler
 
 
         // apply endpoint filter
-        if (!empty($_GET['endpoint']) && !empty($_GET['endpointVersion'])) {
-            if (!$Endpoint = Endpoint::getByHandleAndVersion($_GET['endpoint'], $_GET['endpointVersion'])) {
-                return static::throwNotFoundError('Endpoint not found');
-            }
-        } elseif (!empty($_GET['endpoint']) && ctype_digit($_GET['endpoint'])) {
-            if (!$Endpoint = Endpoint::getByID($_GET['endpoint'])) {
+        if (!empty($_GET['endpoint'])) {
+            if (!$Endpoint = Endpoint::getByHandle($_GET['endpoint'])) {
                 return static::throwNotFoundError('Endpoint not found');
             }
         }

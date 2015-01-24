@@ -5,6 +5,7 @@ namespace Gatekeeper\Endpoints;
 use Cache;
 use ActiveRecord;
 use HandleBehavior;
+use RecordValidator;
 use Gatekeeper\Metrics\Metrics;
 
 class Endpoint extends ActiveRecord
@@ -26,12 +27,16 @@ class Endpoint extends ActiveRecord
         'Title',
         'Handle' => [
             'type' => 'varchar',
-            'length' => 32
+            'unique' => true
         ],
-        'Version' => [
-            'type' => 'varchar',
-            'length' => 32
+        'Path' => [
+            'type' => 'string',
+            'unique' => true
         ],
+#        'Version' => [
+#            'type' => 'varchar',
+#            'length' => 32
+#        ],
         'InternalEndpoint',
         'AdminName' => [
             'notnull' => false
@@ -119,11 +124,9 @@ class Endpoint extends ActiveRecord
             'validator' => 'handle',
             'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
         ],
-        'Version' => [
-            'validator' => 'handle',
-            'allowNumeric' => true,
-            'pattern' => '/^[a-zA-Z0-9][a-zA-Z0-9\-_\.]*$/',
-            'errorMessage' => 'Version is required and can only contain letters, numbers, hyphens, periods, and underscores'
+        'Path' => [
+            'required' => true,
+            'validator' => [__CLASS__, 'validatePath']
         ],
         'InternalEndpoint' => 'URL',
         'AdminEmail' => [
@@ -156,76 +159,50 @@ class Endpoint extends ActiveRecord
         ]
     ];
 
-    public static $indexes = [
-        'HandleVersion' => [
-            'fields' => ['Handle', 'Version'],
-            'unique' => true
-        ]
-    ];
-
-#    public static $sorters = array(
-#        'calls-total' => array(__CLASS__, 'sortMetric')
-#        ,'calls-week' => array(__CLASS__, 'sortMetric')
-#        ,'responsetime' => array(__CLASS__, 'sortMetric')
-#        ,'keys' => array(__CLASS__, 'sortMetric')
-#        ,'clients' => array(__CLASS__, 'sortMetric')
-#    );
-
-    public static function getByHandleAndVersion($handle, $version = null)
+    public static function getFromPath($path)
     {
-        $cacheKey = sprintf('endpoints-lookup/%s/%s', $handle, $version ? $version : '_default');
+        // get sorted list of paths (longest to shortest)
+        if (false == ($endpointPaths = Cache::fetch('endpoint-paths'))) {
+            $endpointPaths = \DB::valuesTable('ID', 'Path', 'SELECT ID, Path FROM `%s` ORDER BY LENGTH(Path) DESC', static::$tableName);
 
-        if ($endpointID = Cache::fetch($cacheKey)) {
-            $Endpoint = static::getByID($endpointID);
-        } else {
-            $where = ['Handle' => $handle];
+            Cache::store('endpoint-paths', $endpointPaths);
+        }
 
-            if ($version) {
-                $where['Version'] = $version;
-            } else {
-                $where[] = 'DefaultVersion';
-            }
 
-            if ($Endpoint = static::getByWhere($where)) {
-                static::mapDependentCacheKey($Endpoint->ID, $cacheKey);
-                Cache::store($cacheKey, $Endpoint->ID);
+        // normalize path to string without / prefix
+        if (is_array($path)) {
+            $path = implode('/', $path);
+        }
+
+        $path = ltrim($path, '/');
+
+
+        // match longest path as prefix
+        foreach ($endpointPaths AS $endpointId => $endpointPath) {
+            if ($endpointPath == $path || 0 === strpos($path, $endpointPath . '/')) {
+                return static::getByID($endpointId);
             }
         }
 
-        return $Endpoint;
+
+        return null;
     }
 
-    public function getTitle()
+    public static function validatePath(RecordValidator $validator, Endpoint $Endpoint)
     {
-        return $this->Title . ' v' . $this->Version;
-    }
-
-    public function getURL($suffix = '/', $params = [])
-    {
-        $suffix = ltrim($suffix, '/');
-        $suffix = 'v' . $this->Version . ($suffix ? '/' . $suffix : '');
-
-        return parent::getURL($suffix, $params);
+        // TODO: test that path doesn't overlap with another path
+        \Debug::dumpVar($Endpoint, true, 'valiadting path');
     }
 
     public function save($deep = true)
     {
-        HandleBehavior::onSave($this);
+        HandleBehavior::onSave($this, $this->Path);
 
         parent::save($deep);
 
-        // if this is endpoint is being set to the default version, unset it from sibling endpoints
-        if ($this->isFieldDirty('DefaultVersion') && $this->DefaultVersion) {
-            $otherDefault = static::getByWhere([
-                'DefaultVersion' => true,
-                'Handle' => $this->Handle,
-                'ID != ' . $this->ID
-            ]);
-
-            if ($otherDefault) {
-                $otherDefault->DefaultVersion = false;
-                $otherDefault->save();
-            }
+        // clear paths cache if path changes
+        if ($this->isFieldDirty('Path')) {
+            Cache::delete('endpoint-paths');
         }
     }
     
@@ -246,53 +223,6 @@ class Endpoint extends ActiveRecord
 
         return $this->_metricsCache['averages'][$averageName];
     }
-
-#    public function getMetric($metricName, $forceUpdate = false)
-#    {
-#        $cacheKey = "metrics/endpoints/$this->ID/$metricName";
-#
-#        if (false !== ($metricValue = Cache::fetch($cacheKey))) {
-#            return $metricValue;
-#        }
-#
-#        try {
-#            $metricValue = DB::oneValue('SELECT %s FROM `%s` Endpoint WHERE Endpoint.ID = %u', array(
-#                static::getMetricSQL($metricName)
-#                ,static::$tableName
-#                ,$this->ID
-#            ));
-#
-#            Cache::store($cacheKey, $metricValue, static::$metricTTL);
-#        } catch (TableNotFoundException $e) {
-#            return null;
-#        }
-#
-#        return $metricValue;
-#    }
-#
-#    public static function getMetricSQL($metricName)
-#    {
-#        switch($metricName)
-#        {
-#            case 'calls-total':
-#                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID)', Transaction::$tableName);
-#            case 'calls-week':
-#                return sprintf('(SELECT COUNT(*) FROM `%s` WHERE EndpointID = Endpoint.ID AND Created >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK))', Transaction::$tableName);
-#            case 'responsetime':
-#                return sprintf('(SELECT AVG(ResponseTime) FROM `%s` WHERE EndpointID = Endpoint.ID)', Transaction::$tableName);
-#            case 'keys':
-#                return sprintf('(SELECT COUNT(*) FROM `%s` K LEFT JOIN `%s` KE ON (KE.KeyID = K.ID) WHERE K.AllEndpoints OR KE.EndpointID = Endpoint.ID)', Key::$tableName, KeyEndpoint::$tableName);
-#            case 'clients':
-#                return sprintf('(SELECT COUNT(DISTINCT ClientIP) FROM `%s` WHERE EndpointID = Endpoint.ID)', Transaction::$tableName);
-#            default:
-#                return 'NULL';
-#        }
-#    }
-#
-#    public static function sortMetric($dir, $name)
-#    {
-#        return static::getMetricSQL($name) . ' ' . $dir;
-#    }
 
     public function getCachedResponses($limit = null)
     {
@@ -366,11 +296,6 @@ class Endpoint extends ActiveRecord
         return $url;
     }
 
-    public function getExternalPath()
-    {
-        return "/$this->Handle/v$this->Version";
-    }
-
     public function getExternalUrl()
     {
         $url = 'http://';
@@ -381,7 +306,7 @@ class Endpoint extends ActiveRecord
             $url .= $_SERVER['HTTP_HOST'] . '/api';
         }
 
-        $url .= $this->getExternalPath();
+        $url .= '/' . $this->Path;
 
         return $url;
     }

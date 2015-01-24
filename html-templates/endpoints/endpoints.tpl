@@ -29,16 +29,16 @@
         {foreach item=Endpoint from=$data}
             <article class="endpoint" {html_attributes_encode $Endpoint->getData() prefix="data-"}>
                 <div class="summary">
-                    <h3 class="title"><a href="{$Endpoint->getUrl()|escape}">{$Endpoint->getExternalPath()|escape}</a></h3>
+                    <h3 class="title"><a href="{$Endpoint->getUrl()|escape}">/{$Endpoint->Path|escape}</a></h3>
                 </div>
 
                 <div class="details">
                     <div class="info internal-url">Internal URL: <a class="endpoint-internal-url" href="{$Endpoint->InternalEndpoint|escape}">{$Endpoint->InternalEndpoint|escape}</a></div>
                     <div class="buttons">
-                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}/edit">Edit</a>
-                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-docs">View Docs</a>
-                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-cache">View Cache</a>
-                        <a class="button" href="/endpoints/{$Endpoint->Handle}/v{$Endpoint->Version}#endpoint-log">View Log</a>
+                        <a class="button" href="{$Endpoint->getURL('/edit')}">Edit</a>
+                        <a class="button" href="{$Endpoint->getURL()}#endpoint-docs">View Docs</a>
+                        <a class="button" href="{$Endpoint->getURL()}#endpoint-cache">View Cache</a>
+                        <a class="button" href="{$Endpoint->getURL()}#endpoint-log">View Log</a>
                     </div>
                 </div>
             </article>

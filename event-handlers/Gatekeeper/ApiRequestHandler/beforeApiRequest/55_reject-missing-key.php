@@ -15,7 +15,7 @@ if ($Endpoint->KeyRequired) {
             $realm .= '/';
         }
 
-        header(sprintf('WWW-Authenticate: %s/%s/v%u', Gatekeeper::$authRealm, $Endpoint->Handle, $Endpoint->Version));
+        header(sprintf('WWW-Authenticate: %s/%s', Gatekeeper::$authRealm, $Endpoint->Path));
         \JSON::error('gatekeeper key required for this endpoint but not provided', 401);
     }
 

@@ -48,7 +48,7 @@
         <blockquote>
             <p>
                 The global bandwidth limit has been <strong>exceeded</strong>
-                for <strong>{endpoint $Alert->Endpoint useHostname=true smallify=no}</strong>.
+                for <strong>{endpoint $Alert->Endpoint useHostname=true}</strong>.
             </p>
     
             <p>

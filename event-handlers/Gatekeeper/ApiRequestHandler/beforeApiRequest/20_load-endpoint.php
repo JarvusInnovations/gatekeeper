@@ -5,31 +5,13 @@ namespace Gatekeeper;
 use Gatekeeper\Endpoints\Endpoint;
 
 
-// read endpoint handle from path
-if (!$endpointHandle = $_EVENT['request']->shiftPathStack()) {
-    return ApiRequestHandler::throwInvalidRequestError('Endpoint handle required');
+// detect endpoint if it has not already been set
+if (!$_EVENT['request']->getEndpoint()) {
+
+    if (!$Endpoint = Endpoint::getFromPath($_EVENT['request']->getPathStack())) {
+        return ApiRequestHandler::throwNotFoundError('No endpoint was found that can handle this path');
+    }
+
+    // save determined endpoint to request object
+    $_EVENT['request']->setEndpoint($Endpoint);
 }
-
-
-// read endpoint version from path and get endpoint
-if (
-    ($endpointVersion = $_EVENT['request']->peekPathStack()) &&
-    $endpointVersion[0] == 'v' &&
-    ($endpointVersion = substr($endpointVersion, 1)) &&
-    preg_match(Endpoint::$validators['Version']['pattern'], $endpointVersion) &&
-    ($Endpoint = Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion))
-) {
-    $_EVENT['request']->shiftPathStack();
-} else {
-    $Endpoint = Endpoint::getByHandleAndVersion($endpointHandle);
-}
-
-
-// ensure endpoint was found
-if (!$Endpoint) {
-    return ApiRequestHandler::throwNotFoundError('Requested endpoint+version not found, be sure to specify a version if this endpoint requires it');
-}
-
-
-// save determined endpoint to request object
-$_EVENT['request']->setEndpoint($Endpoint);

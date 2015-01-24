@@ -16,9 +16,9 @@ class CachedResponsesRequestHandler extends \RequestHandler
     {
         $GLOBALS['Session']->requireAccountLevel('Staff');
         
-        if (empty($_REQUEST['endpoint']) || empty($_REQUEST['endpointVersion'])) {
-            return static::throwInvalidRequestError('endpoint and endpointVersion required');
-        } elseif (!$Endpoint = Endpoint::getByHandleAndVersion($_REQUEST['endpoint'], $_REQUEST['endpointVersion'])) {
+        if (empty($_REQUEST['endpoint'])) {
+            return static::throwInvalidRequestError('endpoint required');
+        } elseif (!$Endpoint = Endpoint::getByHandle($_REQUEST['endpoint'])) {
             return static::throwNotFoundError('Endpoint not found');
         }
 

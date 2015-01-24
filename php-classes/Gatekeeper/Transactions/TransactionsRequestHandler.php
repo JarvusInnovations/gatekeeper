@@ -22,8 +22,8 @@ class TransactionsRequestHandler extends \RecordsRequestHandler
     public static function handleBrowseRequest($options = [], $conditions = [], $responseID = null, $responseData = [])
     {
         // apply endpoint filter
-        if (!empty($_REQUEST['endpoint']) && !empty($_REQUEST['endpointVersion'])) {
-            if (!$Endpoint = Endpoint::getByHandleAndVersion($_REQUEST['endpoint'], $_REQUEST['endpointVersion'])) {
+        if (!empty($_REQUEST['endpoint'])) {
+            if (!$Endpoint = Endpoint::getByHandle($_REQUEST['endpoint'])) {
                 return static::throwNotFoundError('Endpoint not found');
             }
 

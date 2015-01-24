@@ -53,7 +53,7 @@
                 {/if}
                 <tr>
                     <th>Endpoint</th>
-                    <td>{endpoint $Transaction->Endpoint useHostname=true smallify=no}</td>
+                    <td>{endpoint $Transaction->Endpoint useHostname=true}</td>
                 </tr>
                 <tr>
                     <th>Client IP</th>

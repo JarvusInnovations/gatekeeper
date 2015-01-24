@@ -15,18 +15,6 @@ class EndpointsRequestHandler extends \RecordsRequestHandler
     public static $accountLevelWrite = 'Staff';
     public static $accountLevelAPI = 'Staff';
 
-    public static function getRecordByHandle($endpointHandle)
-    {
-        // get version tag from next URL component
-        if (!($endpointVersion = static::shiftPath()) || !preg_match('/^v.+$/', $endpointVersion)) {
-            return static::throwInvalidRequestError('Endpoint version required');
-        }
-
-        $endpointVersion = substr($endpointVersion, 1);
-
-        return Endpoint::getByHandleAndVersion($endpointHandle, $endpointVersion);
-    }
-
     protected static function applyRecordDelta(ActiveRecord $Endpoint, $data)
     {
         if (is_numeric($data['AlertNearMaxRequests'])) {
