@@ -1,0 +1,64 @@
+.docs-tpl {
+    .site > .inner {
+        width: auto;
+    }
+
+    .content > .inner {
+        padding: 0;
+    }
+
+    .page-header,
+    .page-header .header-title {
+        margin-top: 0;
+    }
+}
+
+.split-view {
+    @include display-flex;
+
+    > .nav-view {
+        background-color: mix($page-bg-color, $base-color, 80%);
+        padding: 1.5em 0;
+        width: 240px;
+    }
+
+    > .detail-view {
+        @include flex(1);
+        padding: 1.5em;
+    }
+}
+
+.docs-toc {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    width: 240px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        a { padding-left: 1.5em; }
+        li a { padding-left: 3em; }
+        li li a { padding-left: 4.5em; }
+    }
+
+    a {
+        display: block;
+        padding: .25em 1.5em;
+        text-decoration: none;
+
+        &:hover,
+        &:focus,
+        &.current {
+            background-color: $link-color;
+            color: white;
+        }
+    }
+}
