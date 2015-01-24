@@ -17,3 +17,12 @@ Git::$repositories['GateKeeper'] = [
         'dwoo-plugins'
     ]
 ];
+
+Git::$repositories['swagger-ui'] = [
+    'remote' => 'https://github.com/swagger-api/swagger-ui.git'
+    ,'originBranch' => 'master'
+    ,'workingBranch' => 'master'
+    ,'trees' => [
+        'site-root/lib/swagger-ui' => 'dist'
+    ]
+];
