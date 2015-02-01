@@ -2,17 +2,6 @@
 
 {block "title"}Developer Portal{/block}
 
-{block "branding"}
-<div class="site-branding title-jumbo">
-    <a href="/">
-        <div class="text">
-            <big class="site-name">{$.server.HTTP_HOST}</big>
-        </div>
-    </a>
-</div>
-{/block}
-{block "header-bottom"}{/block}
-
 {block "js-bottom"}
     {$dwoo.parent}
     <script>
