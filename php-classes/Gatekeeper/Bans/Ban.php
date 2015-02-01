@@ -13,6 +13,7 @@ class Ban extends \ActiveRecord
     public static $tableName = 'bans';
     public static $singularNoun = 'ban';
     public static $pluralNoun = 'bans';
+    public static $collectionRoute = '/bans';
     public static $useCache = true;
 
     public static $fields = [
