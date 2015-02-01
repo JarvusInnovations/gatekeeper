@@ -7,6 +7,7 @@ use JSON;
 class Gatekeeper
 {
     public static $apiHostname;
+    public static $portalHostname;
     public static $authRealm = 'Gatekeeper';
 
     public static function authorizeTestApiAccess()
