@@ -26,6 +26,8 @@ class MetricsRequestHandler extends \RequestHandler
 
     public static function handleEndpointsCurrentRequest()
     {
+        $GLOBALS['Session']->requireAccountLevel('Staff');
+
         $results = [];
 
         foreach (Endpoint::getAll() AS $Endpoint) {

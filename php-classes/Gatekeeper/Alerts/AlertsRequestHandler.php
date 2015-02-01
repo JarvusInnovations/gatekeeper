@@ -10,6 +10,12 @@ class AlertsRequestHandler extends \RecordsRequestHandler
     public static $recordClass = AbstractAlert::class;
     public static $browseOrder = ['ID' => 'DESC'];
 
+    public static $accountLevelRead = 'Staff';
+    public static $accountLevelComment = 'Staff';
+    public static $accountLevelBrowse = 'Staff';
+    public static $accountLevelWrite = 'Staff';
+    public static $accountLevelAPI = 'Staff';
+
     public static function handleBrowseRequest($options = [], $conditions = [], $responseID = null, $responseData = [])
     {
         // apply status filter
