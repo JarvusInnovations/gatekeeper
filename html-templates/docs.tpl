@@ -14,46 +14,114 @@
 {block "js-bottom"}
     {$dwoo.parent}
 
+    {if !$.get.jsdebug}
+        <script src="{Site::getVersionedRootUrl('js/pages/Docs.js')}"></script>
+    {/if}
 
+    <script>
+        Ext.require('Site.page.Docs');
+    </script>
 {/block}
 
 {block "content"}
+    <?php
+        // we need to keep a reference to the top-level document for resolving JSONSchema refs
+        $GLOBALS['swaggerDocument'] = $this->scope['swaggerDocument'] = &$this->scope;
+    ?>
+
+    {template definition input}
+        <?php
+            $this->scope['swaggerDocument'] = $GLOBALS['swaggerDocument'];
+        ?>
+
+        {$input = Emergence\Swagger\Reader::flattenDefinition($input, $swaggerDocument)}
+        {$definitionId = Emergence\Swagger\Reader::getDefinitionIdFromPath($input._resolvedRef)}
+
+        {if $input.properties}
+            <table class="definition-properties">
+                <thead>
+                    {if $definitionId}
+                        <tr>
+                            <td colspan="3">
+                                Model: <a href="#models__{$definitionId}">{$definitionId}</a>
+                            </td>
+                        </tr>
+                    {/if}
+                    <tr>
+                        <th>Name</th>
+                        <th>Required</th>
+                        <th>Schema</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {foreach key=property item=propertyData from=$input.properties}
+                    <tr>
+                        <td>{$property}</td>
+                        <td>{tif is_array($input.required) && in_array($property, $input.required) ? 'Yes' : 'No'}</td>
+                        <td>{definition $propertyData}</td>
+                    </tr>
+                    {if $propertyData.description}
+                        <tr>
+                            <td colspan="3">{$propertyData.description|escape|markdown}</td>
+                        </tr>
+                    {/if}
+                {/foreach}
+                </tbody>
+            </table>
+        {else}
+            {if $input.type == 'array'}
+                [{definition $input.items}]
+            {else}
+                {$input.type} {if $input.format}({$input.format}){/if}
+            {/if}
+        {/if}
+    {/template}
+
+    {template domIdFromPath path}{$path|replace:array('/','{','}'):array('__','-','-')}{/template}
+
     <div class="split-view">
         <div class="nav-view">
             <ul class="docs-toc">
-                <li><a class="current" shref="#overview">Overview</a></li>
+                <li><a href="#overview">Overview</a></li>
                 <li><a href="#keys">API Keys</a></li>
-                <li><a href="#paths">Paths</a></li>
+                <li>
+                    <a href="#paths">Paths</a>
+                    <ul>
+                        {foreach key=path item=pathData from=$paths}
+                            <li><a href="#paths{domIdFromPath $path}">{$path}</a></li>
+                        {/foreach}
+                    </ul>
+                </li>
                 <li>
                     <a href="#models">Models</a>
                     <ul>
-                        <li><a href="#models/vehicle">Vehicle</a></li>
-                        <li><a href="#models/route">Route</a></li>
-                        <li><a href="#models/stop">Stop</a></li>
+                        {foreach key=model item=modelData from=$definitions}
+                            <li><a href="#models__{$model}">{$model}</a></li>
+                        {/foreach}
                     </ul>
                 </li>
                 <li><a href="#community">Community Code &amp; Uses</a></li>
             </ul>
         </div>
-    
+
         <div class="detail-view">
             <header class="page-header" id="overview">
-                {$Endpoint = Gatekeeper\Endpoints\EndpointsRequestHandler::getRecordByHandle('livenote-v1')}
-                <h2 class="header-title">{endpoint $Endpoint}</h2>
+                <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
                     <label class="toggle"><input type="checkbox"> Subscribe</label>
                 </div>
             </header>
-        
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dapibus ante nec dolor tincidunt, in euismod augue molestie. Duis ut tortor suscipit, feugiat est eu, semper ipsum. Integer vehicula lorem eget purus ultricies pellentesque. Phasellus pellentesque vitae enim vel dignissim. Sed condimentum urna ultricies efficitur lobortis. Fusce egestas eros maximus, lobortis velit a, sagittis augue. </p>
-        
+
+            <div class="lead">{$info.description|escape|markdown}</div>
+
             <section class="page-section" id="keys">
                 <header class="section-header">
                     <h2 class="header-title">API Keys</h2>
                     <div class="header-buttons">
                         <a class="button primary" href="/keys/create">Create</a>
                 </header>
-        
+
                 {$Keys = Gatekeeper\Keys\Key::getAll()}
                 {foreach item=Key from=$Keys}
                     {$metrics = array(
@@ -91,13 +159,93 @@
                     </article>
                 {/foreach}
             </section>
-        
+
             <section class="page-section" id="paths">
                 <header class="section-header">
                     <h2 class="header-title">Paths</h2>
                 </header>
-        
-                <div id="swagger-ct" class="swagger-section"></div>
+
+                {foreach key=path item=pathData from=$paths}
+                    <section class="endpoint-path" id="paths{domIdFromPath $path}">
+                        <header>
+                            <h3><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
+                        </header>
+
+                        {foreach key=method item=methodData from=$pathData}
+                            <section class="endpoint-path-method" id="paths{domIdFromPath $path}___{$method}">
+                                <header>
+                                    <h4><a href="#paths{domIdFromPath $path}___{$method}">{$method}</a></h4>
+                                </header>
+
+                                {$methodData.description|escape|markdown}
+
+                                <section class="endpoint-path-method-parameters">
+                                    <header>
+                                        <h5>Parameters</h5>
+                                    </header>
+                                    {*dump $methodData.parameters*}
+                                    <table>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Located in</th>
+                                            <th>Description</th>
+                                            <th>Required</th>
+                                            <th>Schema</th>
+                                        </tr>
+
+                                        {foreach item=parameterData from=$methodData.parameters}
+                                            <tr>
+                                                <td>{$parameterData.name}</td>
+                                                <td>{$parameterData.in}</td>
+                                                <td>{$parameterData.description|escape|markdown}</td>
+                                                <td>{tif $parameterData.required ? 'Yes' : 'No'}</td>
+                                                <td>{definition $parameterData}</td>
+                                            </tr>
+                                        {/foreach}
+                                    </table>
+                                </section>
+
+                                <section class="endpoint-path-method-responses">
+                                    <header>
+                                        <h5>Responses</h5>
+                                    </header>
+                                    {*dump $methodData.responses*}
+                                    <table>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Description</th>
+                                            <th>Schema</th>
+                                        </tr>
+
+                                        {foreach key=responseCode item=responseData from=$methodData.responses}
+                                            <tr>
+                                                <td>{$responseCode}</td>
+                                                <td>{$responseData.description|escape|markdown}</td>
+                                                <td>{definition $responseData}</td>
+                                            </tr>
+                                        {/foreach}
+                                    </table>
+                                </section>
+                            </section>
+                        {/foreach}
+                    </section>
+                {/foreach}
+            </section>
+
+            <section class="page-section" id="models">
+                <header class="section-header">
+                    <h2 class="header-title">Models</h2>
+                </header>
+
+                {foreach key=definition item=definitionData from=$definitions}
+                    <section class="endpoint-model" id="models__{$definition}">
+                        <header>
+                            <h3><a href="#models__{$definition}">{$definition}</a></h3>
+                        </header>
+                        {*dump $definitionData*}
+                        {definition $definitionData}
+                    </section>
+                {/foreach}
             </section>
         </div>
     </div>

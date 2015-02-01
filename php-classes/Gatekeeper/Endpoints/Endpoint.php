@@ -314,4 +314,53 @@ class Endpoint extends ActiveRecord
 
         return $url;
     }
+
+    public function getSwagger()
+    {
+        // get docs
+        $docPath = 'api-docs/' . $this->Path . '.yml';
+
+        // TODO: cache docs with a fileWrite invalidator
+        if ($docNode = Site::resolvePath($docPath)) {
+            $swagger = Yaml::parse(file_get_contents($docNode->RealPath));
+        } else {
+            $swagger = [];
+        }
+
+
+        // populate Gatekeeper-configured swagger values
+        $swagger['host'] = Gatekeeper::$apiHostname ?: Site::getConfig('primary_hostname');
+        $swagger['basePath'] = Gatekeeper::$apiHostname ? '/' : '/api';
+        $swagger['schemes'] = ['http'];
+
+        if (Site::getConfig('ssl')) {
+            $swagger['schemas'][] = 'https';
+        }
+
+        if (empty($swagger['info'])) {
+            $swagger['info'] = [
+                'title' => $this->Title
+            ];
+        }
+
+        if (empty($swagger['info']['contact'])) {
+            if ($this->AdminName) {
+                $swagger['info']['contact']['name'] = $this->AdminName;
+            }
+
+            if ($this->AdminEmail) {
+                $swagger['info']['contact']['email'] = $this->AdminEmail;
+            }
+
+            if (Gatekeeper::$portalHostname) {
+                $swagger['info']['contact']['url'] = 'http://' . Gatekeeper::$portalHostname;
+            }
+        }
+
+        if ($this->DeprecationDate) {
+            $swagger['info']['x-deprecation-date'] = $this->DeprecationDate;
+        }
+
+        return $swagger;
+    }
 }
