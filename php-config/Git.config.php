@@ -26,3 +26,21 @@ Git::$repositories['swagger-ui'] = [
         'site-root/lib/swagger-ui' => 'dist'
     ]
 ];
+
+Git::$repositories['symfony-yaml'] = [
+    'remote' => 'https://github.com/symfony/Yaml.git'
+    ,'originBranch' => 'master'
+    ,'workingBranch' => 'master'
+    ,'trees' => [
+        'php-classes/Symfony/Component/Yaml' => [
+            'path' => '.'
+            ,'exclude' => [
+                '#\\.gitignore$#'
+                ,'#^/Tests#'
+                ,'#\\.md$#'
+                ,'#composer\\.json#'
+                ,'#phpunit\\.xml\\.dist#'
+            ]
+        ]
+    ]
+];
