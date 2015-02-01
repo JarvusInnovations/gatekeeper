@@ -32,17 +32,13 @@
         <fieldset class="shrink-break">
             <h4>Routing</h4>
 
-            {capture assign=urlInputHtml}{strip}
+            {capture assign=pathInputHtml}{strip}
                 http://{tif Gatekeeper\Gatekeeper::$apiHostname ? Gatekeeper\Gatekeeper::$apiHostname : "$.server.HTTP_HOST/api"}/&thinsp;
-                <input type="text" size=15 name="Handle" required value="{refill field=Handle default=$Endpoint->Handle}">
-                &nbsp;/v&nbsp;
-                <input type="text" class="tiny" size=2 name="Version" required value="{refill field=Version default=$Endpoint->Version}">
+                <input type="text" size=20 name="Path" required value="{refill field=Path default=$Endpoint->Path}" placeholder="transitview/v1">
             {/strip}{/capture}
-            {labeledField html=$urlInputHtml type=compound label='Public Handle and Version' error=default($errors.Handle, $errors.Version) required=true}
+            {labeledField html=$pathInputHtml type=compound label='Public Path' error=$errors.Path required=true}
 
             {field inputName=InternalEndpoint label='Internal Endpoint' type=url default=$Endpoint->InternalEndpoint error=$errors.InternalEndpoint required=true}
-
-            {checkbox inputName=DefaultVersion value=1 unsetValue=0 label='Default Version' default=$Endpoint->DefaultVersion hint='This endpoint should be the default for its handle if no version is requested' error=$errors.DefaultVersion}
 
             {checkbox inputName=CachingEnabled value=1 unsetValue=0 label='Enable Response Caching' default=$Endpoint->CachingEnabled hint='Internal API must activate via HTTP headers' error=$errors.CachingEnabled}
         </fieldset>

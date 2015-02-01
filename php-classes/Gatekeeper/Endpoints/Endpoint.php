@@ -2,11 +2,15 @@
 
 namespace Gatekeeper\Endpoints;
 
+use Site;
 use Cache;
 use ActiveRecord;
 use HandleBehavior;
 use RecordValidator;
+use TableNotFoundException;
+use Gatekeeper\Gatekeeper;
 use Gatekeeper\Metrics\Metrics;
+use Symfony\Component\Yaml\Yaml;
 
 class Endpoint extends ActiveRecord
 {
@@ -15,6 +19,7 @@ class Endpoint extends ActiveRecord
         'counters' => [],
         'averages' => []
     ];
+    public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-]*(\\/[a-zA-Z][a-zA-Z0-9_\\-]*)*$/';
 
     // ActiveRecord configuration
     public static $tableName = 'endpoints';
@@ -26,17 +31,11 @@ class Endpoint extends ActiveRecord
     public static $fields = [
         'Title',
         'Handle' => [
-            'type' => 'varchar',
             'unique' => true
         ],
         'Path' => [
-            'type' => 'string',
             'unique' => true
         ],
-#        'Version' => [
-#            'type' => 'varchar',
-#            'length' => 32
-#        ],
         'InternalEndpoint',
         'AdminName' => [
             'notnull' => false
@@ -123,11 +122,6 @@ class Endpoint extends ActiveRecord
         'Title' => [
             'minlength' => 2
         ],
-        'Handle' => [
-            'required' => false,
-            'validator' => 'handle',
-            'errorMessage' => 'Handle can only contain letters, numbers, hyphens, and underscores'
-        ],
         'Path' => [
             'required' => true,
             'validator' => [__CLASS__, 'validatePath']
@@ -167,7 +161,11 @@ class Endpoint extends ActiveRecord
     {
         // get sorted list of paths (longest to shortest)
         if (false == ($endpointPaths = Cache::fetch('endpoint-paths'))) {
-            $endpointPaths = \DB::valuesTable('ID', 'Path', 'SELECT ID, Path FROM `%s` ORDER BY LENGTH(Path) DESC', static::$tableName);
+            try {
+                $endpointPaths = \DB::valuesTable('ID', 'Path', 'SELECT ID, Path FROM `%s` ORDER BY LENGTH(Path) DESC', static::$tableName);
+            } catch(TableNotFoundException $e) {
+                $endpointPaths = [];
+            }
 
             Cache::store('endpoint-paths', $endpointPaths);
         }
@@ -183,7 +181,7 @@ class Endpoint extends ActiveRecord
 
         // match longest path as prefix
         foreach ($endpointPaths AS $endpointId => $endpointPath) {
-            if ($endpointPath == $path || 0 === strpos($path, $endpointPath . '/')) {
+            if ($endpointPath == $path || 0 === stripos($path, $endpointPath . '/')) {
                 return static::getByID($endpointId);
             }
         }
@@ -194,8 +192,50 @@ class Endpoint extends ActiveRecord
 
     public static function validatePath(RecordValidator $validator, Endpoint $Endpoint)
     {
-        // TODO: test that path doesn't overlap with another path
-        \Debug::dumpVar($Endpoint, true, 'valiadting path');
+        if (!$Endpoint->Path) {
+            $validator->addError('Path', 'Path must not be empty');
+            return;
+        }
+
+        if ($Endpoint->Path[0] == '/') {
+            $validator->addError('Path', 'Path must not start with /');
+            return;
+        }
+
+        if (substr($Endpoint->Path, -1) == '/') {
+            $validator->addError('Path', 'Path must not end with /');
+            return;
+        }
+
+        if (!preg_match(static::$validPathRegex, $Endpoint->Path)) {
+            $validator->addError('Path', 'Path must start with a letter and only contain letters, numbers, hyphens, and underscores');
+            return;
+        }
+
+        $duplicateConditions = [
+            'Path' => $Endpoint->Path
+        ];
+
+        if ($Endpoint->ID) {
+            $duplicateConditions[] = 'ID != ' . $Endpoint->ID;
+        }
+
+        if (Endpoint::getByWhere($duplicateConditions)) {
+            $validator->addError('Path', 'Path matches an existing endpoint\'s');
+            return;
+        }
+    }
+
+    public function validate($deep = true)
+    {
+        // call parent
+        parent::validate($deep);
+
+        // implement handles
+        HandleBehavior::onValidate($this, $this->_validator);
+
+        // save results
+        return $this->finishValidation();
     }
 
     public function save($deep = true)
@@ -209,7 +249,7 @@ class Endpoint extends ActiveRecord
             Cache::delete('endpoint-paths');
         }
     }
-    
+
     public function getCounterMetric($counterName)
     {
         if (!array_key_exists($counterName, $this->_metricsCache['counters'])) {
@@ -218,7 +258,7 @@ class Endpoint extends ActiveRecord
 
         return $this->_metricsCache['counters'][$counterName];
     }
-    
+
     public function getAverageMetric($averageName, $counterName)
     {
         if (!array_key_exists($averageName, $this->_metricsCache['averages'])) {
@@ -307,7 +347,7 @@ class Endpoint extends ActiveRecord
         if (Gatekeeper::$apiHostname) {
             $url .= Gatekeeper::$apiHostname;
         } else {
-            $url .= $_SERVER['HTTP_HOST'] . '/api';
+            $url .= Site::getConfig('primary_hostname') . '/api';
         }
 
         $url .= '/' . $this->Path;
