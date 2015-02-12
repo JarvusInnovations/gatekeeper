@@ -92,10 +92,6 @@ class Endpoint extends ActiveRecord
             'length' => '3,2',
             'notnull' => false
         ],
-        'DefaultVersion' => [
-            'type' => 'boolean',
-            'default' => false
-        ],
         'PingFrequency' => [
             'type' => 'uint',
             'notnull' => false
