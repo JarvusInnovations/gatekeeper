@@ -370,7 +370,7 @@ class Endpoint extends ActiveRecord
 
         // populate Gatekeeper-configured swagger values
         $swagger['host'] = Gatekeeper::$apiHostname ?: Site::getConfig('primary_hostname');
-        $swagger['basePath'] = Gatekeeper::$apiHostname ? '/' : '/api';
+        $swagger['basePath'] = (Gatekeeper::$apiHostname ? '/' : '/api/') . $this->Path;
         $swagger['schemes'] = ['http'];
 
         if (Site::getConfig('ssl')) {
