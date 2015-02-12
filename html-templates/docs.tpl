@@ -29,24 +29,20 @@
         $GLOBALS['swaggerDocument'] = $this->scope['swaggerDocument'] = &$this->scope;
     ?>
 
-    {template definition input}
+    {template definition input definitionId=null}
         <?php
             $this->scope['swaggerDocument'] = $GLOBALS['swaggerDocument'];
         ?>
 
         {$input = Emergence\Swagger\Reader::flattenDefinition($input, $swaggerDocument)}
-        {$definitionId = Emergence\Swagger\Reader::getDefinitionIdFromPath($input._resolvedRef)}
+        {$definitionId = default($definitionId, Emergence\Swagger\Reader::getDefinitionIdFromPath($input._resolvedRef))}
 
         {if $input.properties}
-            <table class="definition-properties">
+            <table class="docs-table schema-table">
+                {if $definitionId}
+                <caption>Model: <a href="#models__{$definitionId}">{$definitionId}</a></caption>
+                {/if}
                 <thead>
-                    {if $definitionId}
-                        <tr>
-                            <td colspan="3">
-                                Model: <a href="#models__{$definitionId}">{$definitionId}</a>
-                            </td>
-                        </tr>
-                    {/if}
                     <tr>
                         <th>Name</th>
                         <th>Required</th>
@@ -71,7 +67,7 @@
             </table>
         {else}
             {if $input.type == 'array'}
-                [{definition $input.items}]
+                [<div class="indent">{definition $input.items}</div>]
             {else}
                 {$input.type} {if $input.format}({$input.format}){/if}
             {/if}
@@ -120,6 +116,7 @@
                     <h2 class="header-title">API Keys</h2>
                     <div class="header-buttons">
                         <a class="button primary" href="/keys/create">Create</a>
+                    </div>
                 </header>
 
                 {$Keys = Gatekeeper\Keys\Key::getAll()}
@@ -167,32 +164,32 @@
 
                 {foreach key=path item=pathData from=$paths}
                     <section class="endpoint-path" id="paths{domIdFromPath $path}">
-                        <header>
-                            <h3><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
+                        <header class="section-header">
+                            <h3 class="header-title"><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
                         </header>
 
                         {foreach key=method item=methodData from=$pathData}
-                            <section class="endpoint-path-method" id="paths{domIdFromPath $path}___{$method}">
-                                <header>
-                                    <h4><a href="#paths{domIdFromPath $path}___{$method}">{$method}</a></h4>
+                            <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}">
+                                <header class="section-header">
+                                    <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
                                 </header>
 
                                 {$methodData.description|escape|markdown}
 
-                                <section class="endpoint-path-method-parameters">
-                                    <header>
-                                        <h5>Parameters</h5>
-                                    </header>
-                                    {*dump $methodData.parameters*}
-                                    <table>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Located in</th>
-                                            <th>Description</th>
-                                            <th>Required</th>
-                                            <th>Schema</th>
-                                        </tr>
-
+                                <div class="indent">
+                                    <table class="docs-table parameters-table">
+                                        <caption>Parameters</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Located in</th>
+                                                <th>Description</th>
+                                                <th>Required</th>
+                                                <th>Schema</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
                                         {foreach item=parameterData from=$methodData.parameters}
                                             <tr>
                                                 <td>{$parameterData.name}</td>
@@ -202,21 +199,20 @@
                                                 <td>{definition $parameterData}</td>
                                             </tr>
                                         {/foreach}
+                                        </tbody>
                                     </table>
-                                </section>
-
-                                <section class="endpoint-path-method-responses">
-                                    <header>
-                                        <h5>Responses</h5>
-                                    </header>
-                                    {*dump $methodData.responses*}
-                                    <table>
-                                        <tr>
-                                            <th>Code</th>
-                                            <th>Description</th>
-                                            <th>Schema</th>
-                                        </tr>
-
+    
+                                    <table class="docs-table responses-table">
+                                        <caption>Responses</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Description</th>
+                                                <th>Schema</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
                                         {foreach key=responseCode item=responseData from=$methodData.responses}
                                             <tr>
                                                 <td>{$responseCode}</td>
@@ -224,8 +220,9 @@
                                                 <td>{definition $responseData}</td>
                                             </tr>
                                         {/foreach}
+                                        </tbody>
                                     </table>
-                                </section>
+                                </div>
                             </section>
                         {/foreach}
                     </section>
@@ -239,11 +236,8 @@
 
                 {foreach key=definition item=definitionData from=$definitions}
                     <section class="endpoint-model" id="models__{$definition}">
-                        <header>
-                            <h3><a href="#models__{$definition}">{$definition}</a></h3>
-                        </header>
                         {*dump $definitionData*}
-                        {definition $definitionData}
+                        {definition $definitionData definitionId=$definition}
                     </section>
                 {/foreach}
             </section>
