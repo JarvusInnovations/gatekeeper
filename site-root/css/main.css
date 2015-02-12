@@ -2448,71 +2448,151 @@ textarea[name=Notes] {
   padding: 0;
 }
 /* line 10, ../sass/site/modules/_docs.scss */
-.docs-tpl .page-header, .docs-tpl .section-header, .docs-tpl .article-header,
-.docs-tpl .page-header .header-title,
-.docs-tpl .section-header .header-title,
-.docs-tpl .article-header .header-title {
-  margin-top: 0;
+.docs-tpl section[id] {
+  padding-top: 1em;
+}
+/* line 14, ../sass/site/modules/_docs.scss */
+.docs-tpl .section-header, .docs-tpl .article-header {
+  margin: 0 0 1em;
+}
+/* line 18, ../sass/site/modules/_docs.scss */
+.docs-tpl .header-title {
+  font-weight: normal;
+  margin: 0;
+}
+/* line 23, ../sass/site/modules/_docs.scss */
+.docs-tpl .http-method {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+/* line 28, ../sass/site/modules/_docs.scss */
+.docs-tpl .indent {
+  padding-left: 3em;
 }
 
-/* line 16, ../sass/site/modules/_docs.scss */
+/* line 33, ../sass/site/modules/_docs.scss */
 .split-view {
   display: -webkit-flex;
   display: flex;
 }
-/* line 19, ../sass/site/modules/_docs.scss */
+/* line 36, ../sass/site/modules/_docs.scss */
 .split-view > .nav-view {
   background-color: #f2eade;
   padding: 1.5em 0;
   width: 240px;
 }
-/* line 25, ../sass/site/modules/_docs.scss */
+/* line 42, ../sass/site/modules/_docs.scss */
 .split-view > .detail-view {
   -webkit-flex: 1;
   flex: 1;
   padding: 1.5em;
 }
 
-/* line 31, ../sass/site/modules/_docs.scss */
+/* line 48, ../sass/site/modules/_docs.scss */
 .docs-toc {
-  margin: 0;
+  bottom: 0;
+  margin: 1px 0 0;
+  overflow: auto;
+  overflow-x: hidden;
   padding: 0;
   position: fixed;
+  top: 3em;
   width: 240px;
 }
-/* line 37, ../sass/site/modules/_docs.scss */
+/* line 65, ../sass/site/modules/_docs.scss */
 .docs-toc ul {
   margin: 0;
   padding: 0;
 }
-/* line 42, ../sass/site/modules/_docs.scss */
+/* line 70, ../sass/site/modules/_docs.scss */
 .docs-toc li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-/* line 47, ../sass/site/modules/_docs.scss */
+/* line 75, ../sass/site/modules/_docs.scss */
 .docs-toc li a {
-  padding-left: 1.5em;
+  padding-left: 2.25em;
+  text-indent: -0.75em;
 }
-/* line 48, ../sass/site/modules/_docs.scss */
+/* line 80, ../sass/site/modules/_docs.scss */
 .docs-toc li li a {
-  padding-left: 3em;
+  padding-left: 3.75em;
 }
-/* line 49, ../sass/site/modules/_docs.scss */
+/* line 81, ../sass/site/modules/_docs.scss */
 .docs-toc li li li a {
-  padding-left: 4.5em;
+  padding-left: 5.25em;
 }
-/* line 52, ../sass/site/modules/_docs.scss */
+/* line 82, ../sass/site/modules/_docs.scss */
+.docs-toc li li li li a {
+  padding-left: 6.75em;
+}
+/* line 85, ../sass/site/modules/_docs.scss */
 .docs-toc a {
   display: block;
-  padding: .25em 1.5em;
+  line-height: 1.25;
+  padding: .375em 1.5em;
   text-decoration: none;
 }
-/* line 57, ../sass/site/modules/_docs.scss */
-.docs-toc a:hover, .docs-toc a:focus, .docs-toc a.current {
+/* line 91, ../sass/site/modules/_docs.scss */
+.docs-toc a:hover, .docs-toc a:focus {
+  background-color: rgba(71, 113, 166, 0.2);
+}
+/* line 96, ../sass/site/modules/_docs.scss */
+.docs-toc a.current {
   background-color: #4771a6;
   color: white;
+}
+
+/* line 103, ../sass/site/modules/_docs.scss */
+.docs-table {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid #d5d2cd;
+}
+/* line 107, ../sass/site/modules/_docs.scss */
+.docs-table td, .docs-table th {
+  vertical-align: top;
+}
+/* line 111, ../sass/site/modules/_docs.scss */
+.docs-table td {
+  border-top: 1px solid #d5d2cd;
+}
+/* line 115, ../sass/site/modules/_docs.scss */
+.docs-table p {
+  margin: 0;
+}
+/* line 119, ../sass/site/modules/_docs.scss */
+.docs-table caption {
+  background-color: #9b9488;
+  color: white;
+  font-size: smaller;
+  font-weight: normal;
+  padding: .375em .625em;
+  text-transform: uppercase;
+}
+/* line 127, ../sass/site/modules/_docs.scss */
+.docs-table caption a {
+  color: inherit;
+  text-decoration: underline;
+  text-transform: none;
+}
+/* line 134, ../sass/site/modules/_docs.scss */
+.docs-table .docs-table {
+  font-size: small;
+  font-weight: normal;
+  margin: .5em 0;
+  width: auto;
+}
+
+/* line 143, ../sass/site/modules/_docs.scss */
+.endpoint-path-method .section-header, .endpoint-path-method .article-header {
+  border: 0;
+  margin: 0;
+}
+
+/* line 150, ../sass/site/modules/_docs.scss */
+.endpoint-model .docs-table {
+  margin: 0;
 }
 
 /* line 9, ../sass/site/modules/_endpoints.scss */
