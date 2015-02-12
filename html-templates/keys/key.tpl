@@ -8,7 +8,7 @@
     <header class="page-header">
         <h2 class="header-title">Key: {apiKey $Key}</h2>
         <div class="header-buttons">
-            <a class="button" href="/keys/{$Key->Key}/edit">Edit Key</a>
+            <a class="button" href="{$Key->getUrl('/edit')}">Edit Key</a>
         </div>
     </header>
 
@@ -18,23 +18,23 @@
         {if $Key->AllEndpoints}
             <ul>
                 <li>This key can access <strong>all endpoints</strong>.</li>
-                <li><a href="/keys/{$Key->Key}/edit">Edit this key</a> to restrict access to an explicit list of endpoints here.</li>
+                <li><a href="{$Key->getUrl('/edit')}">Edit this key</a> to restrict access to an explicit list of endpoints here.</li>
             </ul>
         {else}
             <ul>
                 {foreach item=Endpoint from=$Key->Endpoints}
-                    <li>{endpoint $Endpoint}&nbsp;<a href="/keys/{$Key->Key}/endpoints/{$Endpoint->ID}/remove" class="button destructive tiny">Remove</a></li>
+                    <li>{endpoint $Endpoint}&nbsp;<a href="{$Key->getUrl('/endpoints')}/{$Endpoint->ID}/remove" class="button destructive tiny">Remove</a></li>
                 {foreachelse}
                     <li><em>No endpoints added yet</em></li>
                 {/foreach}
                 {$unlinkedEndpoints = $Key->getUnlinkedEndpoints()}
                 {if count($unlinkedEndpoints)}
                     <li>
-                        <form action="/keys/{$Key->Key}/endpoints" method="POST">
+                        <form action="{$Key->getUrl('/endpoints')}" method="POST">
                             <select name="EndpointID" class="field-control inline">
                                 <option value="">Select endpoint</option>
                                 {foreach item=Endpoint from=$unlinkedEndpoints}
-                                    <option value="{$Endpoint->ID}">{$Endpoint->Title|escape} v{$Endpoint->Version|escape}</option>
+                                    <option value="{$Endpoint->ID}">{$Endpoint->getTitle()|escape}</option>
                                 {/foreach}
                             </select>
                             <input type="submit" value="Add">
