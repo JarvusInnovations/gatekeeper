@@ -11,6 +11,17 @@
 {/block}
 {block "header-bottom"}{/block}
 
+{block "css"}
+    {$dwoo.parent}
+    <link href="{versioned_url 'lib/prism/prism.css'}" rel="stylesheet">
+    <style>
+        input.invalid {
+            background-color: red;
+            color: white;
+        }
+    </style>
+{/block}
+
 {block "js-bottom"}
     {$dwoo.parent}
 
@@ -21,6 +32,8 @@
     <script>
         Ext.require('Site.page.Docs');
     </script>
+
+    <script src="{versioned_url 'lib/prism/prism.js'}"></script>
 {/block}
 
 {block "content"}
@@ -40,7 +53,7 @@
         {if $input.properties}
             <table class="docs-table schema-table">
                 {if $definitionId}
-                <caption>Model: <a href="#models__{$definitionId}">{$definitionId}</a></caption>
+                <caption>Model: <a href="#models__{$definitionId|replace:array('/','{','}',' '):array('__','-','-','-')}">{$definitionId}</a></caption>
                 {/if}
                 <thead>
                     <tr>
@@ -93,7 +106,7 @@
                     <a href="#models">Models</a>
                     <ul>
                         {foreach key=model item=modelData from=$definitions}
-                            <li><a href="#models__{$model}">{$model}</a></li>
+                            <li><a href="#models__{$model|replace:array('/','{','}',' '):array('__','-','-','-')}">{$model}</a></li>
                         {/foreach}
                     </ul>
                 </li>
@@ -101,7 +114,7 @@
             </ul>
         </div>
 
-        <div class="detail-view">
+        <div class="detail-view endpoint-docs" data-host="{$host|escape}" data-basepath="{$basePath|escape}" data-schemes="{$schemes|implode:','|escape}">
             <header class="page-header" id="overview">
                 <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
@@ -163,13 +176,13 @@
                 </header>
 
                 {foreach key=path item=pathData from=$paths}
-                    <section class="endpoint-path" id="paths{domIdFromPath $path}">
+                    <section class="endpoint-path" id="paths{domIdFromPath $path}" data-path="{$path}">
                         <header class="section-header">
                             <h3 class="header-title"><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
                         </header>
 
                         {foreach key=method item=methodData from=$pathData}
-                            <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}">
+                            <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}" data-method="{$method}">
                                 <header class="section-header">
                                     <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
                                 </header>
@@ -191,11 +204,11 @@
     
                                         <tbody>
                                         {foreach item=parameterData from=$methodData.parameters}
-                                            <tr>
+                                            <tr {html_attributes_encode $parameterData prefix="data-"}>
                                                 <td>{$parameterData.name}</td>
                                                 <td>{$parameterData.in}</td>
                                                 <td>{$parameterData.description|escape|markdown}</td>
-                                                <td>{tif $parameterData.required ? 'Yes' : 'No'}</td>
+                                                <td>{tif $parameterData.required || $parameterData.in == 'path' ? 'Yes' : 'No'}</td>
                                                 <td>{definition $parameterData}</td>
                                             </tr>
                                         {/foreach}
@@ -235,7 +248,7 @@
                 </header>
 
                 {foreach key=definition item=definitionData from=$definitions}
-                    <section class="endpoint-model" id="models__{$definition}">
+                    <section class="endpoint-model" id="models__{$definition|replace:array('/','{','}',' '):array('__','-','-','-')}">
                         {*dump $definitionData*}
                         {definition $definitionData definitionId=$definition}
                     </section>
