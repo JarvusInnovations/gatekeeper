@@ -13,15 +13,18 @@ Ext.define('Site.page.Docs', {
     },
 
     tryItOutTpl: [
-        '<h1>Response ({status_code}):</h1>',
-        '{status_reason}',
-        '<dl>',
-        '   <tpl foreach="headers">',
-        '       <dt>{$}</dt>',
-        '       <dd>{.}</dd>',
-        '   </tpl>',
+        '<h5 class="response-title">Response: {status_code} {status_reason}</h5>',
+
+        '<dl class="response-headers">',
+        '<tpl foreach="headers">',
+            '<div class="dli">',
+                '<dt>{$}</dt>',
+                '<dd>{.}</dd>',
+            '</div>',
+        '</tpl>',
         '</dl>',
-        '<h2>Body</h2>',
+
+        '<h5 class="response-title">Response Body</h5>',
         '<pre class="response-body language-{language}">{body}</pre>'
     ],
     
@@ -156,22 +159,26 @@ Ext.define('Site.page.Docs', {
         // wire test consoles
         Ext.select('.endpoint-path-method', true).each(function(pathMethodEl) {
             var btn = pathMethodEl.appendChild({
-                    tag: 'button',
-                    html: 'Try it out!'
+                    cls: 'indent',
+                    cn: [{
+                        tag: 'button',
+                        html: 'Try it out!'
+                    }]
                 }),
                 method = pathMethodEl.getAttribute('data-method'),
                 path = pathMethodEl.up('.endpoint-path').getAttribute('data-path'),
                 containerEl = pathMethodEl.appendChild({
                     cls: 'response-container'
                 }),
-                tableEl = pathMethodEl.down('.endpoint-path-method-parameters table');
+                tableEl = pathMethodEl.down('.parameters-table');
                 
-            tableEl.down('thead td').insertSibling({tag: 'td', html: 'Value'}, 'after');
+            tableEl.down('thead th').insertSibling({tag: 'th', html: 'Value'}, 'after');
 
             tableEl.select('tbody > tr').each(function(rowEl) {
                 var type = rowEl.getAttribute('data-type'),
                     inputConfig = {
                         tag: 'input',
+                        cls: 'field-control',
                         type: paramInputTypes[type]
                     },
                     collectionFormat;
@@ -182,7 +189,7 @@ Ext.define('Site.page.Docs', {
                     inputConfig.placeholder = ['item1', 'item2', '...'].join((paramCollectionSeperators[rowEl.getAttribute('data-collectionformat') || 'csv'])); 
                 }
                 
-                rowEl.down('td').insertSibling(inputConfig, 'after');
+                rowEl.down('td').insertSibling({ tag: 'td', cn: [inputConfig] }, 'after');
             });
 
             btn.on('click', function (ev, t) {
@@ -193,7 +200,7 @@ Ext.define('Site.page.Docs', {
                     language = '',
                     firstErrorEl;
                 
-                pathMethodEl.select('.endpoint-path-method-parameters tbody > tr').each(function(rowEl) {
+                pathMethodEl.select('.parameters-table tbody > tr').each(function(rowEl) {
                     var inputEl = rowEl.down('input'),
                         isEmpty = (inputEl.dom.value === ''),
                         paramIn = rowEl.getAttribute('data-in'),

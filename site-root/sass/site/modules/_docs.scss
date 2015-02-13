@@ -26,7 +26,7 @@
     }
 
     .indent {
-        padding-left: 3em;
+        margin-left: 1.5em;
     }
 }
 
@@ -57,7 +57,7 @@
     margin: 1px 0 0;
     overflow: auto;
     overflow-x: hidden;
-    padding: 0;
+    padding: 0 0 1em;
     position: fixed;
     top: 3em;
     width: 240px;
@@ -104,18 +104,6 @@
     background-color: rgba(white, .4);
     border: 1px solid $border-color;
 
-    td, th {
-        vertical-align: top;
-    }
-
-    td {
-        border-top: 1px solid $border-color;
-    }
-
-    p {
-        margin: 0;
-    }
-
     caption {
         background-color: darken($border-color, 25);
         color: white;
@@ -131,15 +119,44 @@
         }
     }
 
+    td, th {
+        vertical-align: top;
+    }
+
+    td {
+        border-top: 1px solid $border-color;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    thead {
+        th {
+
+        }
+    }
+
     .docs-table {
         font-size: small;
         font-weight: normal;
         margin: .5em 0;
         width: auto;
     }
+
+    input {
+        padding: .125em .25em;
+
+        &.invalid {
+            background-color: tint(red, 90%);
+            border-color: red;
+        }
+    }
 }
 
 .endpoint-path-method {
+    margin-bottom: 2em;
+
     .section-header {
         border: 0;
         margin: 0;
@@ -148,6 +165,73 @@
 
 .endpoint-model {
     .docs-table {
+        margin: 0;
+    }
+}
+
+.toggle {
+    position: relative;
+
+    input {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    .toggle-off { display: inline; }
+    .toggle-on  { display: none; }
+    .toggle-off-to-on { display: none; }
+    .toggle-on-to-off { display: none; }
+
+    :checked {
+        ~ .toggle-off { display: none; }
+        ~ .toggle-on  { display: inline; }
+    }
+
+    &.off-to-on {
+        .toggle-off { display: none; }
+        .toggle-on  { display: none; }
+        .toggle-off-to-on { display: inline; }
+        .toggle-on-to-off { display: none; }
+    }
+
+    &.on-to-off {
+        .toggle-off { display: none; }
+        .toggle-on  { display: none; }
+        .toggle-off-to-on { display: none; }
+        .toggle-on-to-off { display: inline; }
+    }
+}
+
+.response-container {
+    margin: 1em 0 1em 1.5em;
+}
+
+.response-body {
+    background: rgba(white, .4);
+    border: 1px solid $border-color;
+    max-height: 500px;
+    max-height: 60vh;
+    white-space: pre-wrap;
+}
+
+.response-headers {
+    display: table;
+
+    .dli {
+        display: table-row;
+    }
+
+    dt, dd {
+        display: table-cell;
+    }
+
+    dt {
+        color: $muted-color;
+        padding-right: 1em;
+        text-align: right;
+    }
+
+    dd {
         margin: 0;
     }
 }

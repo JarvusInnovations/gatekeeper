@@ -13,13 +13,7 @@
 
 {block "css"}
     {$dwoo.parent}
-    <link href="{versioned_url 'lib/prism/prism.css'}" rel="stylesheet">
-    <style>
-        input.invalid {
-            background-color: red;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="{versioned_url 'lib/prism/prism.css'}">
 {/block}
 
 {block "js-bottom"}
@@ -80,7 +74,7 @@
             </table>
         {else}
             {if $input.type == 'array'}
-                [<div class="indent">{definition $input.items}</div>]
+                [{if !$input.items.type}<div class="indent">{/if}{definition $input.items}{if !$input.items.type}</div>{/if}]
             {else}
                 {$input.type} {if $input.format}({$input.format}){/if}
             {/if}
@@ -118,7 +112,13 @@
             <header class="page-header" id="overview">
                 <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
-                    <label class="toggle"><input type="checkbox"> Subscribe</label>
+                    <label class="toggle button">
+                        <input type="checkbox">
+                        <span class="toggle-off">Subscribe</span>
+                        <span class="toggle-on">Unsubscribe</span>
+                        <span class="toggle-off-to-on">Subscribing&hellip;</span>
+                        <span class="toggle-on-to-off">Unsubscribing&hellip;</span>
+                    </label>
                 </div>
             </header>
 
@@ -195,7 +195,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Located in</th>
+                                                <th>Located&nbsp;in</th>
                                                 <th>Description</th>
                                                 <th>Required</th>
                                                 <th>Schema</th>
