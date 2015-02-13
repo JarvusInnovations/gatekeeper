@@ -177,7 +177,7 @@ class Endpoint extends ActiveRecord
 
         // match longest path as prefix
         foreach ($endpointPaths AS $endpointId => $endpointPath) {
-            if ($endpointPath == $path || 0 === stripos($path, $endpointPath . '/')) {
+            if (0 === strcasecmp($endpointPath, $path) || 0 === stripos($path, $endpointPath . '/')) {
                 return static::getByID($endpointId);
             }
         }
