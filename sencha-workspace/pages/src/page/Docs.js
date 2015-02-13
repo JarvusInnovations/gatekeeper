@@ -317,7 +317,7 @@ Ext.define('Site.page.Docs', {
         
         nodes.forEach(function(node) {
             var indent = 0,
-                paddinng;
+                pad;
             
             if (node.match(/.+<\/\w[^>]*>$/)) {
                 indent = 0;
