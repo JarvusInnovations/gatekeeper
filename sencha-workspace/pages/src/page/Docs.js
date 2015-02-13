@@ -150,7 +150,7 @@ Ext.define('Site.page.Docs', {
                 integer: 'number',
                 string: 'text',
                 file: 'file',
-                boolean: 'checkbox'
+                'boolean': 'checkbox'
             };
 
         // wire test consoles
