@@ -5,14 +5,16 @@ function Dwoo_Plugin_html_attributes_encode(Dwoo_Core $dwoo, $array, $prefix = n
     $attributes = array();
 
     foreach ($array AS $key => $value) {
-        if ($value === false) {
+        if ($value === false || $value === null) {
             continue;
         }
 
         $attribute = ($prefix ?: '') . $key;
 
         if ($value !== true) {
-            $attribute .= '="' . htmlspecialchars($value) . '"';
+            $attribute .= '="' . htmlspecialchars(
+                (is_string($value) || is_int($value)) ? $value : json_encode($value)
+            ). '"';
         }
 
         $attributes[] = $attribute;
