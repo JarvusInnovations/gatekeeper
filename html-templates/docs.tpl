@@ -98,7 +98,7 @@
                     <a href="#paths">Paths</a>
                     <ul>
                         {foreach key=path item=pathData from=$paths}
-                            <li><a href="#paths{domIdFromPath $path}">{$path}</a></li>
+                            <li><a href="#paths{domIdFromPath $path}">{$path|replace:'/':'<wbr>/'}</a></li>
                         {/foreach}
                     </ul>
                 </li>
