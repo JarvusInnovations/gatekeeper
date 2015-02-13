@@ -230,6 +230,7 @@ Ext.define('Site.page.Docs', {
                     method: method,
                     url: apiSchemes[0] + '://' + apiHost + apiBasePath + me.populatePlaceholders(path, parameters.path),
                     params: parameters.query,
+                    disableCaching: false,
                     callback: function(options, success, response) {
                         var headers = response.getAllResponseHeaders(),
                             body = response.responseText;
@@ -259,8 +260,7 @@ Ext.define('Site.page.Docs', {
                             status_code: response.status,
                             status_reason: success ? (response.statusText || 'OK') : (response.statusText || me.httpErrorReasons[response.status] || 'Error')
                         });
-                    },
-                    disableCaching: true
+                    }
                 });
             });
         });
