@@ -96,7 +96,7 @@
                 </div>
                 <div class="endpoint-text">
                     <h3 class="endpoint-name">
-                        <a class="endpoint-path" href="{$Endpoint->getUrl()}">/{$Endpoint->Path|escape}</a>
+                        <a class="endpoint-path" href="/api-docs/{$Endpoint->Path}">/{$Endpoint->Path|escape}</a>
                         <small class="endpoint-title">{$Endpoint->getTitle()}</small>
                     </h3>
                     <p class="endpoint-description">{$desc|escape}</p>
