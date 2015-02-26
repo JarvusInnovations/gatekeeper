@@ -75,7 +75,7 @@
         </header>
 
         <ul class="endpoint-list">
-        {$Endpoints = Gatekeeper\Endpoints\Endpoint::getAll()}
+        {$Endpoints = Gatekeeper\Endpoints\Endpoint::getAllByWhere('Public')}
         {foreach item=Endpoint from=$Endpoints}
             <li class="endpoint-list-item">
                 {$avgResponseTime = mt_rand(10, 15000)}

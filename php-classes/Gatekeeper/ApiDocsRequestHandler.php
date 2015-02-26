@@ -24,6 +24,11 @@ class ApiDocsRequestHandler extends \RequestHandler
         }
 
 
+        // check access
+        if (!$Endpoint->Public) {
+            $GLOBALS['Session']->requireAccountLevel('Staff');
+        }
+
         return static::respond('docs', $Endpoint->getSwagger());
     }
 }
