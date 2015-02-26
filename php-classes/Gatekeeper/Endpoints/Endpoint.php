@@ -19,7 +19,7 @@ class Endpoint extends ActiveRecord
         'counters' => [],
         'averages' => []
     ];
-    public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-]*(\\/[a-zA-Z][a-zA-Z0-9_\\-]*)*$/';
+    public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-\\.]*(\\/[a-zA-Z][a-zA-Z0-9_\\-\\.]*)*$/';
 
     // ActiveRecord configuration
     public static $tableName = 'endpoints';
@@ -204,7 +204,7 @@ class Endpoint extends ActiveRecord
         }
 
         if (!preg_match(static::$validPathRegex, $Endpoint->Path)) {
-            $validator->addError('Path', 'Path must start with a letter and only contain letters, numbers, hyphens, and underscores');
+            $validator->addError('Path', 'Path must start with a letter and only contain letters, numbers, periods, hyphens, and underscores');
             return;
         }
 
