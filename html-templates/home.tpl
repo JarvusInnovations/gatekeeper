@@ -114,7 +114,7 @@
                         <a class="endpoint-path" href="/api-docs/{$Endpoint->Path}">/{$Endpoint->Path|escape}</a>
                         <small class="endpoint-title">{$Endpoint->getTitle()}</small>
                     </h3>
-                    <p class="endpoint-description">{$Endpoint->Description|escape|markdown}</p>
+                    <div class="endpoint-description">{$Endpoint->Description|escape|markdown}</div>
                 </div>
             </li>
         {/foreach}
