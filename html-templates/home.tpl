@@ -4,15 +4,13 @@
 
 {block "js-bottom"}
     {$dwoo.parent}
-    <script>
-        Ext.onReady(function() {
-            var searchPlaceholder = 'Search APIs…',
-                searchInput = Ext.getBody().down('.api-search-input');
 
-            searchInput.set({ placeholder: searchPlaceholder });
-            searchInput.on('focus', function() { this.set({ placeholder: '' }) });
-            searchInput.on('blur',  function() { this.set({ placeholder: searchPlaceholder }) });
-        });
+    {if !$.get.jsdebug}
+        <script src="{Site::getVersionedRootUrl('js/pages/Portal.js')}"></script>
+    {/if}
+
+    <script>
+        Ext.require('Site.page.Portal');
     </script>
 {/block}
 
@@ -83,7 +81,7 @@
 
         <ul class="endpoint-list">
         {foreach item=Endpoint from=$data}
-            <li class="endpoint-list-item">
+            <li class="endpoint-list-item" data-endpoint-id="{$Endpoint->ID}">
                 {$avgResponseTime = $Endpoint->getAverageMetric('responseTime', 'requests')}
 
                 {if $Endpoint->isDown()}
