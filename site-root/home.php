@@ -1,3 +1,3 @@
 <?php
 
-RequestHandler::respond('home');
+Gatekeeper\HomeRequestHandler::handleRequest();
