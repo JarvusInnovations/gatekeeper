@@ -62,13 +62,21 @@
 
     <section class="page-section">
         <header class="section-header">
-            <h2 class="header-title">Top APIs this week</h2>
+            <h2 class="header-title">
+                {if $order == popularity}
+                    Top APIs this week
+                {elseif $order == alpha}
+                    APIs by path
+                {else}
+                    Newest APIs
+                {/if}
+            </h2>
             <div class="header-buttons">
                 <span class="button-group">
                     <label>Sort:</label>
-                    <a class="button small active" href="#popularity">Popularity</a>
-                    <a class="button small" href="#alpha">Alpha</a>
-                    <a class="button small" href="#newest">Newest</a>
+                    <a class="button small {tif $order == popularity ? active}" href="?order=popularity">Popularity</a>
+                    <a class="button small {tif $order == alpha ? active}" href="?order=alpha">Alpha</a>
+                    <a class="button small {tif $order == newest ? active}" href="?order=newest">Newest</a>
                 </span>
             </div>
         </header>
