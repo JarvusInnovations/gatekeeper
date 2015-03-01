@@ -25,6 +25,7 @@
         <input class="api-search-input" type="search">
     </form>
 
+{*
     <section class="page-section">
         <header class="section-header">
             <h2 class="header-title">Browse by category</h2>
@@ -57,6 +58,7 @@
             {/loop}
         </ul>
     </section>
+*}
 
     <section class="page-section">
         <header class="section-header">
