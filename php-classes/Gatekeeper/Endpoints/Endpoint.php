@@ -38,16 +38,21 @@ class Endpoint extends ActiveRecord
         'Path' => [
             'unique' => true
         ],
-        'InternalEndpoint',
+        'InternalEndpoint' => [
+            'accountLevelEnumerate' => 'Staff'
+        ],
         'AdminName' => [
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'AdminEmail' => [
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'Public' => [
             'type' => 'boolean',
-            'default' => false
+            'default' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'Description' => [
             'type' => 'clob',
@@ -59,27 +64,33 @@ class Endpoint extends ActiveRecord
         ],
         'GlobalRateCount' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'GlobalRatePeriod' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'UserRateCount' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'UserRatePeriod' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'GlobalBandwidthCount' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'GlobalBandwidthPeriod' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'KeyRequired' => [
             'type' => 'boolean',
@@ -87,28 +98,34 @@ class Endpoint extends ActiveRecord
         ],
         'CachingEnabled' => [
             'type' => 'boolean',
-            'default' => true
+            'default' => true,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'AlertOnError' => [
             'type' => 'boolean',
-            'default' => true
+            'default' => true,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'AlertNearMaxRequests' => [
             'type' => 'decimal',
             'length' => '3,2',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'PingFrequency' => [
             'type' => 'uint',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'PingURI' => [
             'type' => 'string',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ],
         'PingTestPattern' => [
             'type' => 'string',
-            'notnull' => false
+            'notnull' => false,
+            'accountLevelEnumerate' => 'Staff'
         ]
     ];
 
