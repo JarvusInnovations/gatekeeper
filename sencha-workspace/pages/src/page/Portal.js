@@ -78,6 +78,16 @@ Ext.define('Site.page.Portal', {
         var me = this,
             queryRe = query && new RegExp('('+Ext.String.escapeRegex(query)+')', 'i');
 
+
+        // suppress duplicate queries
+        if (me.currentQuery == query) {
+            return;
+        }
+
+        me.currentQuery = query;
+
+
+        // apply filter and highlight matches
         me.endpoints.each(function(endpoint) {
             var match = false;
 
