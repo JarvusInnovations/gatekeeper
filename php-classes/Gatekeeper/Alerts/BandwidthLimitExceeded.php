@@ -5,6 +5,7 @@ namespace Gatekeeper\Alerts;
 class BandwidthLimitExceeded extends AbstractAlert
 {
     public static $notificationTemplate = 'bandwidthLimitExceeded';
+    public static $isFatal = true;
 
     public static $validators = [
         'Endpoint' => 'require-relationship'

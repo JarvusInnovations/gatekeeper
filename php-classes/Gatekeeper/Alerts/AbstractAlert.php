@@ -8,6 +8,7 @@ abstract class AbstractAlert extends \ActiveRecord
 {
     public static $displayType;
     public static $notificationTemplate = 'default';
+    public static $isFatal = false;
 
     // ActiveRecord configuration
     public static $tableName = 'alerts';

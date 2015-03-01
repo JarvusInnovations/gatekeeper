@@ -5,6 +5,7 @@ namespace Gatekeeper\Alerts;
 class RateLimitExceeded extends AbstractAlert
 {
     public static $notificationTemplate = 'rateLimitExceeded';
+    public static $isFatal = true;
 
     public static $validators = [
         'Endpoint' => 'require-relationship'

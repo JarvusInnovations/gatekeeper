@@ -74,20 +74,30 @@
         <ul class="endpoint-list">
         {foreach item=Endpoint from=$data}
             <li class="endpoint-list-item">
-                {$avgResponseTime = mt_rand(10, 15000)}
-                {$statuses = array('good', 'mid', 'bad', 'down', '')}
-                {$i = array_rand($statuses)}
-                {$status = $statuses[$i]}
+                {$avgResponseTime = $Endpoint->getAverageMetric('responseTime', 'requests')}
+
+                {if $Endpoint->isDown()}
+                    {$status = down}
+                {elseif $avgResponseTime > 1000}
+                    {$status = bad}
+                {elseif $avgResponseTime > 150}
+                    {$status = mid}
+                {elseif $avgResponseTime}
+                    {$status = good}
+                {else}
+                    {$status = idle}
+                {/if}
                 <div class="primary-metric {$status}">
                     <strong class="metric">
-                        {if $status=='down'}DOWN
+                        {if $status == down}DOWN
                         {else}
                             {if $avgResponseTime>99999}99K+
                             {elseif $avgResponseTime>9999}{floor(math('$avgResponseTime/1000'))}K+
+                            {elseif $status == idle}&mdash;
                             {else}{$avgResponseTime|number_format}{/if}
                         {/if}
                     </strong>
-                    {if $status!='down'}<span class="unit">ms</span>{/if}
+                    {if $status != idle && $status != down}<span class="unit">ms</span>{/if}
                 </div>
                 <div class="endpoint-text">
                     <h3 class="endpoint-name">

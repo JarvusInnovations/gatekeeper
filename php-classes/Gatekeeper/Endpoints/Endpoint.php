@@ -10,16 +10,18 @@ use RecordValidator;
 use TableNotFoundException;
 use Gatekeeper\Gatekeeper;
 use Gatekeeper\Metrics\Metrics;
+use Gatekeeper\Alerts\AbstractAlert;
 use Symfony\Component\Yaml\Yaml;
 
 class Endpoint extends ActiveRecord
 {
     public static $metricTTL = 60;
+    public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-\\.]*(\\/[a-zA-Z][a-zA-Z0-9_\\-\\.]*)*$/';
     protected $_metricsCache = [
         'counters' => [],
         'averages' => []
     ];
-    public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-\\.]*(\\/[a-zA-Z][a-zA-Z0-9_\\-\\.]*)*$/';
+    protected static $_downEndpointIds;
 
     // ActiveRecord configuration
     public static $tableName = 'endpoints';
@@ -403,4 +405,35 @@ class Endpoint extends ActiveRecord
 
         return $swagger;
     }
+
+    public static function getDownEndpoints()
+    {
+        if (isset(static::$_downEndpointIds)) {
+            return static::$_downEndpointIds;
+        }
+
+        $cacheKey = 'endpoints-down';
+
+        if (false === ($endpointIds = Cache::fetch($cacheKey))) {
+            $endpointIds = [];
+
+            foreach (AbstractAlert::getAllByField('Status', 'open') AS $Alert) {
+                if ($Alert::$isFatal) {
+                    $endpointIds[] = $Alert->EndpointID;
+                }
+            }
+
+            $endpointIds = array_unique($endpointIds);
+
+            Cache::store($cacheKey, $endpointIds, static::$metricTTL);
+        }
+
+        return static::$_downEndpointIds = $endpointIds;
+    }
+
+    public function isDown()
+    {
+        return in_array($this->ID, static::getDownEndpoints());
+    }
+
 }
