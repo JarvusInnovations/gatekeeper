@@ -17,9 +17,6 @@
 {/block}
 
 {block "content"}
-    {$lipsum = explode(" ", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dapibus ante nec dolor tincidunt, in euismod augue molestie. Duis ut tortor suscipit, feugiat est eu, semper ipsum. Integer vehicula lorem eget purus ultricies pellentesque. Phasellus pellentesque vitae enim vel dignissim. Sed condimentum urna ultricies efficitur lobortis. Fusce egestas eros maximus, lobortis velit a, sagittis augue. Nullam fermentum ornare odio non pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi vestibulum vestibulum justo, vel laoreet dolor rhoncus a. Sed nec felis a est convallis laoreet. Vestibulum quis accumsan nisi. Maecenas risus odio, dictum eu sem sed, vehicula tincidunt nisi. In semper ligula nec purus laoreet, et euismod justo bibendum. Ut quam magna, tempus at semper nec, vulputate in justo. Integer sed velit sagittis, consectetur erat vitae, rhoncus ligula. In eget lacus eu neque imperdiet tristique sed at sem.")}
-    {$count = count($lipsum)}
-
     <header class="page-header">
         <h1 class="header-title">Find an API</h1>
     </header>
@@ -79,7 +76,6 @@
         {foreach item=Endpoint from=$Endpoints}
             <li class="endpoint-list-item">
                 {$avgResponseTime = mt_rand(10, 15000)}
-                {$desc = lower(join(' ', array_slice($lipsum, mt_rand(0, $count - 1), mt_rand(1, $count) )))}
                 {$statuses = array('good', 'mid', 'bad', 'down', '')}
                 {$i = array_rand($statuses)}
                 {$status = $statuses[$i]}
@@ -99,7 +95,7 @@
                         <a class="endpoint-path" href="/api-docs/{$Endpoint->Path}">/{$Endpoint->Path|escape}</a>
                         <small class="endpoint-title">{$Endpoint->getTitle()}</small>
                     </h3>
-                    <p class="endpoint-description">{$desc|escape}</p>
+                    <p class="endpoint-description">{$Endpoint->Description|escape|markdown}</p>
                 </div>
             </li>
         {/foreach}

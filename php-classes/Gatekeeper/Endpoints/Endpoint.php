@@ -47,6 +47,10 @@ class Endpoint extends ActiveRecord
             'type' => 'boolean',
             'default' => false
         ],
+        'Description' => [
+            'type' => 'clob',
+            'notnull' => false
+        ],
         'DeprecationDate' => [
             'type' => 'timestamp',
             'notnull' => false

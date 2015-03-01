@@ -28,6 +28,8 @@
         <fieldset class="shrink-break">
             {field inputName=Title label=Title default=$Endpoint->Title required=true autofocus=true error=$errors.Title}
 
+            {textarea inputName=Description label=Description default=$Endpoint->Description error=$errors.Description}
+
             {checkbox inputName=Public value=1 unsetValue=0 label='Public' default=$Endpoint->Public hint='Endpoint should be published in the public developer portal' error=$errors.Public}
         </fieldset>
 
