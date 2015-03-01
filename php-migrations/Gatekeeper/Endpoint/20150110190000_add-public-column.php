@@ -10,7 +10,7 @@ if (!static::tableExists($tableName)) {
 }
 
 if (static::columnExists($tableName, 'Public')) {
-    printf("Skipping migration because column `%s`.`Public` already existts\n", $tableName);
+    printf("Skipping migration because column `%s`.`Public` already exists\n", $tableName);
     return static::STATUS_SKIPPED;
 }
 
