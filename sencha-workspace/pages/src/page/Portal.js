@@ -1,10 +1,12 @@
 /*jshint undef: true, unused: true, browser: true, curly: true*/
-/*global Ext*/
+/*global Ext, Jarvus*/
+// @require-package jarvus-highlighter
 Ext.define('Site.page.Portal', {
     singleton: true,
     requires: [
         'Site.Common',
-        'Ext.util.Collection'
+        'Ext.util.Collection',
+        'Jarvus.util.Highlighter'
     ],
 
 
@@ -91,7 +93,7 @@ Ext.define('Site.page.Portal', {
         me.endpoints.each(function(endpoint) {
             var match = false;
 
-            me.removeHighlights(endpoint.endpointEl);
+            Jarvus.util.Highlighter.removeHighlights(endpoint.endpointEl);
 
             if (query) {
                 if (queryRe.test(endpoint.pathText)) {
@@ -106,7 +108,7 @@ Ext.define('Site.page.Portal', {
     
                 if (queryRe.test(endpoint.descriptionText)) {
                     match = true;
-                    me.highlightQuery(endpoint.descriptionEl, query);
+                    Jarvus.util.Highlighter.highlight(endpoint.descriptionEl, query);
                 }
             } else {
                 match = true;
@@ -114,48 +116,5 @@ Ext.define('Site.page.Portal', {
 
             endpoint.endpointEl.setStyle('display', match ? '' : 'none');
         });
-    },
-    
-    highlightQuery: function(containerEl, query) {
-        var nodes = containerEl.dom.childNodes;
-
-		function innerHighlight(node, pat) {
-			var skip = 0;
-			if (node.nodeType == 3) {
-				var pos = node.data.toUpperCase().indexOf(pat);
-				if (pos >= 0) {
-					var spannode = document.createElement('mark')
-						,middlebit = node.splitText(pos)
-						,endbit = middlebit.splitText(pat.length)
-						,middleclone = middlebit.cloneNode(true);
-						
-					spannode.appendChild(middleclone);
-					middlebit.parentNode.replaceChild(spannode, middlebit);
-					skip = 1;
-				}
-			} else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
-				for (var i = 0; i < node.childNodes.length; ++i) {
-					i += innerHighlight(node.childNodes[i], pat);
-				}
-			}
-			return skip;
-		}
-
-		if(nodes.length && query && query.length) {
-			Ext.each(nodes, function(item) {
-				innerHighlight(item, query.toUpperCase());
-			});
-		}
-    },
-    
-    removeHighlights: function(containerEl) {
-        var marks = containerEl.select('mark').elements;
-
-		Ext.each(marks, function(item) {
-			with (item.parentNode) {
-				replaceChild(this.firstChild, this);
-				normalize();
-			}
-		});
     }
 });
