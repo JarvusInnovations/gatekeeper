@@ -108,12 +108,12 @@
             </ul>
         </div>
 
-        <div class="detail-view endpoint-docs" data-host="{$host|escape}" data-basepath="{$basePath|escape}" data-schemes="{$schemes|implode:','|escape}">
+        <div class="detail-view endpoint-docs" data-host="{$host|escape}" data-basepath="{$basePath|escape}" data-schemes="{$schemes|implode:','|escape}" data-handle="{$info['x-handle']|escape}">
             <header class="page-header" id="overview">
                 <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
-                    <label class="toggle button">
-                        <input type="checkbox">
+                    <label class="toggle button subscribe">
+                        <input type="checkbox" {tif $info['x-subscribed'] ? checked}>
                         <span class="toggle-off">Subscribe</span>
                         <span class="toggle-on">Unsubscribe</span>
                         <span class="toggle-off-to-on">Subscribing&hellip;</span>

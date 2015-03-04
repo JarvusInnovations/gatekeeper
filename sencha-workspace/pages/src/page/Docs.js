@@ -5,7 +5,8 @@ Ext.define('Site.page.Docs', {
     requires: [
         'Ext.util.Collection',
         'Ext.String',
-        'Ext.XTemplate'
+        'Ext.XTemplate',
+        'Ext.Ajax'
     ],
 
     config: {
@@ -94,10 +95,22 @@ Ext.define('Site.page.Docs', {
 
     // event handlers
     onDocReady: function() {
-        var me = this;
+        var me = this,
+            docsCt;
 
+        // grab references to key elements
+        me.docsCt = docsCt = Ext.getBody().down('.endpoint-docs');
+
+        // grab key settings from DOM
+        me.apiSchemes = docsCt.getAttribute('data-schemes').split(',');
+        me.apiHost = docsCt.getAttribute('data-host');
+        me.apiBasePath = docsCt.getAttribute('data-basepath');
+        me.apiHandle = docsCt.getAttribute('data-handle');
+
+        // initialize  features
         me.initializeToc();
         me.initializeTryItOut();
+        me.initializeSubscribe();
 
         Ext.get(document).on('scroll', 'onDocumentScroll', me);
     },
@@ -138,10 +151,6 @@ Ext.define('Site.page.Docs', {
     initializeTryItOut: function() {
         var me = this,
             tryItOutTpl = Ext.XTemplate.getTpl(me, 'tryItOutTpl'),
-            docsCt = Ext.getBody().down('.endpoint-docs'),
-            apiSchemes = docsCt.getAttribute('data-schemes').split(','),
-            apiHost = docsCt.getAttribute('data-host'),
-            apiBasePath = docsCt.getAttribute('data-basepath'),
             paramCollectionSeperators = {
                 csv: ',',
                 ssv: ' ',
@@ -221,6 +230,11 @@ Ext.define('Site.page.Docs', {
                         
                         parameters[paramIn][rowEl.getAttribute('data-name')] = val;
                     }
+
+                    // FIXME: move this somewhere or add single: true so that listeners aren't duplicated each time btn is clicked
+                    inputEl.on('input', function(ev, t){
+                        Ext.fly(t).removeCls('invalid');
+                    });
                 });
                 
                 if (firstErrorEl) {
@@ -235,7 +249,7 @@ Ext.define('Site.page.Docs', {
                 
                 Ext.Ajax.request({
                     method: method,
-                    url: apiSchemes[0] + '://' + apiHost + apiBasePath + me.populatePlaceholders(path, parameters.path),
+                    url: me.apiSchemes[0] + '://' + me.apiHost + me.apiBasePath + me.populatePlaceholders(path, parameters.path),
                     params: parameters.query,
                     disableCaching: false,
                     callback: function(options, success, response) {
@@ -267,6 +281,42 @@ Ext.define('Site.page.Docs', {
                             status_code: response.status,
                             status_reason: success ? (response.statusText || 'OK') : (response.statusText || me.httpErrorReasons[response.status] || 'Error')
                         });
+                    }
+                });
+            });
+        });
+    },
+
+    initializeSubscribe: function() {
+        var me = this;
+
+        Ext.select('.subscribe.toggle', true).each(function(toggleEl) {
+            var inputEl = toggleEl.down('input');
+
+            inputEl.on('change', function(ev, inputDom) {
+                var subscribe = inputDom.checked;
+
+                toggleEl[subscribe ? 'addCls' : 'removeCls']('off-to-on');
+                toggleEl[subscribe ? 'removeCls' : 'addCls']('on-to-off');
+
+                Ext.Ajax.request({
+                    method: subscribe ? 'POST' : 'DELETE',
+                    url: '/subscriptions/' + me.apiHandle,
+                    headers: {
+                        Accept: 'application/json'
+                    },
+                    success: function(response) {
+                        var r = Ext.decode(response.responseText);
+
+                        inputDom.checked = !!r.data;
+                        toggleEl.removeCls(['off-to-on', 'on-to-off']);
+                    },
+                    failure: function(response) {
+                        if (response.status == 401) {
+                            location.href = '/login?return=' + encodeURIComponent(location.pathname + location.search);
+                        } else {
+                            window.alert('Failed to subscribe, please try again later');
+                        }
                     }
                 });
             });

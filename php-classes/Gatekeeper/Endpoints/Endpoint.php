@@ -8,6 +8,7 @@ use ActiveRecord;
 use HandleBehavior;
 use RecordValidator;
 use TableNotFoundException;
+use Emergence\People\IPerson;
 use Gatekeeper\Gatekeeper;
 use Gatekeeper\Metrics\Metrics;
 use Gatekeeper\Alerts\AbstractAlert;
@@ -393,13 +394,19 @@ class Endpoint extends ActiveRecord
         $swagger['schemes'] = ['http'];
 
         if (Site::getConfig('ssl')) {
-            $swagger['schemas'][] = 'https';
+            array_unshift($swagger['schemas'], 'https');
         }
 
         if (empty($swagger['info'])) {
-            $swagger['info'] = [
-                'title' => $this->Title
-            ];
+            $swagger['info'] = [];
+        }
+
+        $swagger['info']['title'] = $this->Title;
+        $swagger['info']['x-handle'] = $this->Handle;
+        $swagger['info']['x-subscribed'] = (boolean)$this->getSubscription();
+
+        if (empty($swagger['info']['description']) && $this->Description) {
+            $swagger['info']['description'] = $this->Description;
         }
 
         if (empty($swagger['info']['contact'])) {
@@ -453,4 +460,17 @@ class Endpoint extends ActiveRecord
         return in_array($this->ID, static::getDownEndpoints());
     }
 
+    public function getSubscription(IPerson $Person = null)
+    {
+        if (!$Person) {
+            if (!$Person = $GLOBALS['Session']->Person) {
+                return null;
+            }
+        }
+
+        return Subscription::getByWhere([
+            'EndpointID' => $this->ID,
+            'PersonID' => $Person->ID
+        ]);
+    }
 }
