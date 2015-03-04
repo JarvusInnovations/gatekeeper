@@ -13,7 +13,7 @@ Git::$repositories['GateKeeper'] = [
         'php-migrations',
         'phpunit-tests',
         'site-root',
-        'sencha-workspace',
+        'sencha-workspace/pages',
         'dwoo-plugins'
     ]
 ];
