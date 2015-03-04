@@ -18,7 +18,7 @@ if (static::columnExists($tableName, 'Path')) {
 // migration
 printf("Adding column `%s`.`%s`\n", $tableName, 'Path');
 DB::nonQuery('ALTER TABLE `%s` ADD `Path` varchar(255) NOT NULL AFTER Handle', $tableName);
-DB::nonQuery('UPDATE `%s` SET Path = IF(DefaultVersion, Handle, CONCAT(Handle, "/v", Version))', $tableName);
+DB::nonQuery('UPDATE `%s` SET Path = LOWER(IF(DefaultVersion, Handle, CONCAT(Handle, "/v", Version)))', $tableName);
 
 printf("Dropping index `%s`.`HandleVersion`\n", $tableName);
 DB::nonQuery('ALTER TABLE `%s` DROP INDEX `HandleVersion`;', $tableName);
@@ -27,7 +27,7 @@ printf("Appending versions to titles\n");
 DB::nonQuery('UPDATE `%s` SET Title = CONCAT(Title, " v", Version)', $tableName);
 
 printf("Appending versions to handles\n");
-DB::nonQuery('UPDATE `%s` SET Handle = CONCAT(Handle, "-v", Version)', $tableName);
+DB::nonQuery('UPDATE `%s` SET Handle = LOWER(CONCAT(Handle, "-v", Version))', $tableName);
 
 printf("Adding index `%s`.`Handle`\n", $tableName);
 DB::nonQuery('ALTER TABLE `%s` ADD UNIQUE(`Handle`);', $tableName);
