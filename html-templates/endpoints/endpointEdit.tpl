@@ -65,6 +65,8 @@
 
             {checkbox inputName=KeyRequired value=1 unsetValue=0 label='API Key Required' default=$Endpoint->KeyRequired error=$errors.KeyRequired}
 
+            {checkbox inputName=KeySelfRegistration value=1 unsetValue=0 label='API Key Self Registration' default=$Endpoint->KeySelfRegistration error=$errors.KeySelfRegistration hint="Users can register their own keys without approval"}
+
             {field inputName=DeprecationDate label='Deprecation Date' type=date default=tif($Endpoint->DeprecationDate, date('Y-m-d', $Endpoint->DeprecationDate)) hint="Leave blank if none" error=$errors.DeprecationDate}
         </fieldset>
 

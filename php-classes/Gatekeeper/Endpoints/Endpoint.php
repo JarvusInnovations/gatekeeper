@@ -97,6 +97,10 @@ class Endpoint extends ActiveRecord
             'type' => 'boolean',
             'default' => false
         ],
+        'KeySelfRegistration' => [
+            'type' => 'boolean',
+            'default' => false
+        ],
         'CachingEnabled' => [
             'type' => 'boolean',
             'default' => true,
