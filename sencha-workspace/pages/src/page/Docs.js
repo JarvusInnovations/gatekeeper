@@ -168,11 +168,8 @@ Ext.define('Site.page.Docs', {
         // wire test consoles
         Ext.select('.endpoint-path-method', true).each(function(pathMethodEl) {
             var btn = pathMethodEl.appendChild({
-                    cls: 'indent',
-                    cn: [{
-                        tag: 'button',
-                        html: 'Try it out!'
-                    }]
+                    tag: 'button',
+                    html: 'Try it out!'
                 }),
                 method = pathMethodEl.getAttribute('data-method'),
                 path = pathMethodEl.up('.endpoint-path').getAttribute('data-path'),

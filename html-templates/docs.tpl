@@ -52,7 +52,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Required</th>
+                        <th class="text-center">Required</th>
                         <th>Schema</th>
                     </tr>
                 </thead>
@@ -60,13 +60,13 @@
                 <tbody>
                 {foreach key=property item=propertyData from=$input.properties}
                     <tr>
-                        <td>{$property}</td>
-                        <td>{tif is_array($input.required) && in_array($property, $input.required) ? 'Yes' : 'No'}</td>
+                        <td><code>{$property}</code></td>
+                        <td class="text-center">{tif is_array($input.required) && in_array($property, $input.required) ? '&#10003;' : '<span class="muted">&mdash;</span>'}</td>
                         <td>{definition $propertyData}</td>
                     </tr>
                     {if $propertyData.description}
                         <tr>
-                            <td colspan="3">{$propertyData.description|escape|markdown}</td>
+                            <td class="merge-up" colspan="3"><div class="markdown property-description">{$propertyData.description|escape|markdown}</div></td>
                         </tr>
                     {/if}
                 {/foreach}
@@ -74,7 +74,7 @@
             </table>
         {else}
             {if $input.type == 'array'}
-                [{if !$input.items.type}<div class="indent">{/if}{definition $input.items}{if !$input.items.type}</div>{/if}]
+                [array] {definition $input.items}
             {else}
                 {$input.type} {if $input.format}({$input.format}){/if}
             {/if}
@@ -122,7 +122,7 @@
                 </div>
             </header>
 
-            <div class="lead">{$info.description|escape|markdown}</div>
+            <div class="markdown">{$info.description|escape|markdown}</div>
 
             <section class="page-section" id="keys">
                 <header class="section-header">
@@ -187,9 +187,9 @@
                                     <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
                                 </header>
 
-                                {$methodData.description|escape|markdown}
+                                <div class="markdown indent">{$methodData.description|escape|markdown}</div>
 
-                                <div class="indent">
+{*                                 <div class="indent"> *}
                                     <table class="docs-table parameters-table">
                                         <caption>Parameters</caption>
                                         <thead>
@@ -197,7 +197,7 @@
                                                 <th>Name</th>
                                                 <th>Located&nbsp;in</th>
                                                 <th>Description</th>
-                                                <th>Required</th>
+                                                <th class="text-center">Required</th>
                                                 <th>Schema</th>
                                             </tr>
                                         </thead>
@@ -205,10 +205,10 @@
                                         <tbody>
                                         {foreach item=parameterData from=$methodData.parameters}
                                             <tr {html_attributes_encode $parameterData prefix="data-"}>
-                                                <td>{$parameterData.name}</td>
+                                                <td><code>{$parameterData.name}</code></td>
                                                 <td>{$parameterData.in}</td>
-                                                <td>{$parameterData.description|escape|markdown}</td>
-                                                <td>{tif $parameterData.required || $parameterData.in == 'path' ? 'Yes' : 'No'}</td>
+                                                <td><div class="markdown parameter-description">{$parameterData.description|escape|markdown}</div></td>
+                                                <td class="text-center">{tif $parameterData.required || $parameterData.in == 'path' ? '&#10003;' : '<span class="muted">&mdash;</span>'}</td>
                                                 <td>{definition $parameterData}</td>
                                             </tr>
                                         {/foreach}
@@ -229,13 +229,13 @@
                                         {foreach key=responseCode item=responseData from=$methodData.responses}
                                             <tr>
                                                 <td>{$responseCode}</td>
-                                                <td>{$responseData.description|escape|markdown}</td>
+                                                <td><div class="markdown response-description">{$responseData.description|escape|markdown}</div></td>
                                                 <td>{definition $responseData}</td>
                                             </tr>
                                         {/foreach}
                                         </tbody>
                                     </table>
-                                </div>
+{*                                 </div> *}
                             </section>
                         {/foreach}
                     </section>

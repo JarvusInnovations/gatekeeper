@@ -11,13 +11,17 @@
         padding-top: 1em;
     }
 
+    .page-header {
+        margin: 1.5em 0;
+    }
+
     .section-header {
         margin: 0 0 1em;
     }
 
     .header-title {
         font-weight: normal;
-        margin: 0;
+        margin-bottom: 0;
     }
 
     .http-method {
@@ -25,8 +29,28 @@
         text-transform: uppercase;
     }
 
+    .markdown {
+        @include word-break(break-all);
+    }
+
     .indent {
         margin-left: 1.5em;
+
+        &.markdown {
+            border-left: .25em solid $border-color;
+            margin-left: 0;
+            padding-left: 1.5em;
+        }
+    }
+
+    code, kbd, pre, samp {
+        background-color: rgba($accent-color, .1);
+        font-family: Consolas, Inconsolata, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+        padding: .125em .25em;
+    }
+
+    ol { // ul extends this as well
+        margin: 1.5em 0;
     }
 }
 
@@ -36,12 +60,12 @@
     > .nav-view {
         background-color: mix($page-bg-color, $base-color, 80%);
         padding: 1.5em 0;
-        width: 240px;
+        width: 320px;
     }
 
     > .detail-view {
         @include flex(1);
-        padding: 1.5em;
+        padding: 1.5em 3em;
     }
 }
 
@@ -60,7 +84,7 @@
     padding: 0 0 1em;
     position: fixed;
     top: 3em;
-    width: 240px;
+    width: 320px;
 
     ul {
         margin: 0;
@@ -73,12 +97,13 @@
         padding: 0;
 
         a {
+            font-weight: bold;
             padding-left: link-left-pad();
             text-indent: -1 * $link-left-indent;
         }
 
-        li a { padding-left: link-left-pad(2); }
-        li li a { padding-left: link-left-pad(3); }
+        li a { font-weight: normal; padding-left: link-left-pad(2); }
+        li li a { font-weight: 300; padding-left: link-left-pad(3); }
         li li li a { padding-left: link-left-pad(4); }
     }
 
@@ -87,6 +112,7 @@
         line-height: 1.25;
         padding: .375em 1.5em;
         text-decoration: none;
+        @include word-break(break-all);
 
         &:hover,
         &:focus {
@@ -127,8 +153,27 @@
         border-top: 1px solid $border-color;
     }
 
+    .markdown {
+        color: $muted-color;
+    }
+
+    .parameter-description,
+    .response-description {
+        font-size: smaller;
+        margin: .25em 0;
+    }
+
+    .merge-up {
+        background-color: $page-bg-color;
+        border-top: 0;
+    }
+
     p {
         margin: 0;
+
+        + p {
+            margin-top: 1em;
+        }
     }
 
     thead {
@@ -159,7 +204,6 @@
 
     .section-header {
         border: 0;
-        margin: 0;
     }
 }
 
@@ -203,12 +247,13 @@
 }
 
 .response-container {
-    margin: 1em 0 1em 1.5em;
+    margin: 1.5em 0;
 }
 
 .response-body {
     background: rgba(white, .4);
     border: 1px solid $border-color;
+    border-radius: 2px;
     max-height: 500px;
     max-height: 60vh;
     white-space: pre-wrap;
@@ -233,5 +278,12 @@
 
     dd {
         margin: 0;
+    }
+}
+
+.schema-table {
+    .merge-up {
+        color: $muted-color;
+        font-weight: 300;
     }
 }
