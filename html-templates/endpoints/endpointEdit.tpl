@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <form method="POST" class="register-form">
+    <form method="POST">
         {if $errors}
             <div class="notify error">
                 <strong>Please double-check the fields highlighted below.</strong>
