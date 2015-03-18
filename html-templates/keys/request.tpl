@@ -4,16 +4,15 @@
 
 {block "content"}
     {$Key = $data}
-    {$errors = $Key->validationErrors}
 
     <header class="page-header">
         <h2 class="header-title">Request API key for <a href="/api-docs/{$Endpoint->Path}" title="{$Endpoint->getTitle()|escape}">/{$Endpoint->Path|escape}</a></h2>
     </header>
 
     <form method="POST">
-        {if $errors}
-            <div class="notify error">
-                <strong>Please double-check the fields highlighted below.</strong>
+        {if $message}
+            <div class="notify {tif !$success ? error}">
+                <strong>{$message|escape}</strong>
             </div>
         {/if}
 
