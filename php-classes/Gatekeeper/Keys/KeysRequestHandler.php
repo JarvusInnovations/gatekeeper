@@ -118,6 +118,8 @@ class KeysRequestHandler extends \RecordsRequestHandler
                     'data' => KeyEndpoint::getAllByWhere(['KeyID' => $Key->ID])
                 ]);
             case 'POST':
+                $GLOBALS['Session']->requireAccountLevel('Staff');
+
                 if (empty($_POST['EndpointID']) || !($Endpoint = Endpoint::getByID($_POST['EndpointID']))) {
                     return static::throwInvalidRequestError('Valid EndpointID must be provided');
                 }
@@ -157,6 +159,8 @@ class KeysRequestHandler extends \RecordsRequestHandler
 
     public static function handleEndpointRemoveRequest(Key $Key, Endpoint $Endpoint)
     {
+        $GLOBALS['Session']->requireAccountLevel('Staff');
+
         $KeyEndpoint = KeyEndpoint::getByWhere(['KeyID' => $Key->ID, 'EndpointID' => $Endpoint->ID]);
 
         if (!$KeyEndpoint) {
