@@ -407,7 +407,10 @@ class Endpoint extends ActiveRecord
 
         $swagger['info']['title'] = $this->Title;
         $swagger['info']['x-handle'] = $this->Handle;
+        $swagger['info']['x-internal-id'] = $this->ID;
         $swagger['info']['x-subscribed'] = (boolean)$this->getSubscription();
+        $swagger['info']['x-key-required'] = $this->KeyRequired;
+        $swagger['info']['x-key-self-registration'] = $this->KeySelfRegistration;
 
         if (empty($swagger['info']['description']) && $this->Description) {
             $swagger['info']['description'] = $this->Description;

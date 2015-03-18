@@ -108,7 +108,14 @@
             </ul>
         </div>
 
-        <div class="detail-view endpoint-docs" data-host="{$host|escape}" data-basepath="{$basePath|escape}" data-schemes="{$schemes|implode:','|escape}" data-handle="{$info['x-handle']|escape}">
+        <div
+             class="detail-view endpoint-docs"
+             data-host="{$host|escape}"
+             data-basepath="{$basePath|escape}"
+             data-schemes="{$schemes|implode:','|escape}"
+             data-handle="{$info['x-handle']|escape}"
+             {if $info['x-key-required']}data-key-required{/if}
+            >
             <header class="page-header" id="overview">
                 <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
