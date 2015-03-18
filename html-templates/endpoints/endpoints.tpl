@@ -36,7 +36,7 @@
                     <div class="info internal-url">Internal URL: <a class="endpoint-internal-url" href="{$Endpoint->InternalEndpoint|escape}">{$Endpoint->InternalEndpoint|escape}</a></div>
                     <div class="buttons">
                         <a class="button" href="{$Endpoint->getURL('/edit')}">Edit</a>
-                        <a class="button" href="{$Endpoint->getURL()}#endpoint-docs">View Docs</a>
+                        <a class="button" href="/api-docs/{$Endpoint->Path}">View Docs</a>
                         <a class="button" href="{$Endpoint->getURL()}#endpoint-cache">View Cache</a>
                         <a class="button" href="{$Endpoint->getURL()}#endpoint-log">View Log</a>
                     </div>
