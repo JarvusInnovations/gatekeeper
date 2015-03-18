@@ -1,6 +1,6 @@
 {extends designs/site.tpl}
 
-{block "title"}Docs &mdash; {$dwoo.parent}{/block}
+{block "title"}{$info.title|escape} &mdash; {$dwoo.parent}{/block}
 
 {block "branding"}
 <div class="site-branding title-snug">
