@@ -3,6 +3,7 @@
 namespace Gatekeeper\Keys;
 
 use ActiveRecord;
+use Emergence\People\User;
 use Gatekeeper\Endpoints\Endpoint;
 
 class KeysRequestHandler extends \RecordsRequestHandler
@@ -46,6 +47,8 @@ class KeysRequestHandler extends \RecordsRequestHandler
         switch ($action ?: $action = static::shiftPath()) {
             case 'endpoints':
                 return static::handleEndpointsRequest($Key);
+            case 'share':
+                return static::handleShareRequest($Key);
             default:
                 return parent::handleRecordRequest($Key, $action);
         }
@@ -180,5 +183,39 @@ class KeysRequestHandler extends \RecordsRequestHandler
             'success' => true,
             'data' => $KeyEndpoint
         ]);
+    }
+
+    public static function handleShareRequest(Key $Key)
+    {
+        $responseData = [
+            'data' => $Key
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (empty($_POST['Email'])) {
+                $responseData['success'] = false;
+                $responseData['message'] = 'Email address for registered user required';
+            } elseif (!$User = User::getByUsername($_POST['Email'])) {
+                $responseData['success'] = false;
+                $responseData['message'] = 'No registered user found for provided email address';
+            } else {
+                try {
+                    KeyUser::create([
+                        'Key' => $Key,
+                        'Person' => $User
+                    ], true);
+
+                    return static::respond('shared', [
+                        'success' => true,
+                        'data' => $Key
+                    ]);
+                } catch (\DuplicateKeyException $e) {
+                    $responseData['success'] = false;
+                    $responseData['message'] = 'Requested user already has access to this key';
+                }
+            }
+        }
+
+        return static::respond('share', $responseData);
     }
 }
