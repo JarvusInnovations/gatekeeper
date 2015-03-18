@@ -31,6 +31,8 @@
 {/block}
 
 {block "content"}
+    {$Endpoint = Gatekeeper\Endpoints\Endpoint::getByID($info['x-internal-id'])}
+
     <?php
         // we need to keep a reference to the top-level document for resolving JSONSchema refs
         $GLOBALS['swaggerDocument'] = $this->scope['swaggerDocument'] = &$this->scope;
@@ -135,12 +137,23 @@
                 <header class="section-header">
                     <h2 class="header-title">API Keys</h2>
                     <div class="header-buttons">
-                        <a class="button primary" href="/keys/create">Create</a>
+                        {if $info['x-key-self-registration'] && $.User}
+                            <a class="button primary" href="/keys/request?endpoint={$info['x-handle']|escape:url}">Request new key</a>
+                        {/if}
                     </div>
                 </header>
 
-                {$Keys = Gatekeeper\Keys\Key::getAll()}
-                {foreach item=Key from=$Keys}
+                {if $info['x-key-self-registration'] && !$.User}
+                    <p class="muted">
+                        <em>
+                            <a href="/login?return={$.server.REQUEST_URI|escape:url}">Login</a> to request and manage API keys.
+                        </em>
+                    </p>
+                {/if}
+
+                {$KeyUsers = Gatekeeper\Keys\KeyUser::getAllForEndpointUser($Endpoint)}
+                {foreach item=KeyUser from=$KeyUsers}
+                    {$Key = $KeyUser->Key}
                     {$metrics = array(
                         callsTotal = $Key->getMetric(calls-total)
                         ,callsWeek = $Key->getMetric(calls-week)
@@ -169,10 +182,12 @@
                                 <li><strong>{tif $Key->AllEndpoints ? 'All' : $metrics.endpoints|number_format} endpoint{tif $Key->AllEndpoints || $metrics.endpoints != 1 ? s}</strong> permitted</li>
                             </ul>
                         </div>
-                        <footer>
-                            <a class="button" href="{$Key->getURL()}/share">Share</a>
-                            <a class="button destructive" href="{$Key->getURL()}/delete">Delete</a>
-                        </footer>
+                        {if $KeyUser->Role == 'owner'}
+                            <footer>
+                                <a class="button" href="{$Key->getURL()}/share">Share</a>
+                                <a class="button destructive" href="{$Key->getURL()}/delete">Delete</a>
+                            </footer>
+                        {/if}
                     </article>
                 {/foreach}
             </section>

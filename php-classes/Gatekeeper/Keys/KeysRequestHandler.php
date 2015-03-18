@@ -15,14 +15,74 @@ class KeysRequestHandler extends \RecordsRequestHandler
     public static $accountLevelWrite = 'Staff';
     public static $accountLevelAPI = 'Staff';
 
+    static public function handleRecordsRequest($action = false)
+	{
+		switch ($action ?: $action = static::shiftPath()) {
+            case 'request':
+                return static::handleRequestRequest();
+            default:
+                return parent::handleRecordsRequest($action);
+        }
+    }
+
     public static function handleRecordRequest(ActiveRecord $Key, $action = false)
     {
-        switch ($action ? $action : $action = static::shiftPath()) {
+        switch ($action ?: $action = static::shiftPath()) {
             case 'endpoints':
                 return static::handleEndpointsRequest($Key);
             default:
                 return parent::handleRecordRequest($Key, $action);
         }
+    }
+
+    public static function handleRequestRequest()
+    {
+        $GLOBALS['Session']->requireAuthentication();
+
+        // get key
+        if (empty($_REQUEST['endpoint'])) {
+            return static::throwInvalidRequestError('endpoint required');
+        }
+
+        if (!$Endpoint = Endpoint::getByHandle($_REQUEST['endpoint'])) {
+            return static::throwNotFoundError('Endpoint not found');
+        }
+
+        if (!$Endpoint->KeySelfRegistration) {
+            return static::throwUnauthorizedError('key registration not available');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (empty($_POST['OwnerName'])) {
+                return static::throwInvalidRequestError('OwnerName required');
+            }
+
+            // create Key
+            $Key = Key::create([
+                'OwnerName' => $_POST['OwnerName'],
+                'ContactName' => $GLOBALS['Session']->Person->FullName,
+                'ContactEmail' => $GLOBALS['Session']->Person->Email
+            ], true);
+
+            $KeyEndpoint = KeyEndpoint::create([
+                'Key' => $Key,
+                'Endpoint' => $Endpoint
+            ], true);
+
+            $KeyUser = KeyUser::create([
+                'Key' => $Key,
+                'Person' => $GLOBALS['Session']->Person,
+                'Role' => 'owner'
+            ], true);
+
+            return static::respond('keyIssued', [
+                'data' => $Key
+            ]);
+        }
+
+        return static::respond('request', [
+            'Endpoint' => $Endpoint
+        ]);
     }
 
     public static function handleEndpointsRequest(Key $Key)
