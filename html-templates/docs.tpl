@@ -185,7 +185,7 @@
                         {if $KeyUser->Role == 'owner'}
                             <footer>
                                 <a class="button" href="{$Key->getURL()}/share">Share</a>
-                                <a class="button destructive" href="{$Key->getURL()}/delete">Delete</a>
+                                <a class="button destructive" href="{$Key->getURL()}/revoke">Revoke</a>
                             </footer>
                         {/if}
                     </article>

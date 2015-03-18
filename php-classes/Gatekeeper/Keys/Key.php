@@ -22,6 +22,11 @@ class Key extends \ActiveRecord
         'Key' => [
             'unique' => true
         ],
+        'Status' => [
+            'type' => 'enum',
+            'values' => ['active', 'revoked'],
+            'default' => 'active'
+        ],
         'OwnerName',
         'ContactName' => [
             'notnull' => false

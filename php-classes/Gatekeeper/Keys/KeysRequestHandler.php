@@ -49,6 +49,8 @@ class KeysRequestHandler extends \RecordsRequestHandler
                 return static::handleEndpointsRequest($Key);
             case 'share':
                 return static::handleShareRequest($Key);
+            case 'revoke':
+                return static::handleRevokeRequest($Key);
             default:
                 return parent::handleRecordRequest($Key, $action);
         }
@@ -182,6 +184,30 @@ class KeysRequestHandler extends \RecordsRequestHandler
         return static::respond('keyEndpointRemoved', [
             'success' => true,
             'data' => $KeyEndpoint
+        ]);
+    }
+
+    public static function handleRevokeRequest(Key $Key)
+    {
+        $GLOBALS['Session']->requireAuthentication();
+
+        if (
+            !$GLOBALS['Session']->hasAccountLevel('Staff') &&
+            !KeyUser::getByWhere([
+                'PersonID' => $GLOBALS['Session']->PersonID,
+                'KeyID' => $Key->ID,
+                'Role' => 'owner'
+            ])
+        ) {
+            return static::throwUnauthorizedError('Only staff or the key owner may revoke this key');
+        }
+
+        $Key->Status = 'revoked';
+        $Key->save();
+
+        return static::respond('revoked', [
+            'success' => true,
+            'data' => $Key
         ]);
     }
 
