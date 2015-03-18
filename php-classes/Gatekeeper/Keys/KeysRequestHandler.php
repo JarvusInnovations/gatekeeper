@@ -15,6 +15,22 @@ class KeysRequestHandler extends \RecordsRequestHandler
     public static $accountLevelWrite = 'Staff';
     public static $accountLevelAPI = 'Staff';
 
+    public static function checkReadAccess(ActiveRecord $Record, $suppressLogin = false)
+    {
+        if (parent::checkReadAccess($Record, $suppressLogin)) {
+            return true;
+        }
+
+        if (!$GLOBALS['Session']->Person) {
+            return false;
+        }
+
+        return (boolean)KeyUser::getByWhere([
+            'PersonID' => $GLOBALS['Session']->PersonID,
+            'KeyID' => $Record->ID
+        ]);
+    }
+
     static public function handleRecordsRequest($action = false)
 	{
 		switch ($action ?: $action = static::shiftPath()) {
