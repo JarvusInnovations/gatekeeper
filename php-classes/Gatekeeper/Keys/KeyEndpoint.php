@@ -28,16 +28,10 @@ class KeyEndpoint extends \ActiveRecord
         ]
     ];
 
-    public function validate($deep = true)
-    {
-        parent::validate($deep);
-
-        if (!$this->KeyID || !$this->EndpointID) {
-            $this->_validator->addError('KeyEndpoint', 'Both a KeyID and an EndpointID must be specified');
-        }
-
-        return $this->finishValidation();
-    }
+    public static $validators = [
+        'Key' => 'require-relationship',
+        'Endpoint' => 'require-relationship'
+    ];
 
     public function save($deep = true)
     {
