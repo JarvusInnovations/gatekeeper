@@ -187,6 +187,19 @@ class KeysRequestHandler extends \RecordsRequestHandler
 
     public static function handleShareRequest(Key $Key)
     {
+        $GLOBALS['Session']->requireAuthentication();
+
+        if (
+            !$GLOBALS['Session']->hasAccountLevel('Staff') &&
+            !KeyUser::getByWhere([
+                'PersonID' => $GLOBALS['Session']->PersonID,
+                'KeyID' => $Key->ID,
+                'Role' => 'owner'
+            ])
+        ) {
+            return static::throwUnauthorizedError('Only staff or the key owner may share this key');
+        }
+
         $responseData = [
             'data' => $Key
         ];
