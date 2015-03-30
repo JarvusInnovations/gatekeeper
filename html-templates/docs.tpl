@@ -90,23 +90,27 @@
             <ul class="docs-toc">
                 <li><a href="#overview">Overview</a></li>
                 <li><a href="#keys">API Keys</a></li>
-                <li>
-                    <a href="#paths">Paths</a>
-                    <ul>
-                        {foreach key=path item=pathData from=$paths}
-                            <li><a href="#paths{domIdFromPath $path}">{$path[0]}{$path|substr:1|replace:'/':'<wbr>/'}</a></li>
-                        {/foreach}
-                    </ul>
-                </li>
-                <li>
-                    <a href="#models">Models</a>
-                    <ul>
-                        {foreach key=model item=modelData from=$definitions}
-                            <li><a href="#models__{$model|replace:array('/','{','}',' '):array('__','-','-','-')}">{$model}</a></li>
-                        {/foreach}
-                    </ul>
-                </li>
-                <li><a href="#community">Community Code &amp; Uses</a></li>
+                {if count($paths)}
+                    <li>
+                        <a href="#paths">Paths</a>
+                        <ul>
+                            {foreach key=path item=pathData from=$paths}
+                                <li><a href="#paths{domIdFromPath $path}">{$path[0]}{$path|substr:1|replace:'/':'<wbr>/'}</a></li>
+                            {/foreach}
+                        </ul>
+                    </li>
+                {/if}
+                {if count($definitions)}
+                    <li>
+                        <a href="#models">Models</a>
+                        <ul>
+                            {foreach key=model item=modelData from=$definitions}
+                                <li><a href="#models__{$model|replace:array('/','{','}',' '):array('__','-','-','-')}">{$model}</a></li>
+                            {/foreach}
+                        </ul>
+                    </li>
+                {/if}
+                {*<li><a href="#community">Community Code &amp; Uses</a></li>*}
             </ul>
         </div>
 
@@ -209,90 +213,94 @@
                 {/foreach}
             </section>
 
-            <section class="page-section" id="paths">
-                <header class="section-header">
-                    <h2 class="header-title">Paths</h2>
-                </header>
+            {if count($paths)}
+                <section class="page-section" id="paths">
+                    <header class="section-header">
+                        <h2 class="header-title">Paths</h2>
+                    </header>
 
-                {foreach key=path item=pathData from=$paths}
-                    <section class="endpoint-path" id="paths{domIdFromPath $path}" data-path="{$path}">
-                        <header class="section-header">
-                            <h3 class="header-title"><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
-                        </header>
+                    {foreach key=path item=pathData from=$paths}
+                        <section class="endpoint-path" id="paths{domIdFromPath $path}" data-path="{$path}">
+                            <header class="section-header">
+                                <h3 class="header-title"><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
+                            </header>
 
-                        {foreach key=method item=methodData from=$pathData}
-                            <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}" data-method="{$method}">
-                                <header class="section-header">
-                                    <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
-                                </header>
+                            {foreach key=method item=methodData from=$pathData}
+                                <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}" data-method="{$method}">
+                                    <header class="section-header">
+                                        <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
+                                    </header>
 
-                                <div class="markdown indent">{$methodData.description|escape|markdown}</div>
+                                    <div class="markdown indent">{$methodData.description|escape|markdown}</div>
 
-{*                                 <div class="indent"> *}
-                                    <table class="docs-table parameters-table">
-                                        <caption>Parameters</caption>
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Located&nbsp;in</th>
-                                                <th>Description</th>
-                                                <th class="text-center">Required</th>
-                                                <th>Schema</th>
-                                            </tr>
-                                        </thead>
-    
-                                        <tbody>
-                                        {foreach item=parameterData from=$methodData.parameters}
-                                            <tr {html_attributes_encode $parameterData prefix="data-"}>
-                                                <td><code>{$parameterData.name}</code></td>
-                                                <td>{$parameterData.in}</td>
-                                                <td><div class="markdown parameter-description">{$parameterData.description|escape|markdown}</div></td>
-                                                <td class="text-center">{tif $parameterData.required || $parameterData.in == 'path' ? '&#10003;' : '<span class="muted">&mdash;</span>'}</td>
-                                                <td>{definition $parameterData}</td>
-                                            </tr>
-                                        {/foreach}
-                                        </tbody>
-                                    </table>
-    
-                                    <table class="docs-table responses-table">
-                                        <caption>Responses</caption>
-                                        <thead>
-                                            <tr>
-                                                <th>Code</th>
-                                                <th>Description</th>
-                                                <th>Schema</th>
-                                            </tr>
-                                        </thead>
-    
-                                        <tbody>
-                                        {foreach key=responseCode item=responseData from=$methodData.responses}
-                                            <tr>
-                                                <td>{$responseCode}</td>
-                                                <td><div class="markdown response-description">{$responseData.description|escape|markdown}</div></td>
-                                                <td>{definition $responseData}</td>
-                                            </tr>
-                                        {/foreach}
-                                        </tbody>
-                                    </table>
-{*                                 </div> *}
-                            </section>
-                        {/foreach}
-                    </section>
-                {/foreach}
-            </section>
+    {*                                 <div class="indent"> *}
+                                        <table class="docs-table parameters-table">
+                                            <caption>Parameters</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Located&nbsp;in</th>
+                                                    <th>Description</th>
+                                                    <th class="text-center">Required</th>
+                                                    <th>Schema</th>
+                                                </tr>
+                                            </thead>
 
-            <section class="page-section" id="models">
-                <header class="section-header">
-                    <h2 class="header-title">Models</h2>
-                </header>
+                                            <tbody>
+                                            {foreach item=parameterData from=$methodData.parameters}
+                                                <tr {html_attributes_encode $parameterData prefix="data-"}>
+                                                    <td><code>{$parameterData.name}</code></td>
+                                                    <td>{$parameterData.in}</td>
+                                                    <td><div class="markdown parameter-description">{$parameterData.description|escape|markdown}</div></td>
+                                                    <td class="text-center">{tif $parameterData.required || $parameterData.in == 'path' ? '&#10003;' : '<span class="muted">&mdash;</span>'}</td>
+                                                    <td>{definition $parameterData}</td>
+                                                </tr>
+                                            {/foreach}
+                                            </tbody>
+                                        </table>
 
-                {foreach key=definition item=definitionData from=$definitions}
-                    <section class="endpoint-model" id="models__{$definition|replace:array('/','{','}',' '):array('__','-','-','-')}">
-                        {*dump $definitionData*}
-                        {definition $definitionData definitionId=$definition}
-                    </section>
-                {/foreach}
-            </section>
+                                        <table class="docs-table responses-table">
+                                            <caption>Responses</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Description</th>
+                                                    <th>Schema</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {foreach key=responseCode item=responseData from=$methodData.responses}
+                                                <tr>
+                                                    <td>{$responseCode}</td>
+                                                    <td><div class="markdown response-description">{$responseData.description|escape|markdown}</div></td>
+                                                    <td>{definition $responseData}</td>
+                                                </tr>
+                                            {/foreach}
+                                            </tbody>
+                                        </table>
+    {*                                 </div> *}
+                                </section>
+                            {/foreach}
+                        </section>
+                    {/foreach}
+                </section>
+            {/if}
+
+            {if count($definitions)}
+                <section class="page-section" id="models">
+                    <header class="section-header">
+                        <h2 class="header-title">Models</h2>
+                    </header>
+
+                    {foreach key=definition item=definitionData from=$definitions}
+                        <section class="endpoint-model" id="models__{$definition|replace:array('/','{','}',' '):array('__','-','-','-')}">
+                            {*dump $definitionData*}
+                            {definition $definitionData definitionId=$definition}
+                        </section>
+                    {/foreach}
+                </section>
+            {/if}
         </div>
     </div>
 {/block}
