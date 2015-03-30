@@ -154,7 +154,7 @@
                 {$KeyUsers = Gatekeeper\Keys\KeyUser::getAllForEndpointUser($Endpoint)}
                 <?php
                 // sort keys by status
-                usort($this->scope['KeyUsers'], function($a, $b) {
+                @usort($this->scope['KeyUsers'], function($a, $b) {
                     $aStatus = $a->Key->Status;
                     $bStatus = $b->Key->Status;
 
