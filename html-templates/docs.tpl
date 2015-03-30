@@ -152,6 +152,19 @@
                 {/if}
 
                 {$KeyUsers = Gatekeeper\Keys\KeyUser::getAllForEndpointUser($Endpoint)}
+                <?php
+                // sort keys by status
+                usort($this->scope['KeyUsers'], function($a, $b) {
+                    $aStatus = $a->Key->Status;
+                    $bStatus = $b->Key->Status;
+
+                    if ($aStatus == $bStatus) {
+                        return 0;
+                    }
+
+                    return $aStatus == 'active' ? -1 : 1;
+                });
+                ?>
                 {foreach item=KeyUser from=$KeyUsers}
                     {$Key = $KeyUser->Key}
                     {$metrics = array(
@@ -160,7 +173,7 @@
                         ,callsDayAvg = $Key->getMetric(calls-day-avg)
                         ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
                     )}
-                    <article class="key">
+                    <article class="key key-{$Key->Status}">
                         <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                         <div class="details">
                             <header>
@@ -184,8 +197,12 @@
                         </div>
                         {if $KeyUser->Role == 'owner'}
                             <footer>
-                                <a class="button" href="{$Key->getURL()}/share">Share</a>
-                                <a class="button destructive" href="{$Key->getURL()}/revoke">Revoke</a>
+                                {if $Key->Status == 'active'}
+                                    <a class="button" href="{$Key->getURL()}/share">Share</a>
+                                    <a class="button destructive" href="{$Key->getURL()}/revoke">Revoke</a>
+                                {else}
+                                    <strong>Revoked</strong>
+                                {/if}
                             </footer>
                         {/if}
                     </article>
