@@ -16,6 +16,10 @@ class KeysRequestHandler extends \RecordsRequestHandler
     public static $accountLevelWrite = 'Staff';
     public static $accountLevelAPI = 'Staff';
 
+    public static $browseConditions = [
+        'Status' => 'active'
+    ];
+
     public static function checkReadAccess(ActiveRecord $Record, $suppressLogin = false)
     {
         if (parent::checkReadAccess($Record, $suppressLogin)) {
