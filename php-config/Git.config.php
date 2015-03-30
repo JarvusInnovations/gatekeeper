@@ -18,15 +18,6 @@ Git::$repositories['GateKeeper'] = [
     ]
 ];
 
-Git::$repositories['swagger-ui'] = [
-    'remote' => 'https://github.com/swagger-api/swagger-ui.git'
-    ,'originBranch' => 'master'
-    ,'workingBranch' => 'master'
-    ,'trees' => [
-        'site-root/lib/swagger-ui' => 'dist'
-    ]
-];
-
 Git::$repositories['symfony-yaml'] = [
     'remote' => 'https://github.com/symfony/Yaml.git'
     ,'originBranch' => 'master'
