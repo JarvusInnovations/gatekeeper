@@ -146,14 +146,17 @@
                         {/if}
                     </div>
                 </header>
-
-                {if $info['x-key-self-registration'] && !$.User}
-                    <p class="muted">
-                        <em>
-                            <a href="/login?return={$.server.REQUEST_URI|escape:url}">Login</a> to request and manage API keys.
-                        </em>
-                    </p>
-                {/if}
+                <p>
+                    An API key is <strong>{tif !$Endpoint->KeyRequired ? 'not '}required</strong> for making requests to this API.
+                    {if $Endpoint->KeySelfRegistration}
+                        Registered users may request API keys and be issued them instantly.
+                        {if !$.User}
+                            <a href="/login?return={$.server.REQUEST_URI|escape:url}">Login</a>
+                            or <a href="/register?return={$.server.REQUEST_URI|escape:url}">register</a>
+                            to request and manage API keys.
+                        {/if}
+                    {/if}
+                </p>
 
                 {$KeyUsers = Gatekeeper\Keys\KeyUser::getAllForEndpointUser($Endpoint)}
                 <?php
