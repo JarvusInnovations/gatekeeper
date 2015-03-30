@@ -49,7 +49,7 @@
         {if $input.properties}
             <table class="docs-table schema-table">
                 {if $definitionId}
-                <caption>Model: <a href="#models__{$definitionId|replace:array('/','{','}',' '):array('__','-','-','-')}">{$definitionId}</a></caption>
+                    <caption>Model: <a href="#{unique_dom_id}models//{$definitionId}{/unique_dom_id}">{$definitionId}</a></caption>
                 {/if}
                 <thead>
                     <tr>
@@ -83,8 +83,6 @@
         {/if}
     {/template}
 
-    {template domIdFromPath path}{$path|replace:array('/','{','}'):array('__','-','-')}{/template}
-
     <div class="split-view">
         <div class="nav-view">
             <ul class="docs-toc">
@@ -95,7 +93,7 @@
                         <a href="#paths">Paths</a>
                         <ul>
                             {foreach key=path item=pathData from=$paths}
-                                <li><a href="#paths{domIdFromPath $path}">{$path[0]}{$path|substr:1|replace:'/':'<wbr>/'}</a></li>
+                                <li><a href="#{unique_dom_id}paths/{$path}{/unique_dom_id}">{$path[0]}{$path|substr:1|replace:'/':'<wbr>/'}</a></li>
                             {/foreach}
                         </ul>
                     </li>
@@ -105,7 +103,7 @@
                         <a href="#models">Models</a>
                         <ul>
                             {foreach key=model item=modelData from=$definitions}
-                                <li><a href="#models__{$model|replace:array('/','{','}',' '):array('__','-','-','-')}">{$model}</a></li>
+                                <li><a href="#{unique_dom_id}models//{$model}{/unique_dom_id}">{$model}</a></li>
                             {/foreach}
                         </ul>
                     </li>
@@ -232,15 +230,15 @@
                     </header>
 
                     {foreach key=path item=pathData from=$paths}
-                        <section class="endpoint-path" id="paths{domIdFromPath $path}" data-path="{$path}">
+                        <section class="endpoint-path" id="{unique_dom_id}paths/{$path}{/unique_dom_id}" data-path="{$path}">
                             <header class="section-header">
-                                <h3 class="header-title"><a href="#paths{domIdFromPath $path}">{$path}</a></h3>
+                                <h3 class="header-title"><a href="#{unique_dom_id}paths/{$path}{/unique_dom_id}">{$path}</a></h3>
                             </header>
 
                             {foreach key=method item=methodData from=$pathData}
-                                <section class="endpoint-path-method indent" id="paths{domIdFromPath $path}___{$method}" data-method="{$method}">
+                                <section class="endpoint-path-method indent" id="{unique_dom_id}paths/{$path}.{$method}{/unique_dom_id}" data-method="{$method}">
                                     <header class="section-header">
-                                        <h4 class="header-title"><a href="#paths{domIdFromPath $path}___{$method}"><span class="http-method">{$method}</span> {$path}</a></h4>
+                                        <h4 class="header-title"><a href="#{unique_dom_id}paths/{$path}.{$method}{/unique_dom_id}"><span class="http-method">{$method}</span> {$path}</a></h4>
                                     </header>
 
                                     <div class="markdown indent">{$methodData.description|escape|markdown}</div>
@@ -306,7 +304,7 @@
                     </header>
 
                     {foreach key=definition item=definitionData from=$definitions}
-                        <section class="endpoint-model" id="models__{$definition|replace:array('/','{','}',' '):array('__','-','-','-')}">
+                        <section class="endpoint-model" id="{unique_dom_id}models//{$definition}{/unique_dom_id}">
                             {*dump $definitionData*}
                             {definition $definitionData definitionId=$definition}
                         </section>
