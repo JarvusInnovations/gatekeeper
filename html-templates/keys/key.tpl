@@ -6,7 +6,12 @@
     {$Key = $data}
 
     <header class="page-header">
-        <h2 class="header-title">Key: {apiKey $Key}</h2>
+        <h2 class="header-title">
+            {if $Key->Status == 'revoked'}
+                <strong>(Revoked)</strong>
+            {/if}
+            Key: {apiKey $Key}
+        </h2>
         <div class="header-buttons">
             <a class="button" href="{$Key->getUrl('/edit')}">Edit Key</a>
         </div>
