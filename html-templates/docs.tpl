@@ -213,6 +213,15 @@
                             </footer>
                         {/if}
                     </article>
+                {foreachelse}
+                    {if $.User}
+                        <p>
+                            There are no keys for this API associated with your user account.
+                            {if $Endpoint->KeySelfRegistration}
+                                Click <em>Request new key</em> above to instantly create your first key.
+                            {/if}
+                        </p>
+                    {/if}
                 {/foreach}
             </section>
 
