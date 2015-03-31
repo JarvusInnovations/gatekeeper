@@ -18,8 +18,59 @@
         </div>
     </header>
 
+    <form method="GET">
+        <h3 class="section-title">Filters</h3>
+        <fieldset class="inline-fields">
+
+            {capture assign=methodSelectHtml}
+                <select name="method" class="field-control">
+                    <option value="">any</option>
+                    {foreach item=method from=array(GET,POST,PUT,DELETE,OPTIONS)}
+                        <option {refill field=method selected=$method}>{$method}</option>
+                    {/foreach}
+                </select>
+            {/capture}
+            {labeledField html=$methodSelectHtml type=select label='Method' class="small"}
+
+            {field inputName=path-substring label='Path' fieldClass="medium" placeholder="substring"}
+
+            {field inputName=query-substring label='Query' fieldClass="medium" placeholder="substring"}
+
+            {field inputName=ip label='Client IP' fieldClass="small" placeholder="12.34.56.78"}
+
+            {field inputName=key label='Key' attribs="size=32" placeholder="837c2ceebcd374b1547c3719c4b212cc"}
+
+            {capture assign=endpointSelectHtml}
+                <select name="endpoint" class="field-control">
+                    <option value="">all endpoints</option>
+                    {foreach item=AvailableEndpoint from=Gatekeeper\Endpoints\Endpoint::getAll()}
+                        <option value="{$AvailableEndpoint->Handle}" {refill field=endpoint selected=$AvailableEndpoint->Handle default=$Endpoint->Handle}>{$AvailableEndpoint->getTitle()|escape}</option>
+                    {/foreach}
+                </select>
+            {/capture}
+            {labeledField html=$endpointSelectHtml type=select label='Endpoint'}
+
+            {field inputName=time-max label='Time (max)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS"}
+            {field inputName=time-min label='Time (min)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS"}
+
+            {capture assign=typeSelectHtml}
+                <select name="type" class="field-control">
+                    <option value="">any</option>
+                    <option {refill field=type selected=consumer}>consumer</option>
+                    <option {refill field=type selected=ping}>ping</option>
+                </select>
+            {/capture}
+            {labeledField html=$typeSelectHtml type=select label='Type' class="small"}
+
+            {field inputName=limit type=number label='Limit' default='20' attribs='min="0"' fieldClass="tiny"}
+
+            <div class="submit-area"><input type="submit" value="Apply Filters"></div>
+        </fieldset>
+    </form>
+
     <table>
         <thead>
+            <tr>
                 <th class="col-request">Request</th>
                 <th class="col-timestamp">Timestamp</th>
                 <th class="col-response-code"><small>Response</small> Code</th>

@@ -2,6 +2,8 @@
 
 namespace Gatekeeper\Transactions;
 
+use DB;
+use Gatekeeper\Keys\Key;
 use Gatekeeper\Endpoints\Endpoint;
 
 class TransactionsRequestHandler extends \RecordsRequestHandler
@@ -29,6 +31,57 @@ class TransactionsRequestHandler extends \RecordsRequestHandler
 
             $conditions['EndpointID'] = $Endpoint->ID;
             $responseData['Endpoint'] = $Endpoint;
+        }
+
+        // apply method filter
+        if (!empty($_REQUEST['method'])) {
+            $conditions['Method'] = $_REQUEST['method'];
+        }
+
+        // apply path filter
+        if (!empty($_REQUEST['path-substring'])) {
+            $conditions[] = 'Path LIKE "%' . DB::escape($_REQUEST['path-substring']) . '%"';
+        }
+
+        // apply path filter
+        if (!empty($_REQUEST['query-substring'])) {
+            $conditions[] = 'Query LIKE "%' . DB::escape($_REQUEST['query-substring']) . '%"';
+        }
+
+        // apply IP filter
+        if (!empty($_REQUEST['ip'])) {
+            if (!filter_var($_REQUEST['ip'], FILTER_VALIDATE_IP)) {
+                return static::throwError('IP is invalid');
+            }
+
+            $conditions['ClientIP'] = ip2long($_REQUEST['ip']);
+        }
+
+        // apply key filter
+        if (!empty($_REQUEST['key'])) {
+            if (!$Key = Key::getByKey($_REQUEST['key'])) {
+                return static::throwError('key is invalid');
+            }
+
+            $conditions['KeyID'] = $Key->ID;
+        }
+
+        // apply time filter
+        if (!empty($_REQUEST['time-max']) && ($timeMax = strtotime($_REQUEST['time-max']))) {
+            $conditions[] = 'Created <= "' . date('Y-m-d H:i:s', $timeMax) . '"';
+        }
+
+        if (!empty($_REQUEST['time-min']) && ($timeMin = strtotime($_REQUEST['time-min']))) {
+            $conditions[] = 'Created >= "' . date('Y-m-d H:i:s', $timeMin) . '"';
+        }
+
+        // apply type filter
+        if (!empty($_REQUEST['type'])) {
+            if ($_REQUEST['type'] == 'ping') {
+                $conditions['Class'] = PingTransaction::class;
+            } elseif ($_REQUEST['type'] == 'consumer') {
+                $conditions['Class'] = Transaction::class;
+            }
         }
 
         return parent::handleBrowseRequest($options, $conditions, $responseID, $responseData);
