@@ -13,7 +13,20 @@ Ext.define('Site.page.Docs', {
         currentTocItem: null
     },
 
-    tryItOutTpl: [
+    requestTpl: [
+        '<h5 class="request-title">Request: {method:uppercase} {url}</h5>',
+
+        '<dl class="request-headers">',
+        '<tpl foreach="headers">',
+            '<div class="dli">',
+                '<dt>{$}</dt>',
+                '<dd>{.}</dd>',
+            '</div>',
+        '</tpl>',
+        '</dl>'
+    ],
+
+    responseTpl: [
         '<h5 class="response-title">Response: {status_code} {status_reason}</h5>',
 
         '<dl class="response-headers">',
@@ -151,7 +164,8 @@ Ext.define('Site.page.Docs', {
 
     initializeTryItOut: function() {
         var me = this,
-            tryItOutTpl = Ext.XTemplate.getTpl(me, 'tryItOutTpl'),
+            requestTpl = Ext.XTemplate.getTpl(me, 'requestTpl'),
+            responseTpl = Ext.XTemplate.getTpl(me, 'responseTpl'),
             keysCt = Ext.get('keys'),
             paramCollectionSeperators = {
                 csv: ',',
@@ -175,7 +189,10 @@ Ext.define('Site.page.Docs', {
                 }),
                 method = pathMethodEl.getAttribute('data-method'),
                 path = pathMethodEl.up('.endpoint-path').getAttribute('data-path'),
-                containerEl = pathMethodEl.appendChild({
+                requestCt = pathMethodEl.appendChild({
+                    cls: 'request-container'
+                }),
+                responseCt = pathMethodEl.appendChild({
                     cls: 'response-container'
                 }),
                 tableEl = pathMethodEl.down('.parameters-table');
@@ -206,10 +223,13 @@ Ext.define('Site.page.Docs', {
                         path: {},
                         query: {}
                     },
+                    url = me.apiSchemes[0] + '://' + me.apiHost + me.apiBasePath,
                     headers = {},
                     language = '',
                     firstErrorEl;
 
+
+                // check API key and set header
                 if (me.apiKeyRequired && !checkedKeyEl) {
                     window.alert('An API key is required for making calls to this API. Please request one in the API Keys section above');
                     window.location = '#keys';
@@ -218,6 +238,8 @@ Ext.define('Site.page.Docs', {
                     headers.Authorization = 'Gatekeeper-Key ' + checkedKeyEl.getValue();
                 }
 
+
+                // validate fields
                 pathMethodEl.select('.parameters-table tbody > tr').each(function(rowEl) {
                     var inputEl = rowEl.down('input'),
                         isEmpty = (inputEl.dom.value === ''),
@@ -249,16 +271,30 @@ Ext.define('Site.page.Docs', {
                 if (firstErrorEl) {
                     firstErrorEl.dom.focus();
                 
+                    // FIXME: move this somewhere so it doesn't get added multiple times
                     pathMethodEl.on('blur', function(ev, t) {
                         Ext.fly(t).toggleCls('invalid', t.value === '');
                     }, null, { delegate: 'input.invalid' });
                     
                     return;
                 }
-                
+
+                url += me.populatePlaceholders(path, parameters.path);
+
+
+                // render request info
+                requestTpl.overwrite(requestCt, {
+                    method: method,
+                    url: url,
+                    params: parameters,
+                    headers: headers
+                });
+
+
+                // make request
                 Ext.Ajax.request({
                     method: method,
-                    url: me.apiSchemes[0] + '://' + me.apiHost + me.apiBasePath + me.populatePlaceholders(path, parameters.path),
+                    url: url,
                     params: parameters.query,
                     disableCaching: false,
                     headers: headers,
@@ -284,7 +320,7 @@ Ext.define('Site.page.Docs', {
                             body = Ext.util.Format.htmlEncode(body);
                         }
                         
-                        tryItOutTpl.overwrite(containerEl, {
+                        responseTpl.overwrite(responseCt, {
                             body: body,
                             headers: headers,
                             language: language,
