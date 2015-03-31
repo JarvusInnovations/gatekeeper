@@ -170,7 +170,7 @@
                     return $aStatus == 'active' ? -1 : 1;
                 });
                 ?>
-                {foreach item=KeyUser from=$KeyUsers}
+                {foreach item=KeyUser from=$KeyUsers name=keys}
                     {$Key = $KeyUser->Key}
                     {$metrics = array(
                         callsTotal = $Key->getMetric(calls-total)
@@ -178,7 +178,13 @@
                         ,callsDayAvg = $Key->getMetric(calls-day-avg)
                         ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
                     )}
-                    <article class="key key-{$Key->Status}">
+                    <article class="key key-{$Key->Status}" data-key="{$Key->Key}">
+                        {if $Key->Status == 'active'}
+                            <label>
+                                <input type="radio" name="primary-key" value="{$Key->Key}" {if $.foreach.keys.first}checked{/if}>
+                                Use this key for test requests
+                            </label>
+                        {/if}
                         <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                         <div class="details">
                             <header>

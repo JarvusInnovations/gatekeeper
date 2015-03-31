@@ -106,6 +106,7 @@ Ext.define('Site.page.Docs', {
         me.apiHost = docsCt.getAttribute('data-host');
         me.apiBasePath = docsCt.getAttribute('data-basepath');
         me.apiHandle = docsCt.getAttribute('data-handle');
+        me.apiKeyRequired = docsCt.dom.getAttribute('data-key-required') !== null;
 
         // initialize  features
         me.initializeToc();
@@ -151,6 +152,7 @@ Ext.define('Site.page.Docs', {
     initializeTryItOut: function() {
         var me = this,
             tryItOutTpl = Ext.XTemplate.getTpl(me, 'tryItOutTpl'),
+            keysCt = Ext.get('keys'),
             paramCollectionSeperators = {
                 csv: ',',
                 ssv: ' ',
@@ -199,13 +201,23 @@ Ext.define('Site.page.Docs', {
             });
 
             btn.on('click', function (ev, t) {
-                var parameters = {
+                var checkedKeyEl = keysCt.down('input[name=primary-key]:checked'),
+                    parameters = {
                         path: {},
                         query: {}
-                    }, 
+                    },
+                    headers = {},
                     language = '',
                     firstErrorEl;
-                
+
+                if (me.apiKeyRequired && !checkedKeyEl) {
+                    window.alert('An API key is required for making calls to this API. Please request one in the API Keys section above');
+                    window.location = '#keys';
+                    return;
+                } else if (checkedKeyEl) {
+                    headers.Authorization = 'Gatekeeper-Key ' + checkedKeyEl.getValue();
+                }
+
                 pathMethodEl.select('.parameters-table tbody > tr').each(function(rowEl) {
                     var inputEl = rowEl.down('input'),
                         isEmpty = (inputEl.dom.value === ''),
@@ -249,6 +261,7 @@ Ext.define('Site.page.Docs', {
                     url: me.apiSchemes[0] + '://' + me.apiHost + me.apiBasePath + me.populatePlaceholders(path, parameters.path),
                     params: parameters.query,
                     disableCaching: false,
+                    headers: headers,
                     callback: function(options, success, response) {
                         var headers = response.getAllResponseHeaders(),
                             body = response.responseText;
