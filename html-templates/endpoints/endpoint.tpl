@@ -5,13 +5,12 @@
 {block js-bottom}
     {$dwoo.parent}
     <script>
-        Ext.onReady(function(){
-            var colOptions = Ext.select('.col-options');
-
-            colOptions.on('click', function(ev, t){
+        // TODO: move to a global library somewhere, maybe use delegate body listener
+        Ext.onReady(function() {
+            Ext.select('.col-options', true).on('click', function(ev, t) {
                 var opt = Ext.get(t);
-                    opt.radioCls('selected');
-                    opt.up('table').toggleCls('query-expand');
+                opt.radioCls('selected');
+                opt.up('table').toggleCls('query-expand');
             }, null, { delegate: '.col-option' });
         });
     </script>
