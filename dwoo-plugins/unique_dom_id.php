@@ -31,7 +31,7 @@ class Dwoo_Plugin_unique_dom_id extends Dwoo_Block_Plugin
             $output = preg_replace('/^[^a-z]+/', '', $output);
 
             // replace any forbidden character with -
-            $output = preg_replace('/[^a-z_\\-:.]/', '-', $output);
+            $output = preg_replace('/[^a-z0-9_\\-:.]/', '-', $output);
 
             // collapse multiple -
             $output = preg_replace('/-{2,}/', '-', $output);
