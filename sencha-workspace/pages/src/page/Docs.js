@@ -14,7 +14,14 @@ Ext.define('Site.page.Docs', {
     },
 
     requestTpl: [
-        '<h5 class="request-title">Request: {method:uppercase} {url}</h5>',
+        '<h5 class="request-title">',
+            'Request:',
+            ' {method:uppercase}',
+            ' {[encodeURI(values.url)]}',
+            '<tpl if="Ext.Object.getSize(params.query)">',
+                '?{[Ext.Object.toQueryString(values.params.query)]}',
+            '</tpl>',
+        '</h5>',
 
         '<dl class="request-headers">',
         '<tpl foreach="headers">',
