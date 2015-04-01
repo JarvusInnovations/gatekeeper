@@ -2,17 +2,15 @@
 
 {block title}{$data->Title|escape} &mdash; Endpoints &mdash; {$dwoo.parent}{/block}
 
-{block js-bottom}
+{block "js-bottom"}
     {$dwoo.parent}
+
+    {if !$.get.jsdebug}
+        <script src="{Site::getVersionedRootUrl('js/pages/EndpointDetails.js')}"></script>
+    {/if}
+
     <script>
-        // TODO: move to a global library somewhere, maybe use delegate body listener
-        Ext.onReady(function() {
-            Ext.select('.col-options', true).on('click', function(ev, t) {
-                var opt = Ext.get(t);
-                opt.radioCls('selected');
-                opt.up('table').toggleCls('query-expand');
-            }, null, { delegate: '.col-option' });
-        });
+        Ext.require('Site.page.EndpointDetails');
     </script>
 {/block}
 
@@ -30,7 +28,30 @@
     <section class="page-section" id="endpoint-docs">
         <h3>Documentation</h3>
 
-        <p class="muted"><em>Not yet implemented. Either <a href="https://github.com/mashery/iodocs">I/O Docs</a> or <a href="https://github.com/wordnik/swagger-ui">Swagger</a> will be integrated in the future to allow JSON-defined documentation to be entered here.</em></p>
+        {$SwaggerFileNode = $Endpoint->getSwaggerFileNode()}
+        {if $SwaggerFileNode}
+            <p>
+                <a href="/develop#/{$SwaggerFileNode->FullPath}">{$SwaggerFileNode->FullPath}</a>
+                ({$SwaggerFileNode->SHA1|substr:0:5}&hellip;)
+                was last updated by {personLink $SwaggerFileNode->Author}
+                on {$SwaggerFileNode->Timestamp|date_format:'%Y-%m-%d %H:%M:%S'}
+            </p>
+        {else}
+            <p>
+                No swagger docs have been uploaded yet, only basic information will be displayed in the developer portal.
+            </p>
+        {/if}
+
+        {if $.Session->hasAccountLevel('Developer')}
+            <form class="swagger-uploader" action="/develop/{$Endpoint->getSwaggerFilePath()}">
+                Upload a <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">swagger 2.0 yaml</a>
+                file to <strong>{$Endpoint->getSwaggerFilePath()}</strong> to provide in-depth API documentation and a test console (or just drop one here.)
+            </form>
+        {/if}
+
+        <div class="buttons">
+            <a class="button" href="/api-docs/{$Endpoint->Path}">View Docs</a>
+        </div>
     </section>
 
     <form class="page-section" id="endpoint-rewrites" action="{$Endpoint->getURL('/rewrites')}" method="POST">
