@@ -1,6 +1,5 @@
 /*jshint undef: true, unused: true, browser: true, curly: true*/
 /*global Ext, google*/
-// @require-package ext-charts
 Ext.define('Site.page.Status', {
     singleton: true,
     requires: [
