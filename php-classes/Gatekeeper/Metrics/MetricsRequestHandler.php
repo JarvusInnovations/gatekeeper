@@ -61,26 +61,39 @@ class MetricsRequestHandler extends \RequestHandler
             $timeMin = $timeMax - 3600 * 24 * 7; // 1 week
         }
 
+        if (!empty($_GET['metrics']) && preg_match('/^[a-zA-Z|]+$/', $_GET['metrics'])) {
+            $metricPattern = '(' . $_GET['metrics'] . ')';
+        } else {
+            $metricPattern = '[^/]+';
+        }
+
         return static::respond('historicEndpointMetrics', [
-           'data' => DB::allRecords(
-                'SELECT'
-                .'  Timestamp,'
-                .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
-                .'  SUBSTRING(`Key`, LENGTH(@context) + 2) AS Metric,'
-                .'  Value'
-                .' FROM `%s`'
-                .' WHERE'
-                .'  `Timestamp` BETWEEN "%s" AND "%s" AND '
-                .'  `Key` LIKE "endpoints/%%" AND'
-                .'  `Key` REGEXP "^endpoints/[[:digit:]]+/[^/]+$"'
-                .' ORDER BY ID'
-                .' LIMIT %u',
-                [
-                    MetricSample::$tableName,
-                    date('Y-m-d H:i:s', $timeMin),
-                    date('Y-m-d H:i:s', $timeMax),
-                    !empty($_GET['limit']) && ctype_digit($_GET['limit']) ? $_GET['limit'] : 20
-                ]
+            'data' => array_map(
+                function($row) {
+                    $row['Timestamp'] = intval($row['Timestamp']);
+                    $row['EndpointID'] = intval($row['EndpointID']);
+                    $row['Value'] = intval($row['Value']);
+                    return $row;
+                },
+                DB::allRecords(
+                    'SELECT'
+                    .'  UNIX_TIMESTAMP(Timestamp) AS Timestamp,'
+                    .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
+                    .'  SUBSTRING(`Key`, LENGTH(@context) + 2) AS Metric,'
+                    .'  Value'
+                    .' FROM `%s`'
+                    .' WHERE'
+                    .'  `Timestamp` BETWEEN "%s" AND "%s" AND '
+                    .'  `Key` LIKE "endpoints/%%" AND'
+                    .'  `Key` REGEXP "^endpoints/[[:digit:]]+/%s$"'
+                    .' ORDER BY ID DESC',
+                    [
+                        MetricSample::$tableName,
+                        date('Y-m-d H:i:s', $timeMin),
+                        date('Y-m-d H:i:s', $timeMax),
+                        $metricPattern
+                    ]
+                )
             )
         ]);
     }
