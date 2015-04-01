@@ -48,10 +48,6 @@
         font-family: Consolas, Inconsolata, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
         padding: .125em .25em;
     }
-
-    ol { // ul extends this as well
-        margin: 1.5em 0;
-    }
 }
 
 .split-view {
@@ -77,8 +73,10 @@
         @return $link-left-indent + ($level * $link-left-pad);
     }
 
-    bottom: 0;
-    margin: 1px 0 0;
+    border: 1px solid $border-color;
+    border-width: 1px 0;
+    bottom: 5em;
+    margin: 0;
     overflow: auto;
     overflow-x: hidden;
     padding: 0 0 1em;
@@ -246,8 +244,86 @@
     }
 }
 
-.response-container {
+@-webkit-keyframes fade-request {
+      0% { opacity: .2; }
+    100% { opacity: 1; }
+}
+
+@keyframes fade-in {
+      0% { opacity: .2; }
+    100% { opacity: 1; }
+}
+
+.console-ct {
     margin: 1.5em 0;
+
+    &.is-loading {
+        .loading-indicator {
+            display: inline-block;
+        }
+
+        .request-ct {
+            -webkit-animation: fade-request .5s both;
+                    animation: fade-request .5s both;
+        }
+
+        .response-ct {
+            opacity: .2;
+            @include transition(none);
+        }
+    }
+}
+
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.loading-indicator {
+    border: 3px solid rgba($text-color, .2);
+    border-left-color: $text-color;
+    box-sizing: border-box;
+    display: none;
+    margin: 0 1em;
+    overflow: hidden;
+    position: relative;
+    text-indent: 100%;
+    vertical-align: -.25em;
+    white-space: nowrap;
+
+    -webkit-animation: load8 .25s infinite linear;
+    animation: load8 .25s infinite linear;
+
+    &,
+    &::after {
+        border-radius: 50%;
+        width: 1em;
+        height: 1em;
+    }
+}
+
+.request-ct,
+.response-ct {
+    margin: 1.5em 0;
+    @include transition(opacity .5s);
 }
 
 .response-body {
@@ -259,6 +335,7 @@
     white-space: pre-wrap;
 }
 
+.request-headers,
 .response-headers {
     display: table;
 
@@ -272,6 +349,7 @@
 
     dt {
         color: $muted-color;
+        min-width: 10em;
         padding-right: 1em;
         text-align: right;
     }
