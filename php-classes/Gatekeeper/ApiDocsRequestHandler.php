@@ -29,6 +29,6 @@ class ApiDocsRequestHandler extends \RequestHandler
             $GLOBALS['Session']->requireAccountLevel('Staff');
         }
 
-        return static::respond('docs', $Endpoint->getSwagger());
+        return static::respond('docs', $Endpoint->getSwaggerData());
     }
 }

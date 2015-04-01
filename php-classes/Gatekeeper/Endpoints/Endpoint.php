@@ -381,13 +381,20 @@ class Endpoint extends ActiveRecord
         return $url;
     }
 
-    public function getSwagger()
+    public function getSwaggerFilePath()
     {
-        // get docs
-        $docPath = 'api-docs/' . $this->Path . '.yml';
+        return 'api-docs/' . $this->Path . '.yml';
+    }
 
+    public function getSwaggerFileNode()
+    {
+        return Site::resolvePath($this->getSwaggerFilePath());
+    }
+
+    public function getSwaggerData()
+    {
         // TODO: cache docs with a fileWrite invalidator
-        if ($docNode = Site::resolvePath($docPath)) {
+        if ($docNode = $this->getSwaggerFileNode()) {
             $swagger = Yaml::parse(file_get_contents($docNode->RealPath));
         } else {
             $swagger = [];
