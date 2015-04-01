@@ -22,6 +22,7 @@
     <header class="page-header">
         <h2 class="header-title">Endpoint: {endpoint $Endpoint}</h2>
         <div class="header-buttons">
+            <a class="button" href="mailto:endpoint-subscribers+{$Endpoint->Handle}@{Site::getConfig(primary_hostname)}">Email Subscribers</a>
             <a class="button" href="{$Endpoint->getURL('/edit')}">Edit Endpoint</a>
         </div>
     </header>

@@ -39,6 +39,7 @@
                         <a class="button" href="/api-docs/{$Endpoint->Path}">View Docs</a>
                         <a class="button" href="{$Endpoint->getURL()}#endpoint-cache">View Cache</a>
                         <a class="button" href="{$Endpoint->getURL()}#endpoint-log">View Log</a>
+                        <a class="button" href="mailto:endpoint-subscribers+{$Endpoint->Handle}@{Site::getConfig(primary_hostname)}">Email Subscribers</a>
                     </div>
                 </div>
             </article>
