@@ -32,7 +32,9 @@ class Endpoint extends ActiveRecord
     public static $useCache = true;
 
     public static $fields = [
-        'Title',
+        'Title' => [
+            'includeInSummary' => true
+        ],
         'Handle' => [
             'unique' => true
         ],
