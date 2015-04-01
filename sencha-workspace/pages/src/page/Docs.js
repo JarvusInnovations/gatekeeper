@@ -190,17 +190,28 @@ Ext.define('Site.page.Docs', {
 
         // wire test consoles
         Ext.select('.endpoint-path-method', true).each(function(pathMethodEl) {
-            var btn = pathMethodEl.appendChild({
+            var consoleCt = pathMethodEl.appendChild({
+                    cls: 'console-ct'
+                }),
+
+                btn = consoleCt.appendChild({
                     tag: 'button',
                     html: 'Try it out!'
                 }),
+
+                loader = consoleCt.appendChild({
+                    tag: 'span',
+                    cls: 'loading-indicator',
+                    html: 'Loading&hellip;'
+                }),
+
                 method = pathMethodEl.getAttribute('data-method'),
                 path = pathMethodEl.up('.endpoint-path').getAttribute('data-path'),
-                requestCt = pathMethodEl.appendChild({
-                    cls: 'request-container'
+                requestCt = consoleCt.appendChild({
+                    cls: 'request-ct'
                 }),
-                responseCt = pathMethodEl.appendChild({
-                    cls: 'response-container'
+                responseCt = consoleCt.appendChild({
+                    cls: 'response-ct'
                 }),
                 tableEl = pathMethodEl.down('.parameters-table');
                 
@@ -234,7 +245,6 @@ Ext.define('Site.page.Docs', {
                     headers = {},
                     language = '',
                     firstErrorEl;
-
 
                 // check API key and set header
                 if (me.apiKeyRequired && !checkedKeyEl) {
@@ -282,9 +292,11 @@ Ext.define('Site.page.Docs', {
                     pathMethodEl.on('blur', function(ev, t) {
                         Ext.fly(t).toggleCls('invalid', t.value === '');
                     }, null, { delegate: 'input.invalid' });
-                    
+
                     return;
                 }
+
+                consoleCt.addCls('is-loading');
 
                 url += me.populatePlaceholders(path, parameters.path);
 
@@ -334,6 +346,8 @@ Ext.define('Site.page.Docs', {
                             status_code: response.status,
                             status_reason: success ? (response.statusText || 'OK') : (response.statusText || me.httpErrorReasons[response.status] || 'Error')
                         });
+
+                        consoleCt.removeCls('is-loading');
                     }
                 });
             });
