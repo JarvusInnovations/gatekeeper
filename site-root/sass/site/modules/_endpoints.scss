@@ -166,3 +166,19 @@ $endpoint-metric-width: 4em;
         padding: .75em 1em;
     }
 }
+
+#endpoint-docs {
+    background-color: rgba(white, .5);
+    border: 2px dashed $border-color;
+    border-radius: .25em;
+    padding: 2em;
+
+    &.file-drag-over {
+        background-color: tint($link-color, 90%);
+        border-color: $link-color;
+    }
+
+    &.uploading {
+        border-style: solid;
+    }
+}

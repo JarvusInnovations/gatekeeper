@@ -30,9 +30,9 @@
 
         {$SwaggerFileNode = $Endpoint->getSwaggerFileNode()}
         {if $SwaggerFileNode}
-            <p>
+            <p class="notify">
                 <a href="/develop#/{$SwaggerFileNode->FullPath}">{$SwaggerFileNode->FullPath}</a>
-                ({$SwaggerFileNode->SHA1|substr:0:5}&hellip;)
+                (<samp>{$SwaggerFileNode->SHA1|substr:0:5}&hellip;</samp>)
                 was last updated by {personLink $SwaggerFileNode->Author}
                 on {$SwaggerFileNode->Timestamp|date_format:'%Y-%m-%d %H:%M:%S'}
             </p>
@@ -44,8 +44,10 @@
 
         {if $.Session->hasAccountLevel('Developer')}
             <form class="swagger-uploader" action="/develop/{$Endpoint->getSwaggerFilePath()}">
-                Upload a <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">swagger 2.0 yaml</a>
-                file to <strong>{$Endpoint->getSwaggerFilePath()}</strong> to provide in-depth API documentation and a test console (or just drop one here.)
+                <p>
+                    Upload a <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md">Swagger 2.0 YAML</a>
+                    file to <kbd>{$Endpoint->getSwaggerFilePath()}</kbd> to provide in-depth API documentation and a test console (or just <strong>drop one here.</strong>)
+                </p>
             </form>
         {/if}
 
