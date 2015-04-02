@@ -31,23 +31,34 @@
         {else}
             <ul>
                 {foreach item=Endpoint from=$Key->Endpoints}
-                    <li>{endpoint $Endpoint}&nbsp;<a href="{$Key->getUrl('/endpoints')}/{$Endpoint->ID}/remove" class="button destructive tiny">Remove</a></li>
+                    <li>
+                        {strip}
+                            {endpoint $Endpoint}
+                            {if $.User->hasAccountLevel('Staff')}
+                                &nbsp;
+                                <a href="{$Key->getUrl('/endpoints')}/{$Endpoint->ID}/remove" class="remove-link">&times;</a>
+                            {/if}
+                        {/strip}
+                    </li>
                 {foreachelse}
                     <li><em>No endpoints added yet</em></li>
                 {/foreach}
-                {$unlinkedEndpoints = $Key->getUnlinkedEndpoints()}
-                {if count($unlinkedEndpoints)}
-                    <li>
-                        <form action="{$Key->getUrl('/endpoints')}" method="POST">
-                            <select name="EndpointID" class="field-control inline">
-                                <option value="">Select endpoint</option>
-                                {foreach item=Endpoint from=$unlinkedEndpoints}
-                                    <option value="{$Endpoint->ID}">{$Endpoint->getTitle()|escape}</option>
-                                {/foreach}
-                            </select>
-                            <input type="submit" value="Add">
-                        </form>
-                    </li>
+
+                {if $.User->hasAccountLevel('Staff')}
+                    {$unlinkedEndpoints = $Key->getUnlinkedEndpoints()}
+                    {if count($unlinkedEndpoints)}
+                        <li>
+                            <form action="{$Key->getUrl('/endpoints')}" method="POST">
+                                <select name="EndpointID" class="field-control inline">
+                                    <option value="">Select endpoint</option>
+                                    {foreach item=Endpoint from=$unlinkedEndpoints}
+                                        <option value="{$Endpoint->ID}">{$Endpoint->getTitle()|escape}</option>
+                                    {/foreach}
+                                </select>
+                                <input type="submit" value="Add">
+                            </form>
+                        </li>
+                    {/if}
                 {/if}
             </ul>
         {/if}
