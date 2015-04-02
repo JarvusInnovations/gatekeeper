@@ -139,23 +139,9 @@
             <section class="page-section" id="keys">
                 <header class="section-header">
                     <h2 class="header-title">API Keys</h2>
-                    <div class="header-buttons">
-                        {if $info['x-key-self-registration'] && $.User}
-                            <a class="button primary" href="/keys/request?endpoint={$info['x-handle']|escape:url}">Request new key</a>
-                        {/if}
-                    </div>
                 </header>
-                <p>
-                    An API key is <strong>{tif !$Endpoint->KeyRequired ? 'not '}required</strong> for making requests to this API.
-                    {if $Endpoint->KeySelfRegistration}
-                        Registered users may request API keys and be issued them instantly.
-                        {if !$.User}
-                            <a href="/login?return={$.server.REQUEST_URI|escape:url}">Login</a>
-                            or <a href="/register?return={$.server.REQUEST_URI|escape:url}">register</a>
-                            to request and manage API keys.
-                        {/if}
-                    {/if}
-                </p>
+
+                <p class="notify">An API key is <strong>{tif !$Endpoint->KeyRequired ? 'not '}required</strong> for making requests to this API.</p>
 
                 {$KeyUsers = Gatekeeper\Keys\KeyUser::getAllForEndpointUser($Endpoint)}
                 <?php
@@ -171,6 +157,27 @@
                     return $aStatus == 'active' ? -1 : 1;
                 });
                 ?>
+
+                {if $Endpoint->KeySelfRegistration}
+                    <p>
+                        {if $.User}
+                            <a class="button primary" href="/keys/request?endpoint={$info['x-handle']|escape:url}">Request New Key</a>
+                            &nbsp;
+                        {/if}
+
+                        Registered users may request API keys and receive them instantly.
+                        {if !$.User}
+                            <a href="/login?return={$.server.REQUEST_URI|escape:url}">Log in</a>
+                            or <a href="/register?return={$.server.REQUEST_URI|escape:url}">register</a>
+                            to request and manage API keys.
+                        {/if}
+                    </p>
+                {/if}
+
+                {* TODO this should only display if the user has two or more eligible keys *}
+                {* Maybe show/hide the Use buttons based on this too *}
+                <div>Press <kbd>Use</kbd> to select a key to use for test requests:</div> 
+
                 {foreach item=KeyUser from=$KeyUsers name=keys}
                     {$Key = $KeyUser->Key}
                     {$metrics = array(
