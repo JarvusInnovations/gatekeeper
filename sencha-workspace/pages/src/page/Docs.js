@@ -235,7 +235,7 @@ Ext.define('Site.page.Docs', {
                 rowEl.down('td').insertSibling({ tag: 'td', cn: [inputConfig] }, 'after');
             });
 
-            btn.on('click', function (ev, t) {
+            function _doRequest() {
                 var checkedKeyEl = keysCt.down('input[name=primary-key]:checked'),
                     parameters = {
                         path: {},
@@ -350,6 +350,14 @@ Ext.define('Site.page.Docs', {
                         consoleCt.removeCls('is-loading');
                     }
                 });
+            }
+
+            btn.on('click', _doRequest);
+            tableEl.on('keypress', function(ev, t) {
+                if (ev.keyCode == 13) {
+                    ev.stopEvent();
+                    _doRequest();
+                }
             });
         });
     },
