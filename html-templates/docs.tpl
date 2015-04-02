@@ -186,22 +186,25 @@
                         ,callsDayAvg = $Key->getMetric(calls-day-avg)
                         ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
                     )}
-                    <article class="key key-{$Key->Status}" data-key="{$Key->Key}">
-                        {if $Key->Status == 'active'}
-                            <label>
+                    {*if $Key->Status == 'active'}
+                        <div class="key-selector-ct">
+                            <label class="key-selector">
                                 <input type="radio" name="primary-key" value="{$Key->Key}" {if $.foreach.keys.first}checked{/if}>
-                                Use this key for test requests
+                                Use this key for test requests:
                             </label>
-                        {/if}
+                        </div>
+                    {/if*}
+                    <article class="key key-{$Key->Status} {if $.foreach.keys.first}key-in-use{/if}" data-key="{$Key->Key}">
                         <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                         <div class="details">
                             <header>
                                 <h3 class="title">{apiKey $Key}</h3>
-                                <div class="meta owner">{if $Key->ContactEmail}
-                                    {$recipient = $Key->ContactEmail}
-                                    {if $Key->ContactName}
-                                        {$recipient = "$Key->ContactName <$recipient>"}
-                                    {/if}
+                                <div class="meta owner">
+                                    {if $Key->ContactEmail}
+                                        {$recipient = $Key->ContactEmail}
+                                        {if $Key->ContactName}
+                                            {$recipient = "$Key->ContactName <$recipient>"}
+                                        {/if}
                                         <a href="mailto:{$recipient|escape}" title="Contact key owner">{$recipient|escape}</a>
                                     {elseif $Key->ContactName}
                                         {$Key->ContactName}
@@ -214,26 +217,18 @@
                                 <li><strong>{tif $Key->AllEndpoints ? 'All' : $metrics.endpoints|number_format} endpoint{tif $Key->AllEndpoints || $metrics.endpoints != 1 ? s}</strong> permitted</li>
                             </ul>
                         </div>
-                        {if $KeyUser->Role == 'owner'}
-                            <footer>
-                                {if $Key->Status == 'active'}
+                        <footer>
+                            {if $Key->Status == 'active'}
+                                <a class="button {if $.foreach.keys.first}disabled{/if}" href="">Use</a>
+                                {if $KeyUser->Role == 'owner'}
                                     <a class="button" href="{$Key->getURL()}/share">Share</a>
                                     <a class="button destructive" href="{$Key->getURL()}/revoke">Revoke</a>
-                                {else}
-                                    <strong>Revoked</strong>
                                 {/if}
-                            </footer>
-                        {/if}
-                    </article>
-                {foreachelse}
-                    {if $.User}
-                        <p>
-                            There are no keys for this API associated with your user account.
-                            {if $Endpoint->KeySelfRegistration}
-                                Click <em>Request new key</em> above to instantly create your first key.
+                            {else}
+                                <span class="badge destructive">Revoked</span>
                             {/if}
-                        </p>
-                    {/if}
+                        </footer>
+                    </article>
                 {/foreach}
             </section>
 

@@ -124,6 +124,17 @@
     }
 }
 
+.key-selector-ct {
+    margin-bottom: -1em;
+}
+
+.key-selector {
+    border: 1px solid $border-color;
+    display: inline-block;
+    margin-bottom: -1px;
+    padding: .25em .5em;
+}
+
 .docs-table {
     background-color: rgba(white, .4);
     border: 1px solid $border-color;
@@ -323,7 +334,7 @@
     overflow: hidden;
     position: relative;
     text-indent: 100%;
-    vertical-align: -.25em;
+    vertical-align: -.125em;
     white-space: nowrap;
 
     -webkit-animation: load8 .25s infinite linear;
