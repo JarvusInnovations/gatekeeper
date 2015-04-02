@@ -211,6 +211,23 @@
     }
 }
 
+.swagger-button {
+    border-radius: .25em;
+    display: inline-block;
+    margin-right: .125em;
+    overflow: hidden;
+    vertical-align: -.6667em;
+
+    img {
+        display: block;
+    }
+
+    &:hover,
+    &:focus {
+        opacity: .8;
+    }
+}
+
 .toggle {
     position: relative;
 

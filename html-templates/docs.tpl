@@ -123,6 +123,7 @@
             <header class="page-header" id="overview">
                 <h2 class="header-title"><a href="#overview">{$info.title|escape}</a></h2>
                 <div class="header-buttons">
+                    <a class="swagger-button" href="?format=json"><img src="/img/swagger.png" width="87" height="31" alt="Swagger"></a>
                     <label class="toggle button subscribe">
                         <input type="checkbox" {tif $info['x-subscribed'] ? checked}>
                         <span class="toggle-off">Subscribe</span>
