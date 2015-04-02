@@ -8,19 +8,23 @@
     <header class="page-header">
         <h2 class="page-title">Logged Requests {if $Endpoint}for {endpoint $Endpoint}{/if}</h2>
         <div class="page-buttons">
-            <small class="muted">Download this page:&nbsp;</small>
-            <a class="button" href="?{refill_query format=json}">JSON</a>
-            <a class="button" href="?{refill_query format=csv}">CSV</a>
+            <span class="button-group">
+                <label class="muted">Download this page:&nbsp;</label>
+                <a class="button small" href="?{refill_query format=json}">JSON</a>
+                <a class="button small" href="?{refill_query format=csv}">CSV</a>
+            </span>
 
-            <small class="muted">Download all:&nbsp;</small>
-            <a class="button" href="?{refill_query format=json limit=0 offset=0}">JSON</a>
-            <a class="button" href="?{refill_query format=csv limit=0 offset=0}">CSV</a>
+            <span class="button-group">
+                <label class="muted">Download all:&nbsp;</label>
+                <a class="button small" href="?{refill_query format=json limit=0 offset=0}">JSON</a>
+                <a class="button small" href="?{refill_query format=csv limit=0 offset=0}">CSV</a>
+            </span>
         </div>
     </header>
 
-    <form method="GET">
-        <h3 class="section-title">Filters</h3>
+    <form method="GET" class="filter-list">
         <fieldset class="inline-fields">
+            <h4 class="section-title">Filters</h4>
 
             {capture assign=methodSelectHtml}
                 <select name="method" class="field-control">
@@ -38,7 +42,7 @@
 
             {field inputName=ip label='Client IP' fieldClass="small" placeholder="12.34.56.78"}
 
-            {field inputName=key label='Key' attribs="size=32" placeholder="837c2ceebcd374b1547c3719c4b212cc"}
+            {field inputName=key label='Key' attribs="size=32" fieldClass="medium" placeholder="837c2ceebcd374b1547c3719c4b212cc"}
 
             {capture assign=endpointSelectHtml}
                 <select name="endpoint" class="field-control">
@@ -48,10 +52,10 @@
                     {/foreach}
                 </select>
             {/capture}
-            {labeledField html=$endpointSelectHtml type=select label='Endpoint'}
+            {labeledField html=$endpointSelectHtml type=select label='Endpoint' class="medium"}
 
-            {field inputName=time-max label='Time (max)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS"}
-            {field inputName=time-min label='Time (min)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS"}
+            {field inputName=time-max label='Time (max)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS" fieldClass="medium"}
+            {field inputName=time-min label='Time (min)' attribs="size=19" placeholder="YYYY-MM-DD HH:MM:SS" fieldClass="medium"}
 
             {capture assign=typeSelectHtml}
                 <select name="type" class="field-control">

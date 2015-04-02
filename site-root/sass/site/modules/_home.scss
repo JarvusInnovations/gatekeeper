@@ -137,7 +137,17 @@
 
 
 
+.filter-list {
+    .submit-area {
+        margin-top: 1em;
+    }
 
+    .field,
+    .field + .field {
+        font-size: .875em;
+        margin: 0 1em 1em 0;
+    }
+}
 
 .button-group {
     display: inline-block;
@@ -165,5 +175,9 @@
             border-bottom-right-radius: 5px;
             border-top-right-radius: 5px;
         }
+    }
+
+    + .button-group {
+        margin-left: .5em;
     }
 }
