@@ -7,9 +7,6 @@
 
     <header class="page-header">
         <h2 class="header-title">
-            {if $Key->Status == 'revoked'}
-                <strong>(Revoked)</strong>
-            {/if}
             Key: {apiKey $Key}
         </h2>
         <div class="header-buttons">
@@ -17,7 +14,13 @@
         </div>
     </header>
 
+    <div class="section-info">
+        {if $Key->Status == 'revoked'}<span class="badge destructive">Revoked</span>{/if}
+        {if $Key->Status == 'active'}<span class="badge success">Active</span>{/if}
+    </div>
+
     <section class="page-section" id="key-endpoints">
+
         <h3>Permitted Endpoints</h3>
 
         {if $Key->AllEndpoints}
