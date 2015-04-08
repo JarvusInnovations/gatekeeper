@@ -10,7 +10,8 @@ Ext.define('Site.page.Docs', {
     ],
 
     config: {
-        currentTocItem: null
+        currentTocItem: null,
+        currentKey: null
     },
 
     requestTpl: [
@@ -112,6 +113,18 @@ Ext.define('Site.page.Docs', {
         }
     },
 
+    updateCurrentKey: function(currentKey, oldCurrentKey) {
+        if (oldCurrentKey) {
+            oldCurrentKey.removeCls('key-in-use');
+            oldCurrentKey.down('.button.key-use').removeCls('disabled');
+        }
+
+        if (currentKey) {
+            currentKey.addCls('key-in-use');
+            currentKey.down('.button.key-use').addCls('disabled');
+        }
+    },
+
 
     // event handlers
     onDocReady: function() {
@@ -130,6 +143,7 @@ Ext.define('Site.page.Docs', {
 
         // initialize  features
         me.initializeToc();
+        me.initializeKeySelector();
         me.initializeTryItOut();
         me.initializeSubscribe();
 
@@ -167,6 +181,34 @@ Ext.define('Site.page.Docs', {
         });
 
         me.syncTocFromScroll();
+    },
+
+    initializeKeySelector: function() {
+        var me = this,
+            firstKeyCt;
+
+        Ext.select('article.key', true).each(function(keyCt) {
+
+            if (!keyCt.hasCls('key-active')) {
+                return;
+            }
+
+            keyCt.down('footer').insertFirst({
+                tag: 'a',
+                cls: 'button key-use',
+                href: '#keys',
+                html: 'Use'
+            }).on('click', function(ev, t) {
+                ev.stopEvent();
+                me.setCurrentKey(keyCt);
+            });
+
+            firstKeyCt = firstKeyCt || keyCt;
+        });
+
+        if (firstKeyCt) {
+            me.setCurrentKey(firstKeyCt);
+        }
     },
 
     initializeTryItOut: function() {
@@ -236,7 +278,7 @@ Ext.define('Site.page.Docs', {
             });
 
             function _doRequest() {
-                var checkedKeyEl = keysCt.down('input[name=primary-key]:checked'),
+                var currentKeyEl = me.getCurrentKey(),
                     parameters = {
                         path: {},
                         query: {}
@@ -247,12 +289,12 @@ Ext.define('Site.page.Docs', {
                     firstErrorEl;
 
                 // check API key and set header
-                if (me.apiKeyRequired && !checkedKeyEl) {
+                if (me.apiKeyRequired && !currentKeyEl) {
                     window.alert('An API key is required for making calls to this API. Please request one in the API Keys section above');
                     window.location = '#keys';
                     return;
-                } else if (checkedKeyEl) {
-                    headers.Authorization = 'Gatekeeper-Key ' + checkedKeyEl.getValue();
+                } else if (currentKeyEl) {
+                    headers.Authorization = 'Gatekeeper-Key ' + currentKeyEl.getAttribute('data-key');
                 }
 
 

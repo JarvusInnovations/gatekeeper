@@ -186,15 +186,7 @@
                         ,callsDayAvg = $Key->getMetric(calls-day-avg)
                         ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
                     )}
-                    {*if $Key->Status == 'active'}
-                        <div class="key-selector-ct">
-                            <label class="key-selector">
-                                <input type="radio" name="primary-key" value="{$Key->Key}" {if $.foreach.keys.first}checked{/if}>
-                                Use this key for test requests:
-                            </label>
-                        </div>
-                    {/if*}
-                    <article class="key key-{$Key->Status} {if $.foreach.keys.first}key-in-use{/if}" data-key="{$Key->Key}">
+                    <article class="key key-{$Key->Status}" data-key="{$Key->Key}" id="{unique_dom_id}keys/{$Key->Key}{/unique_dom_id}">
                         <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                         <div class="details">
                             <header>
@@ -219,7 +211,6 @@
                         </div>
                         <footer>
                             {if $Key->Status == 'active'}
-                                <a class="button {if $.foreach.keys.first}disabled{/if}" href="">Use</a>
                                 {if $KeyUser->Role == 'owner'}
                                     <a class="button" href="{$Key->getURL()}/share">Share</a>
                                     <a class="button destructive" href="{$Key->getURL()}/revoke">Revoke</a>
