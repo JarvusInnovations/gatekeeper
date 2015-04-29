@@ -70,8 +70,8 @@ Ext.define('Site.page.Status', {
 
         Ext.Ajax.request({
             method: 'GET',
-//            url: '/status/cache',
-            url: 'http://developer.phila.gov/status/cache',
+            url: '/status/cache',
+//            url: 'http://developer.phila.gov/status/cache',
             withCredentials: true,
             headers: {
                 Accept: 'application/json'
@@ -120,8 +120,8 @@ Ext.define('Site.page.Status', {
 
         Ext.Ajax.request({
             method: 'GET',
-//            url: '/metrics/endpoints-historic',
-            url: 'http://developer.phila.gov/metrics/endpoints-historic',
+            url: '/metrics/endpoints-historic',
+//            url: 'http://developer.phila.gov/metrics/endpoints-historic',
             withCredentials: true,
             params: {
                 metrics: 'requests',

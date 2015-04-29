@@ -7,10 +7,7 @@
     
     <script>
         window.SiteEnvironment = window.SiteEnvironment || { };
-        {*window.SiteEnvironment.gkEndpoints = {JSON::translateObjects(Gatekeeper\Endpoints\Endpoint::getAll(), true)|json_encode};*}
-        {literal}
-        window.SiteEnvironment.gkEndpoints = [{"ID":34,"Title":"Polling Places"},{"ID":32,"Title":"ULRS Rest"},{"ID":31,"Title":"OPA Property Data"},{"ID":30,"Title":"OPA Property Data (Staging)"},{"ID":29,"Title":"ULRS Rest Stage"},{"ID":28,"Title":"Open 311 (Prod)"},{"ID":27,"Title":"Open 311 (Staging)"},{"ID":26,"Title":"Open 311 (Test)"},{"ID":25,"Title":"ArcGIS"},{"ID":24,"Title":"Payments"},{"ID":23,"Title":"L&I Legacy"},{"ID":22,"Title":"GateKeeper Test: Status"},{"ID":21,"Title":"L&I Release (staging)"},{"ID":20,"Title":"Real Estate Tax (staging)"},{"ID":19,"Title":"Authentication Service (staging)"},{"ID":18,"Title":"L&I Beta (staging)"},{"ID":16,"Title":"Authentication Service"},{"ID":15,"Title":"Part I Crime Incidents"},{"ID":14,"Title":"ULRS311"},{"ID":8,"Title":"L&I Release"},{"ID":6,"Title":"PHL Flight Info API"},{"ID":3,"Title":"L&I Beta"},{"ID":2,"Title":"OPA Property Data"}];
-        {/literal}
+        window.SiteEnvironment.gkEndpoints = {JSON::translateObjects(Gatekeeper\Endpoints\Endpoint::getAll(), true)|json_encode};
     </script>
 
     {if !$.get.jsdebug}
@@ -30,8 +27,6 @@
     <header class="page-header">
         <h2 class="header-title">System Status (Demo)</h2>
     </header>
-
-    <p><strong>These charts are currently hard-wired to pull data from developer.phila.gov to provide a realistic demonstration &mdash; ensure you're logged into a staff account at <a href="http://developer.phila.gov" target="_blank">http://developer.phila.gov</a></strong></p>
 
     <section id="cache-status">
         <h3>Cache status</h3>
