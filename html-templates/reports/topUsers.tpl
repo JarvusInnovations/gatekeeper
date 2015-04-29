@@ -50,7 +50,7 @@
             <tr>
                 <td class="col-user">
                     {if $result.UserType == 'ip'}
-                        IP Address: <strong>{$result.UserIdentifier}</strong>
+                        IP Address: <strong><a href="/transactions?ip={$result.UserIdentifier|escape:url}">{$result.UserIdentifier}</a></strong>
                     {else}
                         Key: <strong>{apiKey $result.UserIdentifier}</strong>
                     {/if}
