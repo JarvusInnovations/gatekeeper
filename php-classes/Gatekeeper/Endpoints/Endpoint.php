@@ -407,7 +407,7 @@ class Endpoint extends ActiveRecord
         $swagger['schemes'] = ['http'];
 
         if (Site::getConfig('ssl')) {
-            array_unshift($swagger['schemas'], 'https');
+            array_unshift($swagger['schemes'], 'https');
         }
 
         if (empty($swagger['info'])) {
