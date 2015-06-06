@@ -300,7 +300,7 @@ Ext.define('Site.page.Endpoints', {
             endpoint.primaryValueEl.update(
                 primaryValueRenderer(mode == 'requests' ? requests : bytes)
             );
-            endpoint.primaryUnitEl.update(mode);
+            endpoint.primaryUnitEl.update(mode + ' / hour');
 
             // update response time column
             responseTime = metrics.responseTime;
