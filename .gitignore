@@ -1,0 +1,6 @@
+# ignore emergence metadata directories
+.emergence/
+
+# exclude built files from source control
+/site-root/js/pages/
+/site-root/css/
