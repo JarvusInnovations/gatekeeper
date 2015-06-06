@@ -90,6 +90,35 @@
         <input type="submit" value="Save Rewrites">
     </form>
 
+{*
+    <section class="page-section" id="endpoint-categories">
+        <h3>Categories</h3>
+{dump $Endpoint->Categories}
+
+        <ul>
+            {foreach item=Category from=$Endpoint->Categories}
+                <li>{endpoint $Endpoint}&nbsp;<a href="/keys/{$Key->Key}/endpoints/{$Endpoint->ID}/remove" class="button destructive tiny">Remove</a></li>
+            {foreachelse}
+                <li><em>No categories added yet</em></li>
+            {/foreach}
+            {$availableCategories = $Endpoint->getAvailableCategories()}
+            {if count($availableCategories)}
+                <li>
+                    <form action="{$Endpoint->getUrl('/categories')}" method="POST">
+                        <select name="CategoryID" class="field-control inline">
+                            <option value="">Select category</option>
+                            {foreach item=Category from=$availableCategories}
+                                <option value="{$Endpoint->ID}">{$Category->Title|escape} v{$Endpoint->Version|escape}</option>
+                            {/foreach}
+                        </select>
+                        <input type="submit" value="Add">
+                    </form>
+                </li>
+            {/if}
+        </ul>
+    </section>
+*}
+
     {if $Endpoint->CachingEnabled}
     <section class="page-section" id="endpoint-cache">
         <table>

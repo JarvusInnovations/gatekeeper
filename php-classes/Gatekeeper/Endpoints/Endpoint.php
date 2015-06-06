@@ -12,6 +12,7 @@ use Emergence\People\IPerson;
 use Gatekeeper\Gatekeeper;
 use Gatekeeper\Metrics\Metrics;
 use Gatekeeper\Alerts\AbstractAlert;
+#use Emergence\Categories\Category;
 use Symfony\Component\Yaml\Yaml;
 
 class Endpoint extends ActiveRecord
@@ -489,4 +490,10 @@ class Endpoint extends ActiveRecord
             'PersonID' => $Person->ID
         ]);
     }
+#    public function getAvailableCategories()
+#    {
+#        $categories = Category::getAll();
+#
+#        \Debug::dumpVar($categories);
+#    }
 }
