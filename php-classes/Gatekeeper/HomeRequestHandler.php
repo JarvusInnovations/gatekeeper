@@ -22,22 +22,26 @@ class HomeRequestHandler extends \RequestHandler
     {
         // get request totals for trailing week
         if (false === ($weeklyRequestsByEndpoint = Cache::fetch('endpoints-requests-week'))) {
-            $weeklyRequestsByEndpoint = array_map('intval', DB::valuesTable(
-                'EndpointID',
-                'requests',
-                'SELECT'
-                .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
-                .'  SUM(Value) AS requests'
-                .' FROM `%s`'
-                .' WHERE'
-                .'  `Timestamp` BETWEEN DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK) AND CURRENT_TIMESTAMP AND '
-                .'  `Key` LIKE "endpoints/%%" AND'
-                .'  `Key` REGEXP "^endpoints/[[:digit:]]+/requests$"'
-                .' GROUP BY EndpointID',
-                [
-                    MetricSample::$tableName
-                ]
-            ));
+            try {
+                $weeklyRequestsByEndpoint = array_map('intval', DB::valuesTable(
+                    'EndpointID',
+                    'requests',
+                    'SELECT'
+                    .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
+                    .'  SUM(Value) AS requests'
+                    .' FROM `%s`'
+                    .' WHERE'
+                    .'  `Timestamp` BETWEEN DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 WEEK) AND CURRENT_TIMESTAMP AND '
+                    .'  `Key` LIKE "endpoints/%%" AND'
+                    .'  `Key` REGEXP "^endpoints/[[:digit:]]+/requests$"'
+                    .' GROUP BY EndpointID',
+                    [
+                        MetricSample::$tableName
+                    ]
+                ));
+            } catch (TableNotFoundException $e) {
+                $weeklyRequestsByEndpoint = [];
+            }
 
             Cache::store('endpoints-requests-week', $weeklyRequestsByEndpoint, static::$popularityTTL);
         }
