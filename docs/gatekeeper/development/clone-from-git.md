@@ -1,4 +1,4 @@
-# Clone Gatkeeper from git
+# Clone Gatekeeper from git
 This guide is for developers who want to work on Gatekeeper's core code. It will walk you through
 setting up a fresh site instance and cloning a version of Gatekeeper into it from a remote git
 repository.
