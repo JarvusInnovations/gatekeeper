@@ -38,4 +38,9 @@ class Subscription extends \ActiveRecord
             'unique' => true
         ]
     ];
+
+    public static $dynamicFields = [
+        'Endpoint',
+        'Person'
+    ];
 }

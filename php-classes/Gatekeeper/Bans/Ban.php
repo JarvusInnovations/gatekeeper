@@ -43,6 +43,10 @@ class Ban extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Key'
+    ];
+
     public static $validators = [
         'ExpirationDate' => [
             'validator' => 'datetime',

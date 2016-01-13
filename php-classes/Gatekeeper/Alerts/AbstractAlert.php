@@ -68,6 +68,11 @@ abstract class AbstractAlert extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Acknowledger',
+        'Endpoint'
+    ];
+
     public function getDisplayType()
     {
         return static::$displayType ? static::$displayType : $this->Class;

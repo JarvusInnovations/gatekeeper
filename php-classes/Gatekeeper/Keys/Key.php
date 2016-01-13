@@ -52,6 +52,10 @@ class Key extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Endpoints'
+    ];
+
     public static $validators = [
         'OwnerName' => [
             'minlength' => 2
