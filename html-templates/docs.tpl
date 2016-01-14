@@ -136,7 +136,7 @@
 
             <div class="markdown">{$info.description|escape|markdown}</div>
 
-            <section class="page-section" id="keys">
+            <section class="page-section cardlist" id="keys">
                 <header class="section-header">
                     <h2 class="header-title">API Keys</h2>
                 </header>
@@ -186,7 +186,7 @@
                         ,callsDayAvg = $Key->getMetric(calls-day-avg)
                         ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
                     )}
-                    <article class="key key-{$Key->Status}" data-key="{$Key->Key}" id="{unique_dom_id}keys/{$Key->Key}{/unique_dom_id}">
+                    <article class="key cardlist-item key-{$Key->Status}" data-key="{$Key->Key}" id="{unique_dom_id}keys/{$Key->Key}{/unique_dom_id}">
                         <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                         <div class="details">
                             <header>

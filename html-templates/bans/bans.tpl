@@ -22,10 +22,10 @@
         </label>
     </form>
 
-    <section class="bans">
+    <section class="bans cardlist">
 
         {foreach item=Ban from=$data}
-            <article class="ban">
+            <article class="ban cardlist-item">
                 <div class="details">
                     <header>
                         <h3 class="title">

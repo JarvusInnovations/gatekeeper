@@ -1,10 +1,7 @@
 .keys {
-    @extend %cardlist !optional;
 }
 
 .key {
-    @extend %cardlist-item;
-
     &.key-in-use {
         background-color: tint($link-color, 90%);
         border-color: $link-color;
