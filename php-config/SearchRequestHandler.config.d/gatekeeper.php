@@ -1,29 +1,6 @@
 <?php
 
 if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
-    SearchRequestHandler::$searchClasses[Emergence\People\User::class] = [
-        'fields' => [
-            [
-                'field' => 'FirstName',
-                'method' => 'like'
-            ],
-            [
-                'field' => 'LastName',
-                'method' => 'like'
-            ],
-            [
-                'field' => 'Username',
-                'method' => 'like'
-            ],
-            [
-                'field' => 'FullName',
-                'method' => 'sql',
-                'sql' => 'CONCAT(FirstName," ",LastName) = "%s"'
-            ]
-        ],
-        'conditions' => ['AccountLevel != "Deleted"']
-    ];
-
     SearchRequestHandler::$searchClasses[Gatekeeper\Endpoints\Endpoint::class] = [
         'fields' => [
             [
