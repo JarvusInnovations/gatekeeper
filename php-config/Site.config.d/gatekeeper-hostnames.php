@@ -1,9 +1,5 @@
 <?php
 
-Site::$skipSessionPaths[] = 'api.php';
-Site::$skipSessionPaths[] = 'test-api/cachable.php';
-Site::$skipSessionPaths[] = 'test-api/status.php';
-
 if (
     Gatekeeper\Gatekeeper::$apiHostname &&
     !empty($_SERVER['HTTP_HOST']) &&
