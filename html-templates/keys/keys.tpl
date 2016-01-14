@@ -33,7 +33,8 @@
                 </div>
 
                 <div class="details">
-                    <div class="info internal-url">
+                    <div class="info contact">
+                        Contact:
                         {if $Key->ContactEmail}
                             {$recipient = $Key->ContactEmail}
                             {if $Key->ContactName}
@@ -46,7 +47,9 @@
                         {/if}
                     </div>
                     <div class="buttons">
-                        <a class="button" href="{$Key->getURL('/edit')}">Edit</a>
+                        <a class="button" href="{$Key->getUrl('/edit')}">Edit</a>
+                        <a class="button" href="/bans/create?KeyID={$Key->Key}">Suspend</a>
+                        <a class="button" href="{$Key->getUrl()}#key-log">View Log</a>
                     </div>
                 </div>
             </article>
