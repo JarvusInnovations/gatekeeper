@@ -1,12 +1,14 @@
 /*jshint undef: true, unused: true, browser: true, curly: true*/
-/*global Ext*/
+/*global Ext, Jarvus*/
+// @require-package jarvus-highlighter
 // @abstract
 Ext.define('Site.abstract.TrafficStackPage', {
     requires: [
         'Site.Common',
         'Ext.util.Collection',
         'Ext.Ajax',
-        'Ext.util.Format'
+        'Ext.util.Format',
+        'Jarvus.util.Highlighter'
     ],
 
     responseTimeClsLevels: {
@@ -184,10 +186,20 @@ Ext.define('Site.abstract.TrafficStackPage', {
 
     onFilterKeyUp: function(ev, t) {
         var query = t.value,
-            regexp = new RegExp(query, 'i');
+            regexp = new RegExp(query, 'i'),
+            rowEl, match;
 
         this.rows.each(function(row) {
-            row.el.setVisible(regexp.test(row.title));
+            rowEl = row.el;
+            match = query ? regexp.test(row.title) : true;
+
+            rowEl.setVisible(match);
+
+            Jarvus.util.Highlighter.removeHighlights(rowEl);
+
+            if (query && match) {
+                Jarvus.util.Highlighter.highlight(rowEl, query);
+            }
         });
     },
 

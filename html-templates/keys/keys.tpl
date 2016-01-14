@@ -58,7 +58,12 @@
 {block "js-bottom"}
     {$dwoo.parent}
 
-    {if !$.get.jsdebug}
+    {if $.get.jsdebug}
+        {sencha_bootstrap
+            patchLoader=false
+            packageRequirers=array('sencha-workspace/pages/src/abstract/TrafficStackPage.js', 'sencha-workspace/pages/src/pages/Keys.js')
+        }
+    {else}
         <script src="{Site::getVersionedRootUrl('js/pages/Keys.js')}"></script>
     {/if}
 
