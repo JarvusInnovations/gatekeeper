@@ -4,12 +4,17 @@ namespace Gatekeeper\Keys;
 
 use DB;
 use Cache;
+use Gatekeeper\Metrics\Metrics;
 use Gatekeeper\Endpoints\Endpoint;
 use Gatekeeper\Transactions\Transaction;
 
 class Key extends \ActiveRecord
 {
     public static $metricTTL = 60;
+    protected $_metricsCache = [
+        'counters' => [],
+        'averages' => []
+    ];
 
     // ActiveRecord configuration
     public static $collectionRoute = '/keys';
@@ -91,6 +96,24 @@ class Key extends \ActiveRecord
         }
 
         parent::save($deep);
+    }
+
+    public function getCounterMetric($counterName)
+    {
+        if (!array_key_exists($counterName, $this->_metricsCache['counters'])) {
+            $this->_metricsCache['counters'][$counterName] = Metrics::estimateCounter("users/key:$this->ID/$counterName");
+        }
+
+        return $this->_metricsCache['counters'][$counterName];
+    }
+
+    public function getAverageMetric($averageName, $counterName)
+    {
+        if (!array_key_exists($averageName, $this->_metricsCache['averages'])) {
+            $this->_metricsCache['averages'][$averageName] = Metrics::estimateAverage("users/key:$this->ID/$averageName", "users/key:$this->ID/$counterName");
+        }
+
+        return $this->_metricsCache['averages'][$averageName];
     }
 
     public function getUnlinkedEndpoints()

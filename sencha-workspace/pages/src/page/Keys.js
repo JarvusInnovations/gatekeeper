@@ -4,6 +4,6 @@ Ext.define('Site.page.Keys', {
     extend: 'Site.abstract.TrafficStackPage',
     singleton: true,
 
-    idProperty: 'EndpointID',
-    metricsUrl: '/metrics/endpoints-current'
+    idProperty: 'KeyID',
+    metricsUrl: '/metrics/keys-current'
 });
