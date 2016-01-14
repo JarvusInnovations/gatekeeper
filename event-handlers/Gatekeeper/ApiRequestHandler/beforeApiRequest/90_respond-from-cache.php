@@ -22,10 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $Endpoint->CachingEnabled) {
             foreach ($cachedResponse['headers'] AS $header) {
                 header($header);
             }
+
             print($cachedResponse['body']);
-            
+
             $_EVENT['metrics']['endpointResponsesCached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/responsesCached");
-            $_EVENT['metrics']['endpointBytesCached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/bytesCached", strlen($cachedResponse['body']));
+            $_EVENT['metrics']['endpointBytesCached'] = Metrics::appendCounter("endpoints/$Endpoint->ID/bytesCached", $cachedResponse['bodyLength']);
+
             \Site::finishRequest();
         }
     }
