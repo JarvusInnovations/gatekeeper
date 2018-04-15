@@ -1,5 +1,7 @@
 const semver = require('semver');
+const fs = require('mz/fs');
 const child_process = require('child_process');
+
 const logger = (() => {
     const emptyFn = function () {};
 
@@ -33,6 +35,27 @@ class Git {
 
         this.version = null;
     }
+
+    /**
+     * @static
+     * Gets complete path to git directory
+     */
+    static async getGitDirFromEnvironment() {
+        const gitDir = await Git.prototype.exec('rev-parse', { 'git-dir': true });
+
+        return await fs.realpath(gitDir);
+    }
+
+
+    /**
+     * @static
+     * Gets complete path to working tree
+     */
+    static async getWorkTreeFromEnvironment() {
+        const workTree = await Git.prototype.exec('rev-parse', { 'show-toplevel': true });
+
+        return await workTree ? fs.realpath(workTree) : Promise.resolve(null);
+    };
 
     /**
      * Get the version of the hab binary
@@ -282,3 +305,7 @@ module.exports = function () {
 
 // expose default instance as prototype of exported exec function
 Object.setPrototypeOf(module.exports, git);
+
+
+// expose class prototype
+module.exports.Git = Git;
