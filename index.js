@@ -26,9 +26,8 @@ const logger = (() => {
  * available in the host environment
  */
 class Git {
-
-    constructor ({ command = 'git', gitDir = null, workTree = null} = {}) {
-        this.command = command;
+    constructor ({ command = null, gitDir = null, workTree = null } = {}) {
+        this.command = command || this.command;
         this.gitDir = gitDir;
         this.workTree = workTree;
 
@@ -229,14 +228,12 @@ class Git {
     }
 }
 
-const git = new Git();
 
-module.exports = function () {
-    return git.exec.apply(git, arguments);
-};
+// set default git command
+Git.prototype.command = 'git';
 
-Object.setPrototypeOf(module.exports, git);
 
+// add first-class methods for common git subcommands
 [
     'add',
     'bisect',
@@ -271,3 +268,17 @@ Object.setPrototypeOf(module.exports, git);
         return git.exec.apply(git, args);
     }
 });
+
+
+// create a default instance
+const git = new Git();
+
+
+// expose exec function for default instance as export
+module.exports = function () {
+    return git.exec.apply(git, arguments);
+};
+
+
+// expose default instance as prototype of exported exec function
+Object.setPrototypeOf(module.exports, git);
