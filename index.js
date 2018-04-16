@@ -257,6 +257,29 @@ class Git {
                 });
             }
 
+            let capturePromise;
+            process.captureOutput = () => {
+                if (!capturePromise) {
+                    capturePromise = new Promise((resolve, reject) => {
+                        let output = '';
+
+                        process.stdout.on('data', data => {
+                            output += data;
+                        });
+
+                        process.on('exit', code => {
+                            if (code == 0) {
+                                resolve(output);
+                            } else {
+                                reject({ output, code });
+                            }
+                        });
+                    });
+                }
+
+                return capturePromise;
+            };
+
             return process;
         } else if (execOptions.shell) {
             return new Promise((resolve, reject) => {
