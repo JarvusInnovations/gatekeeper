@@ -104,9 +104,13 @@ class Git {
      * @returns {Promise}
      */
     async exec (...args) {
+        let command;
         const commandArgs = [];
         const commandEnv = {};
-        const execOptions = {};
+        const execOptions = {
+            gitDir: this.gitDir,
+            workTree: this.workTree
+        };
 
         logger.debug('building command', args);
 
@@ -117,12 +121,34 @@ class Git {
         while (arg = args.shift()) {
             switch (typeof arg) {
                 case 'string':
+                    if (!command) {
+                        command = arg; // the first string is the command
+                        break;
+                    }
+                    // fall through and get pushed with numbers
                 case 'number':
                     commandArgs.push(arg.toString());
                     break;
                 case 'object':
 
-                    // extract any exec options
+                    // extract any git options
+                    if ('$gitDir' in arg) {
+                        execOptions.gitDir = arg.$gitDir;
+                        delete arg.$gitDir;
+                    }
+
+                    if ('$workTree' in arg) {
+                        execOptions.workTree = arg.$workTree;
+                        delete arg.$workTree;
+                    }
+
+                    if ('$indexFile' in args) {
+                        gitEnv.GIT_INDEX_FILE = args.$indexFile;
+                        delete args.$indexFile;
+                    }
+
+
+                    // extract any general execution options
                     if ('$nullOnError' in arg) {
                         execOptions.nullOnError = arg.$nullOnError;
                         delete arg.$nullOnError;
@@ -160,24 +186,7 @@ class Git {
 
 
                     // any remaiing elements are args/options
-                    for (let key in arg) {
-                        const value = arg[key];
-
-                        if (key.length == 1) {
-                            if (value === true) {
-                                commandArgs.push('-'+key);
-                            } else if (value !== false) {
-                                commandArgs.push('-'+key, value);
-                            }
-                        } else {
-                            if (value === true) {
-                                commandArgs.push('--'+key);
-                            } else if (value !== false) {
-                                commandArgs.push('--'+key, value);
-                            }
-                        }
-                    }
-
+                    commandArgs.push.apply(commandArgs, Array.isArray(arg) ? arg : cliOptionsToArgs(arg));
                     break;
                 default:
                     throw 'unhandled exec argument';
@@ -185,12 +194,34 @@ class Git {
         }
 
 
-        // prepare options
+        // prefixs args with command
+        if (command) {
+            commandArgs.unshift(command);
+        }
+
+
+
+        // prefix args with git-level options
+        const gitOptions = {};
+
+        if (execOptions.gitDir) {
+            gitOptions['git-dir'] = execOptions.gitDir;
+        }
+
+        if (execOptions.workTree) {
+            gitOptions['work-tree'] = execOptions.workTree;
+        }
+
+        commandArgs.unshift.apply(commandArgs, cliOptionsToArgs(gitOptions));
+
+
+        // prepare environment
         if (execOptions.preserveEnv !== false) {
             Object.setPrototypeOf(commandEnv, process.env);
         }
 
         execOptions.env = commandEnv;
+
 
 
         // execute git command
@@ -309,3 +340,38 @@ Object.setPrototypeOf(module.exports, git);
 
 // expose class prototype
 module.exports.Git = Git;
+
+
+// private utilities
+/**
+ * @private
+ * Convert an options object into CLI arguments string
+ */
+function cliOptionsToArgs(options) {
+    var args = [],
+        k, val;
+
+    for (k in options) {
+        if (k[0] == '_') {
+            continue;
+        }
+
+        val = options[k];
+
+        if (k.length == 1) {
+            if (val === true) {
+                args.push('-'+k);
+            } else if (val !== false) {
+                args.push('-'+k, val);
+            }
+        } else {
+            if (val === true) {
+                args.push('--'+k);
+            } else if (val !== false) {
+                args.push('--'+k+'='+val);
+            }
+        }
+    }
+
+    return args;
+}
