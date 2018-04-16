@@ -10,18 +10,17 @@ const logger = (() => {
 
         error: emptyFn,
         warn: emptyFn,
+        help: emptyFn,
+        data: emptyFn,
         info: emptyFn,
-        verbose: emptyFn,
         debug: emptyFn,
+        prompt: emptyFn,
+        verbose: emptyFn,
+        input: emptyFn,
         silly: emptyFn
     };
 })();
 
-/**
- * TODO:
- * - [ ] Port cliOptionsToArgs
- * - [ ] Add support for gitOptions
- */
 
 /**
  * Represents and provides an interface to an executable git binary
@@ -111,8 +110,6 @@ class Git {
             gitDir: this.gitDir,
             workTree: this.workTree
         };
-
-        logger.debug('building command', args);
 
 
         // scan through all arguments
