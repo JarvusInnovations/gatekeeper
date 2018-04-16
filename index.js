@@ -346,11 +346,13 @@ Git.prototype.command = 'git';
     'remote',
     'reset',
     'rm',
+    'show-ref',
     'show',
     'stash',
     'status',
     'submodule',
     'tag',
+    'update-ref'
 ].forEach(command => {
     const method = command.replace(/-([a-zA-Z])/, (match, letter) => letter.toUpperCase());
 
