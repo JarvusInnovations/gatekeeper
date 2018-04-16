@@ -292,6 +292,7 @@ Git.prototype.command = 'git';
     'add',
     'bisect',
     'branch',
+    'cat-file',
     'checkout',
     'clean',
     'clone',
@@ -300,6 +301,7 @@ Git.prototype.command = 'git';
     'diff',
     'fetch',
     'grep',
+    'hash-object',
     'init',
     'log',
     'merge',
@@ -316,9 +318,11 @@ Git.prototype.command = 'git';
     'status',
     'submodule',
     'tag',
-].forEach(method => {
+].forEach(command => {
+    const method = command.replace(/-([a-zA-Z])/, (match, letter) => letter.toUpperCase());
+
     Git.prototype[method] = function(...args) {
-        args.unshift(method);
+        args.unshift(command);
         return git.exec.apply(git, args);
     }
 });
