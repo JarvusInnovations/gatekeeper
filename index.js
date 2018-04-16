@@ -108,7 +108,8 @@ class Git {
         const commandEnv = {};
         const execOptions = {
             gitDir: this.gitDir,
-            workTree: this.workTree
+            workTree: this.workTree,
+            maxBuffer: 1024 * 1024 // 1 MB output buffer
         };
 
 
