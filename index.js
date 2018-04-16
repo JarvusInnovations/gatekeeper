@@ -154,6 +154,16 @@ class Git {
                         delete arg.$nullOnError;
                     }
 
+                    if ('$spawn' in arg) {
+                        execOptions.spawn = arg.$spawn;
+                        delete arg.$spawn;
+                    }
+
+                    if ('$shell' in arg) {
+                        execOptions.shell = arg.$shell;
+                        delete arg.$shell;
+                    }
+
                     if ('$env' in arg) {
                         for (let key in arg.$env) {
                             commandEnv[key] = arg.$options[key];
