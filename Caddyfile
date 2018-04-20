@@ -1,0 +1,10 @@
+localhost:2015
+
+errors errors.log
+
+fastcgi / 127.0.0.1:9123 {
+    root /src
+    index env.php
+    env SITE_ROOT /src
+    env SCRIPT_FILENAME /src/php-bootstrap/web.php
+}
