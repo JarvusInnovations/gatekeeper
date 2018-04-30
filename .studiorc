@@ -2,7 +2,3 @@
 start-php() {
     hab start --config-from /src/services/php5/ emergence/php5
 }
-
-start-caddy() {
-    hab pkg exec core/caddy caddy &
-}
