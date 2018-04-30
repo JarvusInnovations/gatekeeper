@@ -2,7 +2,7 @@
 
 exec 2>&1
 
-exec php-fpm \
+exec {{pkgPathFor "emergence/php5"}}/sbin/php-fpm \
     --nodaemonize \
     --fpm-config {{pkg.svc_config_path}}/php-fpm.conf \
     -c {{pkg.svc_config_path}}/php.ini

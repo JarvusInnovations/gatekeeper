@@ -4,8 +4,8 @@
 
  - [X] Create services/http
     - [ ] Provide guide/command to run in studio
- - [ ] Rename services/php5 to services/app
-    - [ ] Use emergence/php5 as runtime dep instead of duplicating build plan
+ - [X] Rename services/php5 to services/app
+    - [X] Use emergence/php5 as runtime dep instead of duplicating build plan
  - [ ] Generate web.php with config
  - [ ] Get app working with minimal php-bootstrap changes
  - [ ] Create services/composite
