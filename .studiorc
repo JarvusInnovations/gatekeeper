@@ -1,4 +1,31 @@
 
-start-php() {
-    hab start --config-from /src/services/php5/ emergence/php5
+echo
+echo "--> Setting up development commands..."
+
+
+echo "    * Use 'build-all' to build all packages"
+build-all() {
+    pushd /src > /dev/null
+
+    build services/app
+    build services/http
+    build
+
+    popd > /dev/null
 }
+
+echo "    * Use 'start-all' to start all services"
+start-all() {
+    mkdir -p /hab/user/gatekeeper-http/config
+    echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
+    hab start jarvus/gatekeeper
+}
+
+echo "    * Use 'stop-all' to stop all services"
+stop-all() {
+    hab stop jarvus/gatekeeper
+}
+
+
+# final blank line
+echo
