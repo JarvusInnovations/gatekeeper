@@ -26,3 +26,6 @@
     - Stop/start service
     - -- config-from useful when testing just changes to app nginx config, but build needed to update nginx version after install
   - set port at `/hab/user/gatekeeper-http/config/user.toml`
+- Create app plan
+  - Use existing plan as runtime dep
+- Create composite plan
