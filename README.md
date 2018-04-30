@@ -8,7 +8,8 @@
     - [X] Use emergence/php5 as runtime dep instead of duplicating build plan
  - [ ] Generate web.php with config
  - [ ] Get app working with minimal php-bootstrap changes
- - [ ] Create services/composite
+ - [X] Create composite service
+   - [ ] Explore binding app and http services
 
 ## Journal
 
