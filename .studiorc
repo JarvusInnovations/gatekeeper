@@ -42,6 +42,18 @@ build-composite() {
 }
 
 
+echo "    * Use 'config-all' to apply runtime test config to all services"
+config-all() {
+    config-app
+    config-http
+}
+
+echo "    * Use 'config-app' to apply runtime test config to the app service"
+config-app() {
+    mkdir -p /hab/user/gatekeeper-app/config
+    echo -e "root = \"/src\"" > /hab/user/gatekeeper-app/config/user.toml
+}
+
 echo "    * Use 'config-http' to apply runtime test config to the http service"
 config-http() {
     mkdir -p /hab/user/gatekeeper-http/config
