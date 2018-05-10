@@ -7,6 +7,11 @@ pkg_deps=(
   emergence/php5
 )
 
+
+pkg_binds_optional=(
+  [database]="port username password"
+)
+
 pkg_exports=(
   [port]=network.port
   [entrypoint]=entrypoint

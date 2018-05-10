@@ -1,5 +1,7 @@
 root = ""
-entrypoint = "php-bootstrap/web.php"
 
 [network]
 port = 9123
+
+[database]
+name = "gatekeeper"

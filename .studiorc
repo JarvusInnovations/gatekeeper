@@ -74,7 +74,7 @@ start-app() {
 
 echo "    * Use 'start-app-debug' to start just app service with config from /src"
 start-app-debug() {
-    hab start jarvus/gatekeeper-app --config-from /src/services/app/
+    hab start jarvus/gatekeeper-app --config-from /src/services/app/ --bind database:mysql.default
 }
 
 echo "    * Use 'start-http' to start just http service"
