@@ -60,6 +60,12 @@ config-http() {
     echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
 }
 
+echo "    * Use 'config-mysql' to apply runtime test config to a mysql service"
+config-mysql() {
+    mkdir -p /hab/user/mysql/config
+    echo -e "app_username = \"gatekeeper\"\napp_password = \"qZDxL1Ocm0\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
+}
+
 
 echo "    * Use 'start-all' to start all services via composite"
 start-composite() {
@@ -88,6 +94,12 @@ start-http-debug() {
     hab start jarvus/gatekeeper-http --config-from /src/services/http/ --bind app:gatekeeper-app.default
 }
 
+echo "    * Use 'start-mysql-debug' to start just mysql service"
+start-mysql-debug() {
+    config-mysql
+    hab start core/mysql
+}
+
 
 echo "    * Use 'stop-all' to stop all services"
 stop-composite() {
@@ -102,6 +114,11 @@ stop-app() {
 echo "    * Use 'stop-http' to stop just http service"
 stop-http() {
     hab stop jarvus/gatekeeper-http
+}
+
+echo "    * Use 'stop-mysql' to stop just mysql service"
+stop-mysql() {
+    hab stop core/mysql
 }
 
 

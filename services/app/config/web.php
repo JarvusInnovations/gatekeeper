@@ -12,7 +12,7 @@ Site::initialize($siteRoot, $_SERVER['HTTP_HOST'], [
     {{~#eachAlive bind.database.members as |member|~}}
         {{~#if @first}}
     'database' => [
-        'ip' => '{{member.sys.ip}}',
+        'host' => '{{member.sys.ip}}',
         'port' => '{{member.cfg.port}}',
         'username' => '{{member.cfg.username}}',
         'password' => '{{member.cfg.password}}',
