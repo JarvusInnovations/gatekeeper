@@ -14,16 +14,82 @@ build-all() {
     popd > /dev/null
 }
 
-echo "    * Use 'start-all' to start all services"
-start-all() {
+echo "    * Use 'build-app' to build just the app package"
+build-app() {
+    pushd /src > /dev/null
+
+    build services/app
+
+    popd > /dev/null
+}
+
+echo "    * Use 'build-http' to build just the http package"
+build-http() {
+    pushd /src > /dev/null
+
+    build services/http
+
+    popd > /dev/null
+}
+
+echo "    * Use 'build-composite' to build just the composite package"
+build-composite() {
+    pushd /src > /dev/null
+
+    build
+
+    popd > /dev/null
+}
+
+
+echo "    * Use 'config-http' to apply runtime test config to the http service"
+config-http() {
     mkdir -p /hab/user/gatekeeper-http/config
     echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
+}
+
+
+echo "    * Use 'start-all' to start all services via composite"
+start-all() {
+    config-http
     hab start jarvus/gatekeeper
 }
+
+echo "    * Use 'start-app' to start just app service"
+start-app() {
+    hab start jarvus/gatekeeper-app
+}
+
+echo "    * Use 'start-app-debug' to start just app service with config from /src"
+start-app-debug() {
+    hab start jarvus/gatekeeper-app --config-from /src/services/app/
+}
+
+echo "    * Use 'start-http' to start just http service"
+start-http() {
+    hab start jarvus/gatekeeper-http --bind app:gatekeeper-app.default
+}
+
+echo "    * Use 'start-http-debug' to start just http service with config from /src"
+start-http-debug() {
+    config-http
+    hab start jarvus/gatekeeper-http --config-from /src/services/http/ --bind app:gatekeeper-app.default
+}
+
 
 echo "    * Use 'stop-all' to stop all services"
 stop-all() {
     hab stop jarvus/gatekeeper
+}
+
+echo "    * Use 'stop-app' to stop just app service"
+stop-app() {
+    hab stop jarvus/gatekeeper-app
+}
+
+echo "    * Use 'stop-http' to stop just http service"
+stop-http() {
+    hab stop jarvus/gatekeeper-http
 }
 
 
