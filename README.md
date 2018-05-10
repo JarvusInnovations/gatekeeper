@@ -28,4 +28,13 @@
   - set port at `/hab/user/gatekeeper-http/config/user.toml`
 - Create app plan
   - Use existing plan as runtime dep
+- Connect with binding
 - Create composite plan
+  - Add binding
+- Create mysql plan
+
+## Potential improvements
+
+- Set SCRIPT_FILENAME path dynamically from app package
+  - Currently the http package derives it in order to set via nginx config
+- Let app connect to mysql over specific IP without mysql being bound to 0.0.0.0 by user
