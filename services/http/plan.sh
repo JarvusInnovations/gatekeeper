@@ -8,6 +8,11 @@ pkg_deps=(
 )
 
 
+pkg_binds=(
+  [app]="port"
+)
+
+
 do_build() {
   return 0
 }

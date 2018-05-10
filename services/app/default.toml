@@ -1,1 +1,5 @@
-listen = 9123
+root = ""
+entrypoint = "php-bootstrap/web.php"
+
+[network]
+port = 9123
