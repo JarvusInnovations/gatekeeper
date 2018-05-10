@@ -105,5 +105,14 @@ stop-http() {
 }
 
 
+# overall instructions
+echo
+echo "    For a complete studio debug environment:"
+echo "      config-all"
+echo "      build-all"
+echo "      start-app-debug"
+echo "      start-http-debug"
+
+
 # final blank line
 echo
