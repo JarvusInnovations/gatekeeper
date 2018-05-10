@@ -9,3 +9,7 @@ pkg_services=(
     jarvus/gatekeeper-app
     jarvus/gatekeeper-http
 )
+
+pkg_bind_map=(
+    [jarvus/gatekeeper-http]="app:jarvus/gatekeeper-app"
+)
