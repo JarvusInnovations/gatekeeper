@@ -50,7 +50,7 @@ config-http() {
 
 
 echo "    * Use 'start-all' to start all services via composite"
-start-all() {
+start-composite() {
     config-http
     hab start jarvus/gatekeeper
 }
@@ -78,7 +78,7 @@ start-http-debug() {
 
 
 echo "    * Use 'stop-all' to stop all services"
-stop-all() {
+stop-composite() {
     hab stop jarvus/gatekeeper
 }
 
