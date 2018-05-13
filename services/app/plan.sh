@@ -24,24 +24,11 @@ do_build() {
 }
 
 do_install() {
-  mkdir "${pkg_prefix}/site"
+  build_line "Copying core..."
+  cp -r "${PLAN_CONTEXT}/../../core" "${pkg_prefix}/core"
 
-
-  pushd "${PLAN_CONTEXT}/../../" > /dev/null
-
-  build_line "Copying sites files into ${pkg_prefix}/site/"
-  find . \
-    -maxdepth 1 -mindepth 1 \
-    -type d \
-    -not -name 'services' \
-    -not -name 'results' \
-    -not -name '.git' \
-    -exec cp -r '{}' "${pkg_prefix}/site/{}" \;
-
-  popd > /dev/null
-
-
-  return 0
+  build_line "Copying site..."
+  cp -r "${PLAN_CONTEXT}/../../site" "${pkg_prefix}/site"
 }
 
 do_strip() {
