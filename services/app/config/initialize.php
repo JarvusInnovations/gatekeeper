@@ -1,17 +1,13 @@
 <?php
 
 
-if (empty($_SERVER['SITE_ROOT'])) {
-    error_log('SITE_ROOT must be set in environment');
-    exit(1);
-}
-
-$siteRoot = $_SERVER['SITE_ROOT'];
-
+// determine root paths
+$coreRoot = '{{#if cfg.core.root}}{{ cfg.core.root }}{{else}}{{ pkg.path }}/core{{/if}}';
+$siteRoot = '{{#if cfg.site.root}}{{ cfg.site.root }}{{else}}{{ pkg.path }}/site{{/if}}';
 
 
 // load bootstrap PHP code
-require("${siteRoot}/php-bootstrap/bootstrap.inc.php");
+require("${coreRoot}/bootstrap.inc.php");
 
 
 // load core

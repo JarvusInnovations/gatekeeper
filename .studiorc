@@ -51,7 +51,7 @@ config-all() {
 echo "    * Use 'config-app' to apply runtime test config to the app service"
 config-app() {
     mkdir -p /hab/user/gatekeeper-app/config
-    echo -e "root = \"/src\"" > /hab/user/gatekeeper-app/config/user.toml
+    echo -e "[core]\nroot = \"/src/core\"\n\n[site]\nroot = \"/src/site\"" > /hab/user/gatekeeper-app/config/user.toml
 }
 
 echo "    * Use 'config-http' to apply runtime test config to the http service"

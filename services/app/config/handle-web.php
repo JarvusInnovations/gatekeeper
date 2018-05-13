@@ -2,7 +2,7 @@
 
 
 // initialize site
-require('./initialize.php');
+require('{{ pkg.svc_config_path }}/initialize.php');
 
 
 // dispatch request

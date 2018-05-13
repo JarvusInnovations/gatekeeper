@@ -1,3 +1,7 @@
+[core]
+root = ""
+
+[site]
 root = ""
 timezone = "America/New_York"
 
