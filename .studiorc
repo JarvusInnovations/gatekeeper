@@ -122,6 +122,12 @@ stop-mysql() {
 }
 
 
+echo "    * Use 'shell-mysql' to open a mysql shell for the studio mysql service"
+shell-mysql() {
+    hab pkg exec core/mysql mysql -u root -h 127.0.0.1
+}
+
+
 # overall instructions
 echo
 echo "    For a complete studio debug environment:"
