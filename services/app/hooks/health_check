@@ -1,0 +1,27 @@
+#!/bin/bash -e
+
+
+# test that php-fpm responds on path.ping
+
+{{#if cfg.path.ping}}
+    SCRIPT_NAME="{{ cfg.path.ping }}" \
+    SCRIPT_FILENAME="{{ cfg.path.ping }}" \
+    REQUEST_METHOD="GET" \
+        {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
+            -bind \
+            -connect {{ sys.ip }}:{{ cfg.network.port }} \
+        | grep pong
+{{/if}}
+
+
+# test that CLI can load configuration and connect to database
+
+SITE_ROOT="{{#if cfg.root}}{{cfg.root}}{{else}}{{ pkg.path }}/site{{/if}}" \
+    {{pkgPathFor "emergence/php5"}}/bin/php \
+        -d apc.enable_cli=on \
+        <<- END_OF_SCRIPT
+<?php
+
+require('{{ pkg.svc_config_path }}/initialize.php');
+
+END_OF_SCRIPT

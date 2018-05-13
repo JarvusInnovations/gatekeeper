@@ -5,6 +5,7 @@ pkg_maintainer="Chris Alfano <chris@jarv.us>"
 pkg_license=("AGPL-3.0")
 pkg_deps=(
   emergence/php5
+  jarvus/libfcgi
 )
 
 
