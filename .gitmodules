@@ -2,3 +2,7 @@
 	path = core
 	url = git@github.com:EmergencePlatform/php-core.git
 	branch = master
+[submodule "site"]
+	path = site
+	url = git@github.com:JarvusInnovations/gatekeeper-phila.git
+	branch = sites/gatekeeper.sandbox01.jarv.us
