@@ -3,13 +3,17 @@
 ## TODO
 
  - [X] Create services/http
-    - [ ] Provide guide/command to run in studio
+    - [X] Provide guide/command to run in studio
  - [X] Rename services/php5 to services/app
     - [X] Use emergence/php5 as runtime dep instead of duplicating build plan
- - [ ] Generate web.php with config
+ - [X] Generate web.php with config
  - [ ] Get app working with minimal php-bootstrap changes
  - [X] Create composite service
    - [ ] Explore binding app and http services
+ - [ ] Create composer package for core lib
+   - [ ] Include PSR logger interface
+   - [ ] Include whoops
+   - [ ] Include VarDumper
 
 ## Journal
 
