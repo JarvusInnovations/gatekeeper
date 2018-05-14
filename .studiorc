@@ -1,7 +1,25 @@
+echo
+echo "--> Installing useful packages for development..."
+hab pkg install core/composer emergence/php5
+hab pkg binlink core/composer composer
+hab pkg binlink emergence/php5 php
+
+
+echo
+echo "--> Configuring services for local development..."
+
+mkdir -p /hab/user/gatekeeper-app/config
+echo -e "[core]\nroot = \"/src/core\"\n\n[site]\nroot = \"/src/site\"" > /hab/user/gatekeeper-app/config/user.toml
+
+mkdir -p /hab/user/gatekeeper-http/config
+echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
+
+mkdir -p /hab/user/mysql/config
+echo -e "app_username = \"gatekeeper\"\napp_password = \"gatekeeper\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
+
 
 echo
 echo "--> Setting up development commands..."
-
 
 echo "    * Use 'build-all' to build all packages"
 build-all() {
@@ -42,32 +60,7 @@ build-composite() {
 }
 
 
-echo "    * Use 'config-all' to apply runtime test config to all services"
-config-all() {
-    config-app
-    config-http
-}
-
-echo "    * Use 'config-app' to apply runtime test config to the app service"
-config-app() {
-    mkdir -p /hab/user/gatekeeper-app/config
-    echo -e "[core]\nroot = \"/src/core\"\n\n[site]\nroot = \"/src/site\"" > /hab/user/gatekeeper-app/config/user.toml
-}
-
-echo "    * Use 'config-http' to apply runtime test config to the http service"
-config-http() {
-    mkdir -p /hab/user/gatekeeper-http/config
-    echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
-}
-
-echo "    * Use 'config-mysql' to apply runtime test config to a mysql service"
-config-mysql() {
-    mkdir -p /hab/user/mysql/config
-    echo -e "app_username = \"gatekeeper\"\napp_password = \"qZDxL1Ocm0\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
-}
-
-
-echo "    * Use 'start-all' to start all services via composite"
+echo "    * Use 'start-composite' to start all services via composite"
 start-composite() {
     config-http
     hab start jarvus/gatekeeper
@@ -101,7 +94,7 @@ start-mysql-debug() {
 }
 
 
-echo "    * Use 'stop-all' to stop all services"
+echo "    * Use 'stop-composite' to stop all services via composite"
 stop-composite() {
     hab stop jarvus/gatekeeper
 }
@@ -131,8 +124,8 @@ shell-mysql() {
 # overall instructions
 echo
 echo "    For a complete studio debug environment:"
-echo "      config-all"
 echo "      build-all"
+echo "      start-mysql-debug"
 echo "      start-app-debug"
 echo "      start-http-debug"
 
