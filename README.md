@@ -14,7 +14,9 @@
    - [ ] Include PSR logger interface
    - [X] Include whoops
    - [X] Include VarDumper
+ - [X] Clear ext frameworks from build
  - [ ] Add postfix service
+ - [ ] Add fcgi health check for status url if available
 
 ## Journal
 
@@ -37,6 +39,9 @@
 - Create composite plan
   - Add binding
 - Create mysql plan
+- Write `/hab/user` via `.studiorc`
+- Configure composer and psysh for studio
+- Create package for libfcgi and use with ping for FPM application health_check
 
 ## Potential improvements
 
