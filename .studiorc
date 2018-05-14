@@ -4,6 +4,34 @@ hab pkg install core/composer emergence/php5
 hab pkg binlink core/composer composer
 hab pkg binlink emergence/php5 php
 
+export COMPOSER_ALLOW_SUPERUSER=1
+
+composer g require \
+    symfony/console:^3 \
+    symfony/var-dumper:^3 \
+    nikic/php-parser:^3 \
+    psy/psysh:@stable
+
+sed -e "s#\#\!/usr/bin/env php#\#\!$(hab pkg path emergence/php5)/bin/php#" --in-place "/root/.composer/vendor/psy/psysh/bin/psysh"
+
+mkdir -p /root/.config/psysh
+cat > /root/.config/psysh/config.php <<- END_OF_SCRIPT
+<?php
+
+date_default_timezone_set('America/New_York');
+
+return [
+    'commands' => [
+        new \Psy\Command\ParseCommand,
+    ],
+
+    'defaultIncludes' => [
+        '/hab/svc/gatekeeper-app/config/initialize.php',
+    ]
+];
+
+END_OF_SCRIPT
+
 
 echo
 echo "--> Configuring services for local development..."
@@ -16,8 +44,6 @@ echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.tom
 
 mkdir -p /hab/user/mysql/config
 echo -e "app_username = \"gatekeeper\"\napp_password = \"gatekeeper\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
-
-export COMPOSER_ALLOW_SUPERUSER=1
 
 
 echo
@@ -125,6 +151,11 @@ echo
 echo "    * Use 'shell-mysql' to open a mysql shell for the studio mysql service"
 shell-mysql() {
     hab pkg exec core/mysql mysql -u root -h 127.0.0.1
+}
+
+echo "    * Use 'shell-app' to open a php shell for the studio app service"
+shell-app() {
+    /root/.composer/vendor/psy/psysh/bin/psysh
 }
 
 
