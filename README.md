@@ -14,6 +14,7 @@
    - [ ] Include PSR logger interface
    - [ ] Include whoops
    - [ ] Include VarDumper
+ - [ ] Add postfix service
 
 ## Journal
 
