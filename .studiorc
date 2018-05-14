@@ -17,6 +17,8 @@ echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.tom
 mkdir -p /hab/user/mysql/config
 echo -e "app_username = \"gatekeeper\"\napp_password = \"gatekeeper\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
 
+export COMPOSER_ALLOW_SUPERUSER=1
+
 
 echo
 echo "--> Setting up development commands..."
