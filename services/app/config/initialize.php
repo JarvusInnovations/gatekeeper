@@ -6,12 +6,16 @@ $coreRoot = '{{#if cfg.core.root}}{{ cfg.core.root }}{{else}}{{ pkg.path }}/core
 $siteRoot = '{{#if cfg.site.root}}{{ cfg.site.root }}{{else}}{{ pkg.path }}/site{{/if}}';
 
 
+// determine hostname
+$hostname = empty($_SERVER['HTTP_HOST']) ? 'localhost' : $_SERVER['HTTP_HOST'];
+
+
 // load bootstrap PHP code
 require("${coreRoot}/vendor/autoload.php");
 
 
 // load core
-Site::initialize($siteRoot, $_SERVER['HTTP_HOST'], [
+Site::initialize($siteRoot, $hostname, [
     {{~#eachAlive bind.database.members as |member|~}}
         {{~#if @first}}
     'database' => [
