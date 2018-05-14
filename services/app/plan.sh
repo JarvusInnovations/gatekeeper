@@ -3,6 +3,9 @@ pkg_origin=jarvus
 pkg_version="0.1.0"
 pkg_maintainer="Chris Alfano <chris@jarv.us>"
 pkg_license=("AGPL-3.0")
+pkg_build_deps=(
+  core/composer
+)
 pkg_deps=(
   emergence/php5
   jarvus/libfcgi
@@ -24,11 +27,33 @@ do_build() {
 }
 
 do_install() {
-  build_line "Copying core..."
-  cp -r "${PLAN_CONTEXT}/../../core" "${pkg_prefix}/core"
+  build_line "Copying core (excluding vendor)"
 
-  build_line "Copying site..."
-  cp -r "${PLAN_CONTEXT}/../../site" "${pkg_prefix}/site"
+  mkdir "${pkg_prefix}/core"
+  pushd "${PLAN_CONTEXT}/../../core" > /dev/null
+  find . \
+    -maxdepth 1 -mindepth 1 \
+    -not -name 'vendor' \
+    -not -name '.git*' \
+    -exec cp -r '{}' "${pkg_prefix}/core/{}" \;
+  popd > /dev/null
+
+
+  build_line "Copying site"
+
+  mkdir "${pkg_prefix}/site"
+  pushd "${PLAN_CONTEXT}/../../site" > /dev/null
+  find . \
+    -maxdepth 1 -mindepth 1 \
+    -not -name '.git*' \
+    -exec cp -r '{}' "${pkg_prefix}/site/{}" \;
+  popd > /dev/null
+
+
+  build_line "Running: composer install"
+  pushd "${pkg_prefix}/core" > /dev/null
+  composer install --no-dev
+  popd > /dev/null
 }
 
 do_strip() {

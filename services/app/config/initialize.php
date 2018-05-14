@@ -7,7 +7,7 @@ $siteRoot = '{{#if cfg.site.root}}{{ cfg.site.root }}{{else}}{{ pkg.path }}/site
 
 
 // load bootstrap PHP code
-require("${coreRoot}/bootstrap.inc.php");
+require("${coreRoot}/vendor/autoload.php");
 
 
 // load core
