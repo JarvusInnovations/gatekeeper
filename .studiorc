@@ -62,7 +62,6 @@ build-composite() {
 
 echo "    * Use 'start-composite' to start all services via composite"
 start-composite() {
-    config-http
     hab start jarvus/gatekeeper
 }
 
@@ -83,13 +82,11 @@ start-http() {
 
 echo "    * Use 'start-http-debug' to start just http service with config from /src"
 start-http-debug() {
-    config-http
     hab start jarvus/gatekeeper-http --config-from /src/services/http/ --bind app:gatekeeper-app.default
 }
 
 echo "    * Use 'start-mysql-debug' to start just mysql service"
 start-mysql-debug() {
-    config-mysql
     hab start core/mysql
 }
 
