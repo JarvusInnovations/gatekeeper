@@ -1,0 +1,407 @@
+swagger: '2.0'
+ 
+info:
+  version: "1.0.0"
+  title: Crime Data API
+  description: |
+      Part I crime includes Homicides, Rapes, Robberies, Aggravated Assaults, Thefts. The data returned is generalized by the crime type and the block location.  There are two API endpoints, providing crime data going back to different points in time. 
+      
+      Note - A static CSV file of Part 1 all crime incidents since 1/1/2006 (updated daily) is [available for download.](http://gis.phila.gov/gisdata/police_inct.zip)
+      
+      **UCR Codes**
+      * 100    - Homicide
+      * 200    - Rape
+      * 300    - Robbery (with Firearm or not)
+      * 400 - Aggravated Assault (with Firearm or not)
+      * 500 - Burglary (Residential or Non-Residential)
+      * 600 - Theft (from Vehicle or not)
+      * 700 - Motor Vehicle Theft and Recovered Stolen Motor Vehicle
+      
+      **Key Attribute Field Names & Descriptions**
+      * DC_Dist - A two character field that names the District boundary.
+      * Sector - A single character field that names the Police Service Area boundary.
+      * Dispatch_Date/Dispatch_Time    - The date and time that the officer was dispatched to the scene.
+      * Hour    - The generalized hour of the dispatched time.
+      * DC_Key -    The unique identifier of the crime that consists of Year + District + Unique ID.
+      * Location_Block    - The location of crime generalized by street block.
+      * UCR_General    - The rounded crime code, i.e. 614 to 600.
+      * Text_General_Code    - The generalized text for the crime code.
+      * Point_X    - Longitude of crime location.
+      * Point_Y    - Latitude of crime location.
+      
+      **Tips on Querying this API**
+      
+      You can also pass in a geometry (points, lines or polygons) and query for the crimes that have a spatial relationship to that geometry (crosses, within, etc.). Consult the [ArcGIS REST API documentation]("http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/The_ArcGIS_REST_API/02r300000054000000/") for full details.
+      
+      For example, [to retrieve all of the crimes within a certain area of Philadelphia](http://gis.phila.gov/ArcGIS/rest/services/PhilaGov/Police_Incidents/MapServer/0/query?geometry={"rings":[[[-75.16505599021912,39.95365185651431],[-75.16235232353209,39.95329409673581],[-75.16274392604828,39.951423023730335],[-75.16437470912933,39.95170677215989],[-75.16496479511261,39.951805466989896],[-75.16525983810425,39.95202341756838],[-75.16528129577637,39.95224136745237],[-75.16524910926819,39.95252922472533],[-75.16513645648956,39.9529856816317],[-75.16510963439941,39.95331876988407],[-75.16505599021912,39.95365185651431]]],"spatialReference":{"wkid":4326}}&geometryType=esriGeometryPolygon&spatialRel=esriSpatialRelContains&outFields=*&inSR=4326&outSR=4326&f=pjson&pretty=true) -- http://gis.phila.gov/ArcGIS/rest/services/PhilaGov/Police_Incidents/MapServer/0/query?geometry={"rings":[[[-75.16505599021912,39.95365185651431],[-75.16235232353209,39.95329409673581],[-75.16274392604828,39.951423023730335],[-75.16437470912933,39.95170677215989],[-75.16496479511261,39.951805466989896],[-75.16525983810425,39.95202341756838],[-75.16528129577637,39.95224136745237],[-75.16524910926819,39.95252922472533],[-75.16513645648956,39.9529856816317],[-75.16510963439941,39.95331876988407],[-75.16505599021912,39.95365185651431]]],"spatialReference":{"wkid":4326}}&geometryType=esriGeometryPolygon&spatialRel=esriSpatialRelContains&outFields=*&inSR=4326&outSR=4326&f=pjson&pretty=true
+      
+      **Some things to keep in mind**
+      
+      If you are passing a polygon as the geometry, your first pair of coordinates must be identical to your last to "close" the polygon.
+      
+      The inSR and outSR parameters require a [spatial reference code](http://spatialreference.org/). You'll probably be using latitude/longitude, which is 4326, but there are others. If you do not pass these parameters, the service defaults to the spatialReference that you pass in the geometry string, which is required.
+      
+      There is additional functionality for this API that is not included here. Consult the [documentation]("http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/The_ArcGIS_REST_API/02r300000054000000/") for complete information.
+
+      **Sample API Call**
+      
+      Using query SECTOR='3' AND UCR_GENERAL='500'
+      
+      http://gis.phila.gov/ArcGIS/rest/services/PhilaGov/Police_Incidents_Last30/MapServer/0/query?text=&geometry=&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&objectIds=&where=SECTOR%3D%273%27+AND+UCR_GENERAL%3D%27500%27&time=&returnCountOnly=false&returnIdsOnly=false&returnGeometry=true&maxAllowableOffset=&outSR=&outFields=*&f=pjson
+
+host: gis.phila.gov
+schemes:
+  - http
+basePath: /ArcGIS/rest/services/PhilaGov
+paths:
+  /Police_Incidents_Last30/mapserver:
+    get:
+      description: Part 1 crimes for the last 30 days
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: query
+          name: text
+          description: |
+              A literal search text. If the layer has a display field associated with it, the server searches for this text in this field. This parameter is a short hand for a where clause of "where <displayField> like '%<text>%'". The text is case sensitive. This parameter is ignored if the where parameter is specified.
+              
+              Example - "text=Los"
+          required: false
+          type: string
+        - in: query
+          name: geometry
+          description: The geometry to apply as the spatial filter. The structure of the geometry is the same as the structure of the json geometry objects returned by the ArcGIS REST API. In addition to the JSON structures, for envelopes and points, you can specify the geometry with a simpler comma-separated syntax.
+          required: false
+          type: string
+        - in: query
+          name: geometryType
+          description: The type of geometry specified by the geometry parameter. The geometry type can be an envelope, point, line, or polygon. The default geometry type is an envelope.
+          required: false
+          type: string
+        - in: query
+          name: inSR
+          description: The spatial reference of the input geometry. The spatial reference can be specified as either a well-known ID or as a spatial reference json object. If the inSR is not specified, the geometry is assumed to be in the spatial reference of the map.
+          required: false
+          type: string
+        - in: query
+          name: spatialRel
+          description: |
+              The spatial relationship to be applied on the input geometry while performing the query. The supported spatial relationships include intersects, contains, envelope intersects, within, etc. 
+          
+              The default spatial relationship is intersects (esriSpatialRelIntersects).
+          required: false
+          type: string
+        - in: query
+          name: relationParam
+          description: |
+              The spatial relate function that can be applied while performing the query operation. 
+              
+              An example for this spatial relate function is "FFFTTT***." 
+              
+              For more information on this spatial relate function, refer to the documentation for the spatial relate function.
+          required: false
+          type: string
+        - in: query
+          name: where
+          description: |
+              A where clause for the query filter. Any legal SQL where clause operating on the fields in the layer is allowed
+              For example, "where=POP2000 > 350000". 
+              When standardized queries are enabled, where = CHAR_LENGTH(cntry_name) > 18
+          required: false
+          type: string
+        - in: query
+          name: time
+          description: |
+              The time instant or the time extent to query.
+              
+              *Time instant*
+              Syntax - "time=<timeInstant>"
+              Example - "time=1199145600000 (1 Jan 2008 00:00:00 GMT)"
+              
+              *Time extent*
+              Syntax - "time=<startTime>, <endTime>"
+              Example - "time=1199145600000, 1230768000000 (1 Jan 2008 00:00:00 GMT to 1 Jan 2009 00:00:00 GMT)"
+              
+              A null value specified for start time or end time will represent infinity for start or end time respectively.
+          required: false
+          type: string
+        - in: query
+          name: returnCountOnly
+          description: |
+              *Values - false/true*
+              
+              If true, the response only includes an array of object IDs. Otherwise the response is a feature set. The default is false.
+
+              Note that while there is a limit on the number of features included in the feature set response, there is no limit on the number of object IDs returned in the ID array response. Clients can exploit this to get all the query conforming object IDs by specifying returnIdsOnly=true and subsequently requesting feature sets for subsets of object IDs.
+          required: false
+          type: boolean
+        - in: query
+          name: returnIdsOnly
+          description: |
+              *Values - false/true*
+              
+              If true, the response only includes the count (number of features/records) that would be returned by a query. Otherwise the response is a feature set. The default is false. This option supersedes the returnIdsOnly parameter.
+          required: false
+          type: boolean
+        - in: query
+          name: returnGeometry
+          description: |
+              *Values - false/true*
+              
+              If true, the resultset includes the geometry associated with each result. The default is true.
+          required: false
+          type: boolean
+        - in: query
+          name: maxAllowableOffset
+          description: |
+              This option can be used to specify the maxAllowableOffset to be used for generalizing geometries returned by the query operation.
+
+              The maxAllowableOffset is in the units of the outSR. If outSR is not specified, maxAllowableOffset is assumed to be in the unit of the spatial reference of the map.
+
+              Example - "maxAllowableOffset=2"
+          required: false
+          type: string
+        - in: query
+          name: outSR
+          description: |
+              The spatial reference of the returned geometry.
+
+              The spatial reference can be specified as either a well-known ID or as a spatial reference json object.
+
+              If outSR is not specified, the geometry is returned in the spatial reference of the map.
+          required: false
+          type: string
+        - in: query
+          name: outFields
+          description: |
+              The list of fields to be included in the returned resultset. This list is a comma delimited list of field names. If you specify the shape field in the list of return fields, it is ignored. To request geometry, set returnGeometry to true.
+
+              You can also specify the wildcard "*" as the value of this parameter. In this case, the query results include all the field values.
+
+              Example - "outFields=AREANAME,ST,POP2000"
+
+              Example (wildcard usage) - "outFields=*"
+          required: false
+          type: string
+        - in: query
+          name: f
+          description: |
+              The response format. The default response format is html.
+
+              *Note* - "f=kmz" would always return Z values.
+              
+              Values - html | json | kmz | amf (default, when returnIdsOnly=false and returnCountOnly=false)
+
+              Values - html | json | amf (when outStatistics is specified)
+
+              Values - html | json (when either returnIdsOnly=true or returnCountOnly=true is specified)
+          required: false
+          type: string
+        - in: query
+          name: pretty
+          required: false
+          type: string
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Crime Data'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /Police_Incidents/MapServer:
+    get:
+      description: Part 1 crimes going back to 1/1/2006
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: query
+          name: text
+          description: |
+              A literal search text. If the layer has a display field associated with it, the server searches for this text in this field. This parameter is a short hand for a where clause of "where <displayField> like '%<text>%'". The text is case sensitive. This parameter is ignored if the where parameter is specified.
+              Example - "text=Los"
+          required: false
+          type: string
+        - in: query
+          name: geometry
+          description: The geometry to apply as the spatial filter. The structure of the geometry is the same as the structure of the json geometry objects returned by the ArcGIS REST API. In addition to the JSON structures, for envelopes and points, you can specify the geometry with a simpler comma-separated syntax.
+          required: false
+          type: string
+        - in: query
+          name: geometryType
+          description: The type of geometry specified by the geometry parameter. The geometry type can be an envelope, point, line, or polygon. The default geometry type is an envelope.
+          required: false
+          type: string
+        - in: query
+          name: inSR
+          description: The spatial reference of the input geometry. The spatial reference can be specified as either a well-known ID or as a spatial reference json object. If the inSR is not specified, the geometry is assumed to be in the spatial reference of the map.
+          required: false
+          type: string
+        - in: query
+          name: spatialRel
+          description: The spatial relationship to be applied on the input geometry while performing the query. The supported spatial relationships include intersects, contains, envelope intersects, within, etc. The default spatial relationship is intersects (esriSpatialRelIntersects).
+          required: false
+          type: string
+        - in: query
+          name: relationParam
+          description: The spatial relate function that can be applied while performing the query operation. An example for this spatial relate function is "FFFTTT***." For more information on this spatial relate function, refer to the documentation for the spatial relate function.
+          required: false
+          type: string
+        - in: query
+          name: where
+          description: |
+              A where clause for the query filter. Any legal SQL where clause operating on the fields in the layer is allowed
+              For example, "where=POP2000 > 350000". 
+              When standardized queries are enabled, where = CHAR_LENGTH(cntry_name) > 18
+          required: false
+          type: string
+        - in: query
+          name: time
+          description: |
+              The time instant or the time extent to query.
+              
+              *Time instant*
+              Syntax - "time=<timeInstant>"
+              Example - "time=1199145600000 (1 Jan 2008 00:00:00 GMT)"
+              
+              *Time extent*
+              Syntax - "time=<startTime>, <endTime>"
+              Example - "time=1199145600000, 1230768000000 (1 Jan 2008 00:00:00 GMT to 1 Jan 2009 00:00:00 GMT)"
+              
+              A null value specified for start time or end time will represent infinity for start or end time respectively.
+          required: false
+          type: string
+        - in: query
+          name: returnCountOnly
+          description: |
+              *Values - false/true*
+              
+              If true, the response only includes an array of object IDs. Otherwise the response is a feature set. The default is false.
+
+              Note that while there is a limit on the number of features included in the feature set response, there is no limit on the number of object IDs returned in the ID array response. Clients can exploit this to get all the query conforming object IDs by specifying returnIdsOnly=true and subsequently requesting feature sets for subsets of object IDs.
+          required: false
+          type: boolean
+        - in: query
+          name: returnIdsOnly
+          description: |
+              *Values - false/true*
+              
+              If true, the response only includes the count (number of features/records) that would be returned by a query. Otherwise the response is a feature set. The default is false. This option supersedes the returnIdsOnly parameter.
+          required: false
+          type: boolean
+        - in: query
+          name: returnGeometry
+          description: |
+              *Values - false/true*
+              
+              If true, the resultset includes the geometry associated with each result. The default is true.
+          required: false
+          type: boolean
+        - in: query
+          name: maxAllowableOffset
+          description: |
+              This option can be used to specify the maxAllowableOffset to be used for generalizing geometries returned by the query operation.
+
+              The maxAllowableOffset is in the units of the outSR. If outSR is not specified, maxAllowableOffset is assumed to be in the unit of the spatial reference of the map.
+
+              Example - "maxAllowableOffset=2"
+          required: false
+          type: string
+        - in: query
+          name: outSR
+          description: |
+              The spatial reference of the returned geometry.
+
+              The spatial reference can be specified as either a well-known ID or as a spatial reference json object.
+
+              If outSR is not specified, the geometry is returned in the spatial reference of the map.
+          required: false
+          type: string
+        - in: query
+          name: outFields
+          description: |
+              The list of fields to be included in the returned resultset. This list is a comma delimited list of field names. If you specify the shape field in the list of return fields, it is ignored. To request geometry, set returnGeometry to true.
+
+              You can also specify the wildcard "*" as the value of this parameter. In this case, the query results include all the field values.
+
+              Example - "outFields=AREANAME,ST,POP2000"
+
+              Example (wildcard usage) - "outFields=*"
+          required: false
+          type: string
+        - in: query
+          name: f
+          description: |
+              The response format. The default response format is html.
+
+              *Note* - "f=kmz" would always return Z values.
+              
+              Values - html | json | kmz | amf (default, when returnIdsOnly=false and returnCountOnly=false)
+
+              Values - html | json | amf (when outStatistics is specified)
+
+              Values - html | json (when either returnIdsOnly=true or returnCountOnly=true is specified)
+          required: false
+          type: string
+        - in: query
+          name: pretty
+          required: false
+          type: string
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Crime Data'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  
+definitions:
+  Crime Data:
+    properties:
+      DC_Dist:
+        type: string
+      Sector:
+        type: string
+      Dispatch_Date_Time:
+        type: string
+      Dispatch_Date:
+        type: string
+      Dispatch_Time:
+        type: string
+      Hour:
+        type: integer
+      DC_Key:
+        type: string
+      Location_Block:
+        type: string
+      UCR_General:
+        type: string
+      ObjectID:
+        type: integer
+      Text_General_Code:
+        type: string
+      Point_X:
+        type: number
+      Point_Y:
+        type: number
+  errorModel:
+    required:
+      - code
+      - message
+    properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

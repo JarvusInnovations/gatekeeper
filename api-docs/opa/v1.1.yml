@@ -1,0 +1,686 @@
+swagger: '2.0'
+
+info:
+  version: "1.1.0"
+  title: Property Data API
+  description: This API exposes data on assessed property values based on information from the Office of Property Assessment (OPA). Currently in beta, subject to change.
+host: api.phila.gov
+schemes:
+  - http
+basePath: /opa/v1.1
+paths:
+
+  /address/{address}/:
+    get:
+      summary: Search properties by address.
+      description: |
+          Searches properties by address string. Returns an array of properties. Uses the Cityâ€™s address validator to parse various address formats (ie. N or North and st or Street will all work).
+      
+          SAMPLE - "/address/1234%20market%20st/?format=json"
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: address
+          description: Address to retrieve data for, e.g. "1234 market st".
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /address/{address}/{unit}:
+    get:
+      summary: Search properties by address and unit.
+      description: |
+          Searches properties by address string and, optionally, the unit. Returns an array of properties. Uses the Cityâ€™s address validator to parse various address formats (ie. N or North and st or Street will all work).
+      
+          SAMPLE - "/address/123%20S%20broad/1?format=json"
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: address
+          description: Address to retrieve data for
+          type: string
+        - in: path
+          name: unit
+          description: Unit at that address to retrieve data for
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /block/{address}/:
+    get:
+      summary: Search properties by the city block of an address string
+      description: |
+          Search properties by the city block of an address string. Returns an array of properties. Note that the trailing slash after the address string is still required when no unit is provided.
+      
+          SAMPLE - "/block/1200%20market%20st/?format=json"
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: address
+          description: Address on the block you wish to retrieve data for.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /block/{address}/{unit}:
+    get:
+      summary: Search properties by the city block of an address string and unit.
+      description: |
+          Search properties by the city block of an address string and unit. Returns an array of properties.
+      
+          SAMPLE - "/block/1200%20market%20st/?format=json"
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: address
+          description: Address on the block you wish to retrieve data for.
+          type: string
+        - in: path
+          name: unit
+          description: Unit at the Address on the block you wish to retrieve data for.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /intersection/{street_a}/{street_b}:
+    get:
+      summary: Searches properties near an intersection of two streets.
+      description: |
+          Searches properties near an intersection of two streets. Returns an array of properties.
+      
+          SAMPLE - "/intersection/12th/market?format=json"
+
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: street_a
+          description: First street at the intersection.
+          type: string
+        - in: path
+          name: street_b
+          description: Second street at the intersection.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /account/{account_number}:
+    get:
+      summary: View an individual property by its OPA Account Number.
+      description: |
+          View an individual property by its OPA Account Number. Returns a property object with more detail than those of the search methods.
+      
+          SAMPLE - "/account/883309000?format=json"
+
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: account_number
+          description: Number of the account for which to retrieve data.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: A single property
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Single Property'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /property/{property_id}:
+    get:
+      summary: View an individual property by its Property ID.
+      description: |
+          View an individual property by its Property ID, an alternative primary key that is a concatenation of the street code, house number, and unit number. Returns a property object with more detail than those of the search methods.
+          SAMPLE - "/property/5356001234"
+
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: property_id
+          description: Number of the account for which to retrieve data.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: A single property
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Single Property'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  
+  /nearby/{latitude}/{longitude}/:
+    get:
+      summary: Searches for properties within 200 feet of a latitude/longitude point.
+      description: |
+          Searches for properties within 200 feet of a latitude/longitude point. Property latitude/longitude points can be obtained via the other API methods. Note that the trailing slash after the longitude must be provided even if the radius is not specified.
+          
+          SAMPLE - "/nearby/-75.1609758181729/39.9516618543639/"
+
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: latitude
+          description: Latitude value of the geographic point.
+          type: string
+        - in: path
+          name: longitude
+          description: Longitude value of the geographic point.
+          type: string
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /nearby/{latitude}/{longitude}/{radius}:
+    get:
+      summary: Searches for properties within a specified rectangular radius of a latitude/longitude point.
+      description: |
+          Searches for properties within a specified rectangular radius of a latitude/longitude point. The radius is measured in feet. Property latitude/longitude points can be obtained via the other API methods.
+      
+          SAMPLE - "/nearby/-75.1609758181729/39.9516618543639/400"
+
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: latitude
+          description: Latitude value of the geographic point.
+          type: string
+        - in: path
+          name: longitude
+          description: Longitude value of the geographic point.
+          type: string
+        - in: path
+          name: radius
+          description: rectangular radius (in feet) of area around the point in which to search.
+          type: string  
+        - in: query
+          name: sort
+          description: Field on which to sort results (ex. market_value)
+          required: false
+          type: string
+        - in: query
+          name: format
+          description: Format of response (xml or json)
+          required: false
+          type: string
+        - in: query
+          name: dir
+          description: Direction of sorting (asc or desc)
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of results returned
+          required: false
+          type: number
+        - in: query
+          name: skip
+          description: Number of results to skip (for pagination)
+          required: false
+          type: number
+          
+      responses:
+        200:
+          description: An array of properties
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property Array'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+definitions:
+  Property Array:
+    status:
+      type: string
+    total:
+      type: integer
+    data:
+      properties:
+        OPAProperty:
+          property_id:
+            type: integer
+          account_number:
+            type: integer
+          full_address:
+            type: string
+          unit:
+            type: object
+          zip:
+            type: integer
+          address_match:
+            original:
+              type: string
+            standardized:
+              type: string
+            similarity:
+              type: integer
+            match_code:
+              type: string
+            match_type:
+              type: string
+          geometry:
+            x:
+              type: number
+            y:
+              type: number
+          ownership:
+            owners:
+              type: array
+          characteristics:
+            description:
+              type: string
+            land_area:
+              type: string
+            improvement_area:
+              type: integer
+            improvement_description:
+              type: string
+            building_code:
+              type: string
+            homestead:
+              type: string
+          sales_information:
+            sales_date:
+              type: string
+            sales_price:
+              type: integer
+            sales_type:
+              type: integer
+          valuation_history:
+            valuation_history:
+              certification_year:
+                type: integer
+              market_value:
+                type: integer
+              land_taxable:
+                type: integer
+              land_exempt:
+                type: integer
+              improvement_taxable:
+                type: integer
+              improvement_exempt:
+                type: integer
+              total_exempt:
+                type: integer
+              taxes:
+                type: number
+              certified:
+                type: boolean
+          proposed_valuation:
+  Single Property:
+    status:
+      type: string
+    data:
+      property:
+          property_id:
+            type: integer
+          account_number:
+            type: integer
+          full_address:
+            type: string
+          unit:
+            type: object
+          zip:
+            type: integer
+          geometry:
+            x:
+              type: number
+            y:
+              type: number
+          ownership:
+            owners:
+              type: array
+            mailing_address:
+              street:
+                type: string
+              city:
+                type: string
+              state:
+                type: string
+              zip:
+                type: string
+          characteristics:
+            description:
+              type: string
+            beginning_point:
+              type: string
+            land_area:
+              type: string
+            improvement_area:
+              type: integer
+            improvement_description:
+              type: string
+            exterior_condition:
+              type: integer
+            zoning:
+              type: string
+            zoning_description:
+              type: string
+            building_code:
+              type: string
+            homestead:
+              type: string
+          sales_information:
+            sales_date:
+              type: string
+            sales_price:
+              type: integer
+            sales_type:
+              type: integer
+          valuation_history:
+            valuation_history:
+              certification_year:
+                type: integer
+              market_value:
+                type: integer
+              land_taxable:
+                type: integer
+              land_exempt:
+                type: integer
+              improvement_taxable:
+                type: integer
+              improvement_exempt:
+                type: integer
+              total_exempt:
+                type: integer
+              taxes:
+                type: number
+              certified:
+                type: boolean
+          proposed_valuation:
+  errorModel:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

@@ -1,0 +1,210 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: 311 API (Beta)
+  description: |
+      This API exposes service requests submitted to the City of Philadelphia through the Philly311 mobile app.
+  
+      NOTE - The Philly 311 API is currently read only - we only implement API methods that allow a client to retrieve information libraries service types or service requests. Allowing the creation of new service requests through this API is a feature that is on our roadmap for future releases.
+host: www.publicstuff.com
+schemes:
+  - http
+basePath: /api/open311
+paths:
+  /services:
+    get:
+      summary: Get Services List
+      description: Get a list of 311 service request types and their associated service codes.
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: query
+          name: jurisdiction_id
+          description: The location of the services , e.g. "philadelphia-pa"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of services
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/service'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /services/{service_code}:
+    get:
+      summary: Get Service Definition
+      description: Get details associated with a service code. (This call is only necessary if the service selected has metadata set as 'true' from the Get Services List response.)
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: service_code
+          description: The service_code of a specific service.
+          required: true
+          type: integer
+        - in: query
+          name: jurisdiction_id
+          description: The location of the services , e.g. "philadelphia-pa"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of services
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/service_definition'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /requests:
+    get:
+      summary: Get Service Requests
+      description: Find out the current status of multiple service requests.
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: query
+          name: jurisdiction_id
+          description: The location of the service requests , e.g. "philadelphia-pa"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of service requests
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/service_requests'       
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /requests/{service_request_id}:
+    get:
+      summary: Get a Specific Service Request
+      description: Find out the current status of an individual service request.
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: service_request_id
+          description: The ID of the service request
+          required: true
+          type: string
+        - in: query
+          name: jurisdiction_id
+          description: The location of the service request , e.g. "philadelphia-pa"
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of services
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/service_requests'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+definitions:
+  service:
+    service_code:
+      type: number
+      format: double
+    service_name:
+      type: string
+    ?description:
+      type: string
+    metadata:
+      type: boolean
+    ?type:
+      type: string
+    keywords:
+      type: string
+    group:
+      type: string
+  service_definition:
+    service_code:
+      type: integer
+      format: int32
+    attributes:
+      attribute:
+        variable:
+          type: integer
+          format: int32
+        code:
+          type: integer
+          format: int32
+        datatype:
+          type: string
+        order:
+          type: integer
+        required:
+          type: integer
+        datatype_description:
+          type: string
+        description:
+          type: string
+  service_requests:
+    request:
+      status:
+        type: string
+      service_request_id:
+        type: string
+      status_notes:
+        type: string
+      service_name:
+        type: string
+      service_code:
+        type: integer
+        format: int32
+      description:
+        type: string
+      agency_responsible:
+        type: string
+      service_notice:
+        type: string
+      requested_datetime:
+        type: string
+      updated_datetime:
+        type: string
+      expected_datetime:
+        type: string
+      address:
+        type: string
+      address_id:
+        type: integer
+        format: int32
+      zipcode:
+        type: integer
+        format: int32
+      lat:
+        type: number
+        format: double
+      long:
+        type: number
+        format: double
+      media_url:
+        type: string
+  errorModel:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

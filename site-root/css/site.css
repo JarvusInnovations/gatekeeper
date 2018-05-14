@@ -1,0 +1,109 @@
+html,
+body {
+	background: #666;
+}
+
+.site.wrapper {
+	background: white;
+	margin: 1em auto;
+	width: 960px;
+}
+
+header.site,
+footer.site {
+	background: #ddd;
+}
+
+header.site,
+#content,
+footer.site {
+	padding: 2em;
+}
+
+#logo {
+	float: left;
+	margin: 0;
+}
+
+#user-info {
+	float: right;
+}
+
+nav {
+	display: inline-block;
+	padding: 0 1em;
+}
+
+nav li {
+	display: inline-block;
+}
+
+nav a {
+	display: block;
+	padding: 1em;
+}
+
+#content {
+	clear: both;
+	padding: 2em;
+}
+
+aside {
+	float: right;
+	margin-left: 1.5em;
+	width: 26em;
+}
+
+#login,
+#register {
+	display: inline-block;
+}
+
+.field-pair {
+	white-space: nowrap;
+}
+
+.field-pair .field {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.field-pair .field:last-of-type {
+	margin-right: 0;
+}
+
+.field {
+	line-height: 2;
+	margin-bottom: 21px;
+}
+
+.field label {
+	line-height: 1; 
+}
+
+.field span {
+	display: block;
+}
+
+.field input {
+	width: 12em;
+}
+
+.field .hint {
+	color: #999;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.checkbox input {
+	margin-right: .25em;
+}
+
+.submit .submit {
+	float: right;
+}
+
+.form-hint {
+	font-style: italic;
+	margin-top: 21px;
+}

@@ -1,0 +1,296 @@
+@import 'normalize'; // makes browsers render elements more consistently and in line with modern standards
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat);
+
+html {
+    background: $text-color;
+}
+
+body {
+    background: $page-bg-color;
+    @include box-shadow(0 0 1.5em black);
+    color: $text-color;
+    font: normal normal medium #{$font-size}/#{$line-height};
+    font-family: $body-font;
+    text-rendering: optimizeLegibility;
+}
+
+.browser-warning {
+    background: tint($alert-color, 80%);
+    margin: 0;
+    padding: .5em 1em;
+    text-align: center;
+    
+    a {
+        text-decoration: underline;
+    }
+}
+
+.site {
+    &.header,
+    &.footer {
+        background: white;
+        border: 1px solid $border-color;
+        clear: both;
+    }
+
+    &.header {
+        border-width: 0 0 1px;
+
+        @media #{$mq-phone} {
+            & > .inner {
+                padding: 0 1.5em .25em;
+            }
+        }
+    }
+
+    &.footer {
+        border-width: 1px 0 0;
+
+        > .inner {
+            padding-bottom: 5em;
+            padding-bottom: 10vh;
+        }
+    }
+
+    & > .inner {
+        margin: auto;
+        padding: 1em;
+
+        @media #{$mq-wide} {
+            width: 85%;
+
+            &.full-bleed {
+                padding: 0;
+                width: 100%;
+            }
+        }
+    }
+}
+
+.inner {
+    @include clearfix;
+}
+
+.sidebar-layout {
+    @include clearfix;
+
+    .reading-width {
+        max-width: none;
+    }
+
+    @media #{$mq-wide} {
+        $sidebar-size: 18em;
+
+        .main-col {
+            @include box-sizing(border-box);
+            float: left;
+            width: 100%;
+            
+            > .col-inner {
+                margin-right: $sidebar-size + 6;
+            }
+        }
+
+        .sidebar-col {
+            @include box-sizing(border-box);
+            float: right;
+            margin-left: -1 * $sidebar-size; 
+            width: $sidebar-size;
+        }
+    }
+    
+    &.sidebar-28 {
+        @media #{$mq-wide} {
+            $sidebar-size: 28em;
+    
+            .main-col {
+                @include box-sizing(border-box);
+                float: left;
+                width: 100%;
+                
+                > .col-inner {
+                    margin-right: $sidebar-size + 1.5;
+                }
+            }
+    
+            .sidebar-col {
+                @include box-sizing(border-box);
+                float: right;
+                margin-left: -1 * $sidebar-size; 
+                width: $sidebar-size;
+            }
+        }
+    }
+}
+
+.site-branding {
+    margin-bottom: 2em;
+    
+    a {
+        @include link-colors(inherit);
+        text-decoration: none;
+    }
+    
+    img {
+        vertical-align: middle;
+    }
+    
+    .text {
+        display: inline-block;
+    }
+
+    .site-logo + .text {
+        padding-left: 1em;
+    }
+    
+    @media #{$mq-phone} {
+        float: left;
+        font-size: 1em;
+        font-weight: lighter;
+        line-height: inherit;
+        margin: 2.5em 0 0;
+    }
+
+    &.has-slogan {
+    	font-size: 1em;
+    	
+    	.text {
+        	vertical-align: -1em;
+    	}
+    	
+    	@media #{$mq-phone} {
+    	    float: none;
+    	    margin: 0;
+        	padding: .75em 0 0;
+        	overflow: hidden;
+        	
+        	.text {
+            	display: block;
+            	margin-top: .25em;
+            	overflow: hidden;
+        	}
+    	}
+
+    	@media #{$mq-tablet} {
+        	margin-top: 1em;
+    	}
+    	
+    	@media #{$mq-wide} {
+        	margin: 0;
+    	}
+    }
+}
+
+.site-logo {
+    .has-slogan & {
+        @media #{$mq-phone} {
+        	float: left;
+        	height: 48px;
+        	margin-right: .75em;
+        }
+    }
+}
+
+.site-name {
+    color: $text-color;
+    font-family: $heading-font;
+    font-size: 2em;
+    vertical-align: middle;
+
+    .has-slogan & {
+    	display: block;
+    	line-height: 1;
+
+        @media #{$mq-phone} {
+            font-size: 1.25em;
+        }
+    }
+
+    small {
+        color: $muted-color;
+        font-size: .5em;
+    }
+}
+
+@mixin nav-link {
+    border-top: 2px solid $accent-color;
+    color: $text-color;
+    display: block;
+    padding: .375em .75em;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        background: rgba($accent-color, .2);
+        color: $text-color;
+    }
+
+    &:visited {
+        color: $text-color;
+    }
+
+    &:active,
+    &.current {
+        background: $accent-color;
+        border-color: darken($accent-color, 10);
+        color: white;
+    }
+}
+
+.user-tools {
+    text-align: right;
+
+    @media #{$mq-phone} {
+    }
+
+    @media #{$mq-tablet} {
+    }
+
+    a {
+        background-color: rgba($link-color, .1);
+        color: $link-color;
+        display: inline-block;
+        height: 1em * $line-height;
+        margin-left: 1px - ($font-size / 4); // remove .25em "whitespace" gap, but leave 1px
+        padding: .5em 1em;
+        vertical-align: top;
+
+        &:hover,
+        &:focus {
+            background-color: $link-color;
+            color: contrast-color($link-color);
+            text-decoration: none;
+        }
+
+        &:visited {
+            color: $link-color;
+        }
+    }
+
+    .avatar {
+        margin-right: .25em;
+        vertical-align: -.125em;
+    }
+}
+
+.footer {
+    address {
+        display: inline-block;
+    }
+
+    small {
+        clear: both;
+        display: block;
+        margin: 1em 0 0;
+    }
+
+    .mini-search {
+        margin-bottom: 1.5em;
+
+        @media #{$mq-phone} {
+            input { width: 100%; }
+        }
+    }
+}

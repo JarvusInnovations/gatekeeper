@@ -1,0 +1,1 @@
+Ext.define("Site.page.Keys",{extend:Site.abstractpage.TrafficStack,singleton:true,idProperty:"KeyID",metricsUrl:"/metrics/keys-current"});

@@ -1,0 +1,1 @@
+Ext.define("Site.page.Endpoints",{extend:Site.abstractpage.TrafficStack,singleton:true,idProperty:"EndpointID",metricsUrl:"/metrics/endpoints-current"});
