@@ -9,11 +9,11 @@
  - [X] Generate web.php with config
  - [ ] Get app working with minimal php-bootstrap changes
  - [X] Create composite service
-   - [ ] Explore binding app and http services
- - [ ] Create composer package for core lib
+   - [X] Explore binding app and http services
+ - [X] Create composer package for core lib
    - [ ] Include PSR logger interface
-   - [ ] Include whoops
-   - [ ] Include VarDumper
+   - [X] Include whoops
+   - [X] Include VarDumper
  - [ ] Add postfix service
 
 ## Journal
