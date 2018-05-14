@@ -52,7 +52,7 @@ do_install() {
 
   build_line "Running: composer install"
   pushd "${pkg_prefix}/core" > /dev/null
-  composer install --no-dev
+  COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev
   popd > /dev/null
 }
 
