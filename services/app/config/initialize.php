@@ -19,12 +19,16 @@ Site::initialize($siteRoot, $hostname, [
     {{~#eachAlive bind.database.members as |member|~}}
         {{~#if @first}}
     'database' => [
-        'host' => '{{member.sys.ip}}',
-        'port' => '{{member.cfg.port}}',
-        'username' => '{{member.cfg.username}}',
-        'password' => '{{member.cfg.password}}',
-        'database' => '{{../cfg.database.name}}'
-    ]
+        'host' => '{{ member.sys.ip }}',
+        'port' => '{{ member.cfg.port }}',
+        'username' => '{{ member.cfg.username }}',
+        'password' => '{{ member.cfg.password }}',
+        'database' => '{{ ../cfg.database.name }}'
+    ],
         {{~/if~}}
     {{~/eachAlive}}
+
+    'logger' => [
+        'root' => '{{ pkg.svc_var_path }}/logs'
+    ]
 ]);
