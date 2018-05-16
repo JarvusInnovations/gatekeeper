@@ -13,12 +13,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"> {* responsive viewport *}
     {/block}
 
-    <title>{block "title"}{Site::getConfig(label)}{/block}</title>
-    
+    <title>{block "title"}{Site::$title|escape}{/block}</title>
+
     {block "css"}
         {include includes/site.css.tpl}
     {/block}
-    
+
     {block "js-top"}
         {include includes/site.js-top.tpl}
     {/block}
@@ -28,9 +28,9 @@
     <!--[if lt IE 9]>
     <p class="browser-waring">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    
+
     <div class="wrapper site clearfix">
-    
+
     <header class="header site clearfix">
         {block "user-tools"}
             {include includes/site.user-tools.tpl}
@@ -40,13 +40,13 @@
             {block "branding"}
                 {include includes/site.branding.tpl}
             {/block}
-            
+
             {block "header-bottom"}
                 {include includes/site.header-bottom.tpl}
             {/block}
         </div>
     </header>
-    
+
     <main class="content site clearfix" role="main"> {* !.site.content *}
         <div class="inner {block content-inner-class}{/block}">
             {block "content"}
@@ -56,13 +56,13 @@
 
                 <div class="reading-width">
                     <p class="lead">This is a <code>.lead</code> paragraph, optionally used to introduce body text. <span class="muted">You can also apply a <code>.muted</code> class to any text to fade it out a bit.</span></p>
-                    
+
                     <p>Nulla sodales, mi sit amet mollis tincidunt, dui velit ultrices felis, eu mattis sem enim pellentesque tellus. Maecenas vel magna enim. Proin commodo, magna in semper laoreet, nisl tellus dignissim odio, vel hendrerit arcu mauris vel mi.</p>
-    
+
                     <header class="section-header">
                         <h2 class="header-title title-2">A Sub-Section</h2>
                     </header>
-    
+
                     <div class="well">
                         <h3 class="title-5">This is a <code>.well</code></h3>
                         <p>Wells can be used to set off toolboxes, forms (<code>&lt;fieldset&gt;</code> gets the same styles), or special information from the rest of the body text.</p>
@@ -71,7 +71,7 @@
                         <button class="primary">Primary/Submit Button</button>
                         <button class="destructive">Delete</button>
                     </div>
-    
+
                     <p>Fusce in ligula dolor. Sed pellentesque quam a odio sollicitudin molestie. Nulla vulputate congue elit id dapibus. Nulla sodales, mi sit amet mollis tincidunt, dui velit ultrices felis, eu mattis sem enim pellentesque tellus. Maecenas vel magna enim. Proin commodo, magna in semper laoreet, nisl tellus dignissim odio, vel hendrerit arcu mauris vel mi.</p>
                     <ul>
                         <li>List item</li>
@@ -92,7 +92,7 @@
             {/block}
         </div>
     </main>
-    
+
     {$footerImageUrl = Emergence\Skeleton\Design::$footerImageUrl}
     <footer class="footer site clearfix {Emergence\Skeleton\Design::$footerCls|escape}">
         <div class="inner" {if $footerImageUrl}style="background-image:url({$footerImageUrl|escape})"{/if}>
@@ -100,7 +100,7 @@
             {block "footer-top"}
                 {include includes/site.footer-top.tpl}
             {/block}
-    
+
             {block "footer"}
                 {include includes/site.footer.tpl}
             {/block}
@@ -117,7 +117,7 @@
     {block "analytics"}
         {include includes/site.analytics.tpl}
     {/block}
-    
+
     {* enables site developers to dump the internal session log here by setting ?log_report=1 on any page *}
     {log_report}
 </body>
