@@ -28,6 +28,7 @@ Site::initialize($siteRoot, $hostname, [
         {{~/if~}}
     {{~/eachAlive}}
 
+    'handle' => {{toJson cfg.site.handle}},
     'primary_hostname' => {{toJson cfg.site.primary_hostname}},
     'hostnames' => {{toJson cfg.site.hostnames}},
 

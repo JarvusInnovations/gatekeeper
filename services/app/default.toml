@@ -3,6 +3,7 @@ root = ""
 
 [site]
 root = ""
+handle = "gatekeeper"
 timezone = "America/New_York"
 primary_hostname = "localhost"
 hostnames = [ ]
