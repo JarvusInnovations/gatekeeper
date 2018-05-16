@@ -4,6 +4,8 @@ root = ""
 [site]
 root = ""
 timezone = "America/New_York"
+primary_hostname = "localhost"
+hostnames = [ ]
 
 [logger]
 dump = false

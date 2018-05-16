@@ -28,6 +28,9 @@ Site::initialize($siteRoot, $hostname, [
         {{~/if~}}
     {{~/eachAlive}}
 
+    'primary_hostname' => {{toJson cfg.site.primary_hostname}},
+    'hostnames' => {{toJson cfg.site.hostnames}},
+
     'logger' => [
         'dump' => {{toJson cfg.logger.dump}},
         'root' => '{{ pkg.svc_var_path }}/logs'
