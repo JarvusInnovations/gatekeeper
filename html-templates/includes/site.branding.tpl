@@ -6,7 +6,7 @@
             <img class="site-icon" src="{versioned_url '/apple-touch-icon.png'}" width=36 alt="">
         {/if}
         <div class="text">
-            <big class="site-name">{Site::getConfig(label)}</big>
+            <big class="site-name">{Site::$title|escape}</big>
         </div>
     </a>
 </div>
