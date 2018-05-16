@@ -29,6 +29,7 @@ Site::initialize($siteRoot, $hostname, [
     {{~/eachAlive}}
 
     'logger' => [
+        'dump' => {{toJson cfg.logger.dump}},
         'root' => '{{ pkg.svc_var_path }}/logs'
     ]
 ]);

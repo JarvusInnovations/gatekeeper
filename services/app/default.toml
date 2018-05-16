@@ -5,6 +5,9 @@ root = ""
 root = ""
 timezone = "America/New_York"
 
+[logger]
+dump = false
+
 [pm]
 type = "dynamic"
 max_children = 50
