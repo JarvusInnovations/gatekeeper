@@ -94,9 +94,14 @@ start-mysql() {
     hab start core/mysql
 }
 
-echo "    * Use 'start-app' to start just app service"
+echo "    * Use 'start-app' to start just app service bound to mysql"
 start-app() {
     hab start jarvus/gatekeeper-app --bind database:mysql.default --config-from /src/services/app/
+}
+
+echo "    * Use 'start-app-remote' to start just app service bound to mysql-remote"
+start-app() {
+    hab start jarvus/gatekeeper-app --bind database:mysql-remote.default --config-from /src/services/app/
 }
 
 echo "    * Use 'start-http' to start just http service"

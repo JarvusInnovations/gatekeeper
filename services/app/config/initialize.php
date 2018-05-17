@@ -19,7 +19,7 @@ Site::initialize($siteRoot, $hostname, [
     {{~#eachAlive bind.database.members as |member|~}}
         {{~#if @first}}
     'database' => [
-        'host' => '{{ member.sys.ip }}',
+        'host' => '{{#if member.cfg.host}}{{ member.cfg.host }}{{else}}{{ member.sys.ip }}{{/if}}',
         'port' => '{{ member.cfg.port }}',
         'username' => '{{ member.cfg.username }}',
         'password' => '{{ member.cfg.password }}',
