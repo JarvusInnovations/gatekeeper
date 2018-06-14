@@ -40,7 +40,7 @@ mkdir -p /hab/user/gatekeeper-app/config
 echo -e "[core]\nroot = \"/src/core\"\n\n[site]\nroot = \"/src/site\"" > /hab/user/gatekeeper-app/config/user.toml
 
 mkdir -p /hab/user/gatekeeper-http/config
-echo -e "[http.listen]\nport = 8080" > /hab/user/gatekeeper-http/config/user.toml
+echo -e "[http.listen]\nport = 7080" > /hab/user/gatekeeper-http/config/user.toml
 
 mkdir -p /hab/user/mysql/config
 echo -e "app_username = \"gatekeeper\"\napp_password = \"gatekeeper\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml

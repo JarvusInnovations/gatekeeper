@@ -1,5 +1,39 @@
 # gatekeeper-sandbox
 
+## Studio Development
+
+1. Install habitat
+
+    ```bash
+    curl -s https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
+    ```
+
+1. Set up habitat
+
+    When prompted, enter `slate` as your default origin and choose yes to generate a key
+
+    ```bash
+    hab setup
+    ```
+
+1. Launch studio with port 80 mapped to host:
+
+    ```bash
+    HAB_DOCKER_OPTS="-p 7080:7080" hab studio enter
+    ```
+
+1. Build all applications within studio:
+
+    ```bash
+    build-all
+    ```
+
+1. Launch all applications with default test configuration:
+
+    ```bash
+    start-all
+    ```
+
 ## TODO
 
  - [X] Create services/http
