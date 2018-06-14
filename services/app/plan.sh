@@ -18,7 +18,6 @@ pkg_binds_optional=(
 
 pkg_exports=(
   [port]=network.port
-  [entrypoint]=entrypoint
 )
 
 
