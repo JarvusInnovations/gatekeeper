@@ -12,6 +12,12 @@ pkg_binds=(
   [app]="port"
 )
 
+pkg_exports=(
+  [port]=http.listen.port
+)
+
+pkg_exposes=(port)
+
 
 do_build() {
   return 0
