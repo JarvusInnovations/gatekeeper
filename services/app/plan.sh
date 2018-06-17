@@ -12,7 +12,7 @@ pkg_deps=(
 )
 
 
-pkg_binds_optional=(
+pkg_binds=(
   [database]="port username password"
 )
 
