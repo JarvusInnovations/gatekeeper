@@ -7,9 +7,9 @@ pkg_license=("AGPL-3.0")
 
 pkg_services=(
     jarvus/gatekeeper-app
-    jarvus/gatekeeper-http
+    emergence/nginx
 )
 
 pkg_bind_map=(
-    [jarvus/gatekeeper-http]="app:jarvus/gatekeeper-app"
+    [emergence/nginx]="app:jarvus/gatekeeper-app"
 )

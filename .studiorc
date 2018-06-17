@@ -36,14 +36,45 @@ END_OF_SCRIPT
 echo
 echo "--> Configuring services for local development..."
 
-mkdir -p /hab/user/gatekeeper-app/config
-echo -e "[core]\nroot = \"/src/core\"\n\n[site]\nroot = \"/src/site\"" > /hab/user/gatekeeper-app/config/user.toml
+init-user-config() {
+    config_pkg_name="$1"
+    config_default="$2"
+    [ -z "$config_pkg_name" -o -z "$config_default" ] && { echo >&2 'Usage: init-user-config pkg_name "[default]\nconfig = value"'; return 1; }
 
-mkdir -p /hab/user/gatekeeper-http/config
-echo -e "[http.listen]\nport = 7080" > /hab/user/gatekeeper-http/config/user.toml
+    config_toml_path="/hab/user/${config_pkg_name}/config/user.toml"
 
-mkdir -p /hab/user/mysql/config
-echo -e "app_username = \"gatekeeper\"\napp_password = \"gatekeeper\"\nbind = \"0.0.0.0\"\n" > /hab/user/mysql/config/user.toml
+    if [ ! -f "$config_toml_path" ]; then
+        echo "    Initializing: $config_toml_path"
+        mkdir -p "/hab/user/${config_pkg_name}/config"
+        echo -e "$config_default" > "$config_toml_path"
+    fi
+}
+
+init-user-config gatekeeper-app '
+    [core]
+    root = "/src/core"
+
+    [site]
+    root = "/src/site"
+'
+
+init-user-config nginx '
+    [http.listen]
+    port = 7080
+'
+
+init-user-config mysql '
+    app_username = "gatekeeper"
+    app_password = "gatekeeper"
+    bind = "0.0.0.0"
+'
+
+init-user-config mysql-remote '
+    app_username = "gatekeeper"
+    app_password = "gatekeeper"
+    host = "127.0.0.1"
+    port = 3306
+'
 
 
 echo
@@ -54,15 +85,6 @@ build-app() {
     pushd /src > /dev/null
 
     build services/app
-
-    popd > /dev/null
-}
-
-echo "    * Use 'build-http' to build just the http package"
-build-http() {
-    pushd /src > /dev/null
-
-    build services/http
 
     popd > /dev/null
 }
@@ -81,7 +103,6 @@ build-all() {
     pushd /src > /dev/null
 
     build services/app
-    build services/http
     build
 
     popd > /dev/null
@@ -89,35 +110,53 @@ build-all() {
 
 
 echo
-echo "    * Use 'start-mysql' to start just mysql service"
-start-mysql() {
-    hab start core/mysql
+
+echo "    * Use 'start-mysql-local' to start local mysql service"
+start-mysql-local() {
+    stop-mysql
+    hab svc load core/mysql
 }
 
-echo "    * Use 'start-app' to start just app service bound to mysql"
-start-app() {
-    hab start jarvus/gatekeeper-app --bind database:mysql.default --config-from /src/services/app/
+echo "    * Use 'start-mysql-remote' to start remote mysql service"
+start-mysql-remote() {
+    stop-mysql
+    hab svc load jarvus/mysql-remote
 }
 
-echo "    * Use 'start-app-remote' to start just app service bound to mysql-remote"
+echo "    * Use 'start-app-local' to start app service bound to local mysql"
+start-app-local() {
+    hab svc load jarvus/gatekeeper-app \
+        --bind=database:mysql.default
+}
+
+echo "    * Use 'start-app-remote' to start app service bound to remote mysql"
 start-app-remote() {
-    hab start jarvus/gatekeeper-app --bind database:mysql-remote.default --config-from /src/services/app/
+    hab svc load jarvus/gatekeeper-app \
+        --bind=database:mysql-remote.default
 }
 
-echo "    * Use 'start-http' to start just http service"
+echo "    * Use 'start-http' to start http service"
 start-http() {
-    hab start jarvus/gatekeeper-http --bind app:gatekeeper-app.default
+    hab svc load emergence/nginx \
+        --bind=app:gatekeeper-app.default
 }
 
-echo "    * Use 'start-composite' to start all services via composite"
+echo "    * Use 'start-composite' to start app+http via composite"
 start-composite() {
-    hab start jarvus/gatekeeper
+    hab svc load jarvus/gatekeeper
 }
 
-echo "    * Use 'start-all' to start all services individually"
-start-all() {
-    start-mysql
-    start-app
+echo "    * Use 'start-all-local' to start all services individually with local mysql"
+start-all-local() {
+    start-mysql-local
+    start-app-local
+    start-http
+}
+
+echo "    * Use 'start-all-remote' to start all services individually with remote mysql"
+start-all-remote() {
+    start-mysql-remote
+    start-app-remote
     start-http
 }
 
@@ -125,17 +164,18 @@ start-all() {
 echo
 echo "    * Use 'stop-mysql' to stop just mysql service"
 stop-mysql() {
-    hab stop core/mysql
+    hab svc unload core/mysql
+    hab svc unload jarvus/mysql-remote
 }
 
 echo "    * Use 'stop-app' to stop just app service"
 stop-app() {
-    hab stop jarvus/gatekeeper-app
+    hab svc unload jarvus/gatekeeper-app
 }
 
 echo "    * Use 'stop-http' to stop just http service"
 stop-http() {
-    hab stop jarvus/gatekeeper-http
+    hab svc unload emergence/nginx
 }
 
 echo "    * Use 'stop-composite' to stop all services via composite"
@@ -153,9 +193,15 @@ stop-all() {
 
 
 echo
-echo "    * Use 'shell-mysql' to open a mysql shell for the studio mysql service"
-shell-mysql() {
+
+echo "    * Use 'shell-mysql-local' to open a mysql shell for the local mysql service"
+shell-mysql-local() {
     hab pkg exec core/mysql mysql -u root -h 127.0.0.1
+}
+
+echo "    * Use 'shell-mysql-remote' to open a mysql shell for the remote mysql service"
+shell-mysql-remote() {
+    hab pkg exec core/mysql mysql --defaults-extra-file=/hab/svc/mysql-remote/config/client.cnf
 }
 
 echo "    * Use 'shell-app' to open a php shell for the studio app service"
@@ -167,7 +213,7 @@ shell-app() {
 # overall instructions
 echo
 echo "    For a complete studio debug environment:"
-echo "      build-all && start-all"
+echo "      build-all && start-all-local"
 
 
 # final blank line
