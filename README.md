@@ -161,6 +161,10 @@
   - [X] Include whoops
   - [X] Include VarDumper
 - [X] Clear ext frameworks from build
+- [ ] Update README for 0.56.0 supervisor and emergence/nginx
+- [ ] Test and restore composite with local and remote mysql bind
+- [ ] Add "quick start" to readme
+- [ ] Document habitat concepts: studio, .studiorc, service, bindings, relationship to docker
 - [ ] Add postfix service
 - [ ] Add fcgi health check for status url if available
 - [ ] Add cron job for app heartbeat event
