@@ -6,10 +6,10 @@ services:
     command: --peer db --bind database:mysql.default
 
   http:
-    image: jarvus/gatekeeper-http
+    image: emergence/nginx
     command: --peer app --bind app:gatekeeper-app.default
     environment:
-      HAB_GATEKEEPER_HTTP: |
+      HAB_NGINX: |
         [http.listen]
         port = 7080
     ports:
