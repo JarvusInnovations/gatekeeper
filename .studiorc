@@ -84,7 +84,7 @@ echo "    * Use 'build-app' to build just the app package"
 build-app() {
     pushd /src > /dev/null
 
-    build services/app
+    build habitat-plans/app
 
     popd > /dev/null
 }
@@ -93,19 +93,15 @@ echo "    * Use 'build-composite' to build just the composite package"
 build-composite() {
     pushd /src > /dev/null
 
-    build
+    build habitat-plans/composite
 
     popd > /dev/null
 }
 
 echo "    * Use 'build-all' to build all packages"
 build-all() {
-    pushd /src > /dev/null
-
-    build services/app
-    build
-
-    popd > /dev/null
+    build-app
+    build-composite
 }
 
 
