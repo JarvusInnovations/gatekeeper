@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  app:
+    image: jarvus/gatekeeper-app
+    command: --peer db --bind database:mysql.default
+
+  http:
+    image: jarvus/gatekeeper-http
+    command: --peer app --bind app:gatekeeper-app.default
+    environment:
+      HAB_GATEKEEPER_HTTP: |
+        [http.listen]
+        port = 7080
+    ports:
+      - 7080:7080

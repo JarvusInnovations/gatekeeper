@@ -12,22 +12,18 @@ services:
       - mysql-data:/hab/svc/mysql/data
 
   app:
-    image: jarvus/gatekeeper-app
     depends_on:
       - db
-    command: --peer db --bind database:mysql.default
+    extends:
+      file: common-services.yml
+      service: app
 
   http:
-    image: jarvus/gatekeeper-http
     depends_on:
       - app
-    environment:
-      HAB_GATEKEEPER_HTTP: |
-        [http.listen]
-        port = 7080
-    ports:
-      - 7080:7080
-    command: --peer app --bind app:gatekeeper-app.default
+    extends:
+      file: common-services.yml
+      service: http
 
 
 volumes:

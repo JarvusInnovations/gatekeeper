@@ -56,23 +56,39 @@
     hab pkg export docker $HAB_ORIGIN/gatekeeper-http
     ```
 
-1. *Optional:* Export docker container for mysql
+1. Export docker container for mysql
 
-  ```bash
-  hab pkg export docker core/mysql
-  ```
+    - Local mysql:
+
+      ```bash
+      hab pkg export docker core/mysql
+      ```
+
+    - Remote mysql:
+
+      ```bash
+      hab pkg export docker jarvus/mysql-remote
+      ```
 
 1. Exit studio
 
-  ```bash
-  exit
-  ```
+    ```bash
+    exit
+    ```
 
 1. Launch containers with docker-compose
 
-  ```bash
-  docker-compose -f docker-compose.local-mysql.yml up
-  ```
+    - Local mysql:
+
+      ```bash
+      docker-compose -f docker-compose.mysql-local.yml up
+      ```
+
+    - Remote mysql:
+
+      ```bash
+      docker-compose -f docker-compose.mysql-remote.yml up
+      ```
 
 ### Helpful Commands
 
@@ -80,39 +96,74 @@
 
     ```bash
     SERVICE_NAME=app
-    docker-compose -f docker-compose.local-mysql.yml exec $SERVICE_NAME hab sup bash
+    MYSQL_MODE=local
+    docker-compose -f docker-compose.mysql-${MYSQL_MODE}.yml exec ${SERVICE_NAME} hab sup bash
     ```
 
 - Access interactive mysql shell:
 
+  - Local mysql:
+
     ```bash
-    docker-compose -f docker-compose.local-mysql.yml exec db mysql -u root -h 127.0.0.1
+    docker-compose -f docker-compose.mysql-local.yml \
+      exec db \
+      mysql \
+        --defaults-extra-file=/hab/svc/mysql/config/client.cnf \
+        gatekeeper
+    ```
+
+  - Remote mysql:
+
+    ```bash
+    docker-compose -f docker-compose.mysql-remote.yml \
+      exec db \
+      hab pkg exec core/mysql-client mysql \
+        --defaults-extra-file=/hab/svc/mysql-remote/config/client.cnf \
+        gatekeeper
     ```
 
 - Promote access level for registered user:
 
+  - Local mysql:
+
     ```bash
-    docker-compose -f docker-compose.local-mysql.yml exec db mysql -u root -h 127.0.0.1 gatekeeper -e 'UPDATE people SET AccountLevel = "Developer" WHERE Username = "chris"'
+    docker-compose -f docker-compose.mysql-local.yml \
+      exec db \
+      mysql \
+        --defaults-extra-file=/hab/svc/mysql/config/client.cnf \
+        gatekeeper \
+        -e 'UPDATE people SET AccountLevel = "Developer" WHERE Username = "chris"'
+    ```
+
+  - Remote mysql:
+
+    ```bash
+    docker-compose -f docker-compose.mysql-remote.yml \
+      exec db \
+      hab pkg exec core/mysql-client mysql \
+        --defaults-extra-file=/hab/svc/mysql-remote/config/client.cnf \
+        gatekeeper \
+        -e 'UPDATE people SET AccountLevel = "Developer" WHERE Username = "chris"'
     ```
 
 ## TODO
 
- - [X] Create services/http
-    - [X] Provide guide/command to run in studio
- - [X] Rename services/php5 to services/app
-    - [X] Use emergence/php5 as runtime dep instead of duplicating build plan
- - [X] Generate web.php with config
- - [ ] Get app working with minimal php-bootstrap changes
- - [X] Create composite service
-   - [X] Explore binding app and http services
- - [X] Create composer package for core lib
-   - [ ] Include PSR logger interface
-   - [X] Include whoops
-   - [X] Include VarDumper
- - [X] Clear ext frameworks from build
- - [ ] Add postfix service
- - [ ] Add fcgi health check for status url if available
- - [ ] Add cron job for app heartbeat event
+- [X] Create services/http
+  - [X] Provide guide/command to run in studio
+- [X] Rename services/php5 to services/app
+  - [X] Use emergence/php5 as runtime dep instead of duplicating build plan
+- [X] Generate web.php with config
+- [ ] Get app working with minimal php-bootstrap changes
+- [X] Create composite service
+  - [X] Explore binding app and http services
+- [X] Create composer package for core lib
+  - [ ] Include PSR logger interface
+  - [X] Include whoops
+  - [X] Include VarDumper
+- [X] Clear ext frameworks from build
+- [ ] Add postfix service
+- [ ] Add fcgi health check for status url if available
+- [ ] Add cron job for app heartbeat event
 
 ## Journal
 

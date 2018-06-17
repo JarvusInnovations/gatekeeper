@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  db:
+    image: jarvus/mysql-remote
+    environment:
+      HAB_MYSQL_REMOTE: |
+        app_username = "desktopuser"
+        app_password = "MAtJPBgRdV"
+        host = "desktop.chrisalfano.com"
+
+  app:
+    depends_on:
+      - db
+    extends:
+      file: common-services.yml
+      service: app
+    command: --peer db --bind database:mysql-remote.default
+
+  http:
+    depends_on:
+      - app
+    extends:
+      file: common-services.yml
+      service: http
