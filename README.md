@@ -16,7 +16,7 @@
     hab setup
     ```
 
-1. Launch studio with port 80 mapped to host:
+1. Launch studio with port 7080 mapped to host:
 
     ```bash
     HAB_DOCKER_OPTS="-p 7080:7080" hab studio enter
@@ -32,6 +32,67 @@
 
     ```bash
     start-all
+    ```
+
+## Working with Docker
+
+1. Launch studio:
+
+    ```bash
+    hab studio enter
+    ```
+
+1. Build app package and export docker container
+
+    ```bash
+    build services/app
+    hab pkg export docker $HAB_ORIGIN/gatekeeper-app
+    ```
+
+1. Build http package and export docker container
+
+    ```bash
+    build services/http
+    hab pkg export docker $HAB_ORIGIN/gatekeeper-http
+    ```
+
+1. *Optional:* Export docker container for mysql
+
+  ```bash
+  hab pkg export docker core/mysql
+  ```
+
+1. Exit studio
+
+  ```bash
+  exit
+  ```
+
+1. Launch containers with docker-compose
+
+  ```bash
+  docker-compose -f docker-compose.local-mysql.yml up
+  ```
+
+### Helpful Commands
+
+- Launch interactive bash shell for any service container defined in `docker-compose.*.yml`:
+
+    ```bash
+    SERVICE_NAME=app
+    docker-compose -f docker-compose.local-mysql.yml exec $SERVICE_NAME hab sup bash
+    ```
+
+- Access interactive mysql shell:
+
+    ```bash
+    docker-compose -f docker-compose.local-mysql.yml exec db mysql -u root -h 127.0.0.1
+    ```
+
+- Promote access level for registered user:
+
+    ```bash
+    docker-compose -f docker-compose.local-mysql.yml exec db mysql -u root -h 127.0.0.1 gatekeeper -e 'UPDATE people SET AccountLevel = "Developer" WHERE Username = "chris"'
     ```
 
 ## TODO
@@ -51,6 +112,7 @@
  - [X] Clear ext frameworks from build
  - [ ] Add postfix service
  - [ ] Add fcgi health check for status url if available
+ - [ ] Add cron job for app heartbeat event
 
 ## Journal
 
