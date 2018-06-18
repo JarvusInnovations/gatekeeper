@@ -91,6 +91,8 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
     start-all-local
     ```
 
+    Any problems? Use `hab sup status` and `sup-log` to investigate.
+
 1. **Use the application**
 
     You should now be able to open http://localhost:7080/ on your workstation and use the application.
