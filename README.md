@@ -21,9 +21,9 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
     Habitat is a tool for automating all the build and runtime workflows for applications, in a way that behaves consistently across time and environments. An application automated with habitat can be run on any operating system, connected to other applications running locally or remotely, and deployed to either a container, virtual machine, or bare-metal system.
 
-    Installing habitat only adds one binary to your system, `hab`, and initialized the `/hab` tree.
+    Installing habitat only adds one binary to your system, `hab`, and initializes the `/hab` tree.
 
-    This command must be run once per system:
+    This command must be run once per workstation:
 
     ```bash
     curl -s https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
@@ -39,14 +39,14 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
     hab setup
     ```
 
-    *Entering a __default origin__ will generate a build key and determine what vendor name all the packages you build will be prefixed with. It should correspond to the organization you would publish internally or externally as. This is recommended.*
+    *Entering a __default origin__ will generate a build key and determine what vendor name all the packages you build will be prefixed with. It should correspond to the organization you would publish internally or externally as. __This is recommended__.*
 
     *Authenticating with GitHub is only necessary for publishing builds to the public artifact depot, [bldr.habitat.sh](https://bldr.habitat.sh/). You can skip this for now and re-run `hab setup` later.*
 
 1. **Clone this repository and change into it**
 
     ```bash
-    git clone git@github.com:CityOfPhiladelphia/gatekeeper-phila.git -b develop
+    git clone git@github.com:JarvusInnovations/Gatekeeper.git -b phila-develop
     cd ./gatekeeper-phila
     ```
 
