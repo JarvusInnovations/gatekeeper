@@ -80,7 +80,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
     This shortcut is defined by [`.studiorc`](./.studiorc):
 
     ```bash
-    build-all
+    build-app
     ```
 
 1. **Launch all applications**
