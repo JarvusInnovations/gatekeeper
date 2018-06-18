@@ -2,7 +2,7 @@
 
 This repository contains Gatekeeper with Philadelphia customizations applied, refactored for build and runtime automation with [habitat](https://www.habitat.sh/).
 
-Eventually it will be split up further such that the Gatekeeper base and Philadelphia customizations are kept separate and combined during a build process. Currently the [`site`](./site/) tree is extracted already-composited from a legacy site instance with the [`emergence-source-http-legacy pull'](http://forum.emr.ge/t/pull-any-site-into-a-git-repo/111) command.
+Eventually it will be split up further such that the Gatekeeper base and Philadelphia customizations are kept separate and combined during a build process. Currently the `/site/` tree is extracted already-composited from a legacy site instance with the [`emergence-source-http-legacy pull`](http://forum.emr.ge/t/pull-any-site-into-a-git-repo/111) command.
 
 ## Table of Contents
 
@@ -66,13 +66,13 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
 1. **Review available studio commands**
 
-    After habitat finishes generating the studio, the [`.studiorc`](./studiorc) script provided in the root of this repository is detected and executed to provide project-specific initialization of the interactive shell.
+    After habitat finishes generating the studio, the [`.studiorc`](./.studiorc) script provided in the root of this repository is detected and executed to provide project-specific initialization of the interactive shell.
 
     By convention, this script will install packages and define commands that are useful to working on the project, printing documentation along the way. Look for this documentation just above your shell prompt once it finally appears.
 
 1. **Build all applications**
 
-    This shortcut is defined by [`.studiorc`](./studiorc):
+    This shortcut is defined by [`.studiorc`](./.studiorc):
 
     ```bash
     build-all
@@ -80,7 +80,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
 1. **Launch all applications**
 
-    This shortcut is defined by [`.studiorc`](./studiorc):
+    This shortcut is defined by [`.studiorc`](./.studiorc):
 
     ```bash
     start-all-local
@@ -90,7 +90,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
     You should now be able to open http://localhost:7080/ on your workstation and use the application.
 
-    Register a user account for yourself using the online signup form. Then run `shell-mysql-local` to enter an interactive MySQL shell and run this SQL statement to upgrade the access level for all registered users:
+    Create a user account for yourself using the online register form. Then run `shell-mysql-local` to enter an interactive MySQL shell and run this SQL statement to upgrade the access level for all registered users:
 
     ```sql
     UPDATE gatekeeper.people SET AccountLevel = "Developer";
