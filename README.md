@@ -46,7 +46,12 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 1. **Clone this repository and change into it**
 
     ```bash
-    git clone -b phila-develop git@github.com:JarvusInnovations/Gatekeeper.git ./gatekeeper-phila
+    git clone \
+       --recursive \
+       -b phila-develop \
+       git@github.com:JarvusInnovations/Gatekeeper.git \
+       ./gatekeeper-phila
+
     cd ./gatekeeper-phila
     ```
 
