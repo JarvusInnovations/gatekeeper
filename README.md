@@ -17,6 +17,13 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
 ## Quick Start
 
+1. **Install Docker**
+
+    On Mac and Windows workstations, Docker must be installed to use habitat. On Linux, Docker is optional.
+
+    - [Download *Docker for Mac*](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+    - [Download *Docker for Windows*](https://store.docker.com/editions/community/docker-ce-desktop-windows)
+
 1. **Install habitat on your system**
 
     Habitat is a tool for automating all the build and runtime workflows for applications, in a way that behaves consistently across time and environments. An application automated with habitat can be run on any operating system, connected to other applications running locally or remotely, and deployed to either a container, virtual machine, or bare-metal system.
