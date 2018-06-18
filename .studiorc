@@ -100,8 +100,7 @@ build-composite() {
 
 echo "    * Use 'build-all' to build all packages"
 build-all() {
-    build-app
-    build-composite
+    build-app && build-composite
 }
 
 
@@ -144,16 +143,12 @@ start-composite() {
 
 echo "    * Use 'start-all-local' to start all services individually with local mysql"
 start-all-local() {
-    start-mysql-local
-    start-app-local
-    start-http
+    start-mysql-local && start-app-local && start-http
 }
 
 echo "    * Use 'start-all-remote' to start all services individually with remote mysql"
 start-all-remote() {
-    start-mysql-remote
-    start-app-remote
-    start-http
+    start-mysql-remote && start-app-remote && start-http
 }
 
 
