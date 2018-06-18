@@ -52,4 +52,9 @@ class Transaction extends \ActiveRecord
             'class' => Key::class
         ]
     ];
+
+    public static $dynamicFields = [
+        'Endpoint',
+        'Key'
+    ];
 }

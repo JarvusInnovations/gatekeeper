@@ -28,6 +28,11 @@ class KeyEndpoint extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Key',
+        'Endpoint'
+    ];
+
     public static $validators = [
         'Key' => 'require-relationship',
         'Endpoint' => 'require-relationship'

@@ -4,6 +4,7 @@ namespace Gatekeeper\Metrics;
 
 use DB;
 use Gatekeeper\Endpoints\Endpoint;
+use Gatekeeper\Keys\Key;
 
 class MetricsRequestHandler extends \RequestHandler
 {
@@ -19,6 +20,8 @@ class MetricsRequestHandler extends \RequestHandler
                 return static::handleEndpointsCurrentRequest();
             case 'endpoints-historic':
                 return static::handleEndpointsHistoricRequest();
+            case 'keys-current':
+                return static::handleKeysCurrentRequest();
             default:
                 return static::throwInvalidRequestError('Global metrics are not yet implemented');
         }
@@ -33,7 +36,7 @@ class MetricsRequestHandler extends \RequestHandler
         foreach (Endpoint::getAll() AS $Endpoint) {
             $results[] = [
                 'EndpointID' => $Endpoint->ID,
-                
+
                 // TODO: move this list to Metric config var and implement Endpoint->getAllMetrics
                 'requests' => $Endpoint->getCounterMetric('requests'),
                 'responseTime' => $Endpoint->getAverageMetric('responseTime', 'requests'),
@@ -44,7 +47,7 @@ class MetricsRequestHandler extends \RequestHandler
             ];
         }
 
-        return static::respond('currentEndpointMetrics', [
+        return static::respond('currentEndpointsMetrics', [
            'data' => $results
         ]);
     }
@@ -95,6 +98,31 @@ class MetricsRequestHandler extends \RequestHandler
                     ]
                 )
             )
+        ]);
+    }
+
+    public static function handleKeysCurrentRequest()
+    {
+        $GLOBALS['Session']->requireAccountLevel('Staff');
+
+        $results = [];
+
+        foreach (Key::getAll() AS $Key) {
+            $results[] = [
+                'KeyID' => $Key->ID,
+
+                // TODO: move this list to Metric config var and implement Endpoint->getAllMetrics
+                'requests' => $Key->getCounterMetric('requests'),
+                'responseTime' => $Key->getAverageMetric('responseTime', 'requests'),
+                'responsesExecuted' => $Key->getCounterMetric('responsesExecuted'),
+                'responsesCached' => $Key->getCounterMetric('responsesCached'),
+                'bytesExecuted' => $Key->getCounterMetric('bytesExecuted'),
+                'bytesCached' => $Key->getCounterMetric('bytesCached')
+            ];
+        }
+
+        return static::respond('currentKeysMetrics', [
+           'data' => $results
         ]);
     }
 }

@@ -84,9 +84,9 @@
             </div>
         </header>
 
-        <ul class="endpoint-list">
+        <ul class="endpoint-list cardlist">
         {foreach item=Endpoint from=$data}
-            <li class="endpoint-list-item" data-endpoint-id="{$Endpoint->ID}">
+            <li class="endpoint-list-item cardlist-item" data-endpoint-id="{$Endpoint->ID}">
                 {$avgResponseTime = $Endpoint->getAverageMetric('responseTime', 'requests')}
 
                 {if $Endpoint->isDown()}

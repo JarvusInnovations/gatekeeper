@@ -144,6 +144,13 @@ class Endpoint extends ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Rewrites' => [
+            'relationship' => 'Rewrites',
+            'accountLevelEnumerate' => 'Staff'
+        ]
+    ];
+
     public static $validators = [
         'Title' => [
             'minlength' => 2

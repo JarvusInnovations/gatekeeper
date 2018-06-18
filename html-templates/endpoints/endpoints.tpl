@@ -11,23 +11,23 @@
         </div>
     </header>
 
-    <section class="endpoints">
+    <section class="endpoints trafficstack">
         <header>
             <input type="search" class="list-filter" placeholder="Filter endpoints&hellip;">
 
-            <div class="endpoints-col-headers">
-                <form class="endpoints-col-header title-col">
+            <div class="trafficstack-col-headers">
+                <form class="trafficstack-col-header title-col">
 {*                     <span class="radio-set-label">Show:</span> *}
                     <label class="radio-set-item"><input type="radio" name="mode" value="requests" checked> <span class="label-text">Request Count</span></label>
                     <label class="radio-set-item"><input type="radio" name="mode" value="bytes"> <span class="label-text">Bytes Transferred</span></label>
                 </form>
 
-                <div class="endpoints-col-header metric-secondary-col"><div class="header-text">Response Time (ms)</div></div>
-                <div class="endpoints-col-header metric-secondary-col"><div class="header-text">Cache Hit Ratio</div></div>
+                <div class="trafficstack-col-header metric-secondary-col"><div class="header-text">Response Time (ms)</div></div>
+                <div class="trafficstack-col-header metric-secondary-col"><div class="header-text">Cache Hit Ratio</div></div>
             </div>
         </header>
         {foreach item=Endpoint from=$data}
-            <article class="endpoint" {html_attributes_encode $Endpoint->getData() prefix="data-"}>
+            <article class="endpoint trafficstack-row" {html_attributes_encode $Endpoint->getData() prefix="data-"}>
                 <div class="summary">
                     <h3 class="title"><a href="{$Endpoint->getUrl()|escape}">/{$Endpoint->Path|escape}</a></h3>
                 </div>
@@ -51,7 +51,12 @@
 {block "js-bottom"}
     {$dwoo.parent}
 
-    {if !$.get.jsdebug}
+    {if $.get.jsdebug}
+        {sencha_bootstrap
+            patchLoader=false
+            packageRequirers=array('sencha-workspace/pages/src/abstractpage/TrafficStack.js', 'sencha-workspace/pages/src/pages/Endpoints.js')
+        }
+    {else}
         <script src="{Site::getVersionedRootUrl('js/pages/Endpoints.js')}"></script>
     {/if}
 

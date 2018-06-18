@@ -78,7 +78,6 @@
 }
 
 .endpoint-list-item {
-    @extend %cardlist-item;
     @mixin metric-color($color: $accent-color) {
         $pure: tint(saturate($color, 100%), 80%);
         $pure-dark: shade(saturate($color, 100%), 60%);

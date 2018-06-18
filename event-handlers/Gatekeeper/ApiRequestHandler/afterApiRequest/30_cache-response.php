@@ -55,4 +55,5 @@ Cache::store("response:$Endpoint->ID:$url", array(
     ,'expires' => $expires
     ,'headers' => $cachableHeaders
     ,'body' => $_EVENT['responseBody']
+    ,'bodyLength' => strlen($_EVENT['responseBody'])
 ), $expires - $startTime);

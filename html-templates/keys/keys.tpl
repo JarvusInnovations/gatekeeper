@@ -11,63 +11,66 @@
         </div>
     </header>
 
-    <form method="GET">
-        <label>
-            Sort by
-            <select name="sort" onchange="this.form.submit()">
-                <option value="">No sort</option>
-                <option value="calls-total" {refill field=sort selected=calls-total}>Total calls</option>
-                <option value="calls-week" {refill field=sort selected=calls-week}>Calls this week</option>
-                <option value="calls-day-avg" {refill field=sort selected=calls-day-avg}>Average calls per day</option>
-                <option value="endpoints" {refill field=sort selected=endpoints}># of endpoints</option>
-            </select>
-            <select name="dir" onchange="this.form.submit()">
-                <option {refill field=dir selected=DESC}>DESC</option>
-                <option {refill field=dir selected=ASC}>ASC</option>
-            </select>
-        </label>
-    </form>
+    <section class="keys trafficstack">
+        <header>
+            <input type="search" class="list-filter" placeholder="Filter keys&hellip;">
 
-    <section class="keys">
-        <p class="muted">Metrics are updated every {Gatekeeper\Keys\Key::$metricTTL} seconds.</p>
+            <div class="trafficstack-col-headers">
+                <form class="trafficstack-col-header title-col">
+{*                     <span class="radio-set-label">Show:</span> *}
+                    <label class="radio-set-item"><input type="radio" name="mode" value="requests" checked> <span class="label-text">Request Count</span></label>
+                    <label class="radio-set-item"><input type="radio" name="mode" value="bytes"> <span class="label-text">Bytes Transferred</span></label>
+                </form>
 
+                <div class="trafficstack-col-header metric-secondary-col"><div class="header-text">Response Time (ms)</div></div>
+                <div class="trafficstack-col-header metric-secondary-col"><div class="header-text">Cache Hit Ratio</div></div>
+            </div>
+        </header>
         {foreach item=Key from=$data}
-            {$metrics = array(
-                callsTotal = $Key->getMetric(calls-total)
-                ,callsWeek = $Key->getMetric(calls-week)
-                ,callsDayAvg = $Key->getMetric(calls-day-avg)
-                ,endpoints = tif($Key->AllEndpoints, null, $Key->getMetric(endpoints))
-            )}
+            <article class="key trafficstack-row" {html_attributes_encode $Key->getData() prefix="data-"}>
+                <div class="summary">
+                    <h3 class="title">{apiKey $Key}</h3>
+                </div>
 
-            <article class="key">
-                <div class="primary-metric"><strong>{$metrics.callsTotal|number_format} call{tif $metrics.callsTotal != 1 ? s}</strong> all time</div>
                 <div class="details">
-                    <header>
-                        <h3 class="title">{apiKey $Key}</h3>
-                        <div class="meta owner">{if $Key->ContactEmail}
+                    <div class="info contact">
+                        Contact:
+                        {if $Key->ContactEmail}
                             {$recipient = $Key->ContactEmail}
                             {if $Key->ContactName}
                                 {$recipient = "$Key->ContactName <$recipient>"}
                             {/if}
-                                <a href="mailto:{$recipient|escape}" title="Contact key owner">{$recipient|escape}</a>
-                            {elseif $Key->ContactName}
-                                {$Key->ContactName}
-                            {/if}
-                        </div>
-                    </header>
-                    <ul class="other-metrics">
-                        <li><strong>{$metrics.callsWeek|number_format} call{tif round($metrics.callsWeek) != 1 ? s}</strong> this week</li>
-                        <li><strong>{$metrics.callsDayAvg|number_format} call{tif round($metrics.callsDayAvg) != 1 ? s}</strong> avg per day</li>
-                        <li><strong>{tif $Key->AllEndpoints ? 'All' : $metrics.endpoints|number_format} endpoint{tif $Key->AllEndpoints || $metrics.endpoints != 1 ? s}</strong> permitted</li>
-                    </ul>
+
+                            <a href="mailto:{$recipient|escape}" title="Contact key owner">{$recipient|escape}</a>
+                        {elseif $Key->ContactName}
+                            {$Key->ContactName}
+                        {/if}
+                    </div>
+                    <div class="buttons">
+                        <a class="button" href="{$Key->getUrl('/edit')}">Edit</a>
+                        <a class="button" href="/bans/create?KeyID={$Key->Key}">Suspend</a>
+                        <a class="button" href="{$Key->getUrl()}#key-log">View Log</a>
+                    </div>
                 </div>
-                <footer>
-                    <a class="button" href="/keys/{$Key->Key}/edit">Edit</a>
-                    <a class="button" href="/bans/create?KeyID={$Key->Key}">Suspend</a>
-                    <a class="button" href="/keys/{$Key->Key}#key-log">View Log</a>
-                </footer>
             </article>
         {/foreach}
-
     </section>
+
+{/block}
+
+{block "js-bottom"}
+    {$dwoo.parent}
+
+    {if $.get.jsdebug}
+        {sencha_bootstrap
+            patchLoader=false
+            packageRequirers=array('sencha-workspace/pages/src/abstractpage/TrafficStack.js', 'sencha-workspace/pages/src/pages/Keys.js')
+        }
+    {else}
+        <script src="{Site::getVersionedRootUrl('js/pages/Keys.js')}"></script>
+    {/if}
+
+    <script>
+        Ext.require('Site.page.Keys');
+    </script>
 {/block}

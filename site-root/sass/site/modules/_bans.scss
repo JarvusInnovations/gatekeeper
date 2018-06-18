@@ -1,10 +1,7 @@
 .bans {
-    @extend %cardlist !optional;
 }
 
 .ban {
-    @extend %cardlist-item;
-    
     & > .details {
         padding: .5em;
     }

@@ -34,6 +34,11 @@ class KeyUser extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Key',
+        'Person'
+    ];
+
     public static $validators = [
         'Key' => 'require-relationship',
         'Person' => 'require-relationship'

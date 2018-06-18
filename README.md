@@ -14,7 +14,7 @@ It provides a central facility for logging, analyzing, rate-limiting, and creden
 - **Rate limiting**: Global and per-user rate limits configurable for each endpoint
 - **Bandwidth limiting**: Global bandwidth limits configurable for each endpoint
 - **Key management**: Configure endpoints to require keys, issue keys, and grant keys access to individual or all endpoints with an optional expiration date.
-- **Ban manegement**: Ban a key or an IP permenantly or until a given date
+- **Ban management**: Ban a key or an IP permanently or until a given date
 - **Logging**: Exportable logs record endpoint, path, response code, response time, response size, client IP, and key if provided for every transaction
 - **Top users report**: View top users by IP or key over any given time period, globally or for a given endpoint
 - **Uptime monitoring**: Ping your internal endpoints on a regular interval to test for a healthy response with an optional regex pattern for the response body
@@ -28,7 +28,7 @@ These features are currently under development for the next release:
 - Advanced filtering, sorting, and searching for transactions log
 
 ## Requirements
-The GateKeeper application is built on the Emergence PHP framework and deployement engine, and requires an Emergence server to host it.
+The GateKeeper application is built on the Emergence PHP framework and deployment engine, and requires an Emergence server to host it.
 
 Emergence takes just a few minutes to setup on a Linux VM, and is designed to have a fresh system to itself. Once launched
 it will configure services on the machine as-needed to host an instance of the application along with any other
@@ -52,4 +52,3 @@ This video walks through the complete process of installing emergence and then i
 printf "*/5 *\t* * *\troot\techo \"Emergence\\\\EventBus::fireEvent('heartbeat', 'Gatekeeper');\" | /usr/local/bin/emergence-shell gatekeeper > /dev/null\n" | sudo tee /etc/cron.d/gatekeeper-heartbeat
 ```
 ###
-

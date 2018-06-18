@@ -33,6 +33,10 @@ class EndpointRewrite extends \ActiveRecord
         ]
     ];
 
+    public static $dynamicFields = [
+        'Endpoint'
+    ];
+
     public static $validators = [
         'Endpoint' => 'require-relationship',
         'Pattern' => [
