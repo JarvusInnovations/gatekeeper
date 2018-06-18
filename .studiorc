@@ -121,13 +121,13 @@ start-mysql-remote() {
 
 echo "    * Use 'start-app-local' to start app service bound to local mysql"
 start-app-local() {
-    hab svc load jarvus/gatekeeper-app \
+    hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
         --bind=database:mysql.default
 }
 
 echo "    * Use 'start-app-remote' to start app service bound to remote mysql"
 start-app-remote() {
-    hab svc load jarvus/gatekeeper-app \
+    hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
         --bind=database:mysql-remote.default
 }
 
@@ -139,7 +139,7 @@ start-http() {
 
 echo "    * Use 'start-composite' to start app+http via composite"
 start-composite() {
-    hab svc load jarvus/gatekeeper
+    hab svc load "${HAB_ORIGIN}/gatekeeper"
 }
 
 echo "    * Use 'start-all-local' to start all services individually with local mysql"
@@ -166,7 +166,7 @@ stop-mysql() {
 
 echo "    * Use 'stop-app' to stop just app service"
 stop-app() {
-    hab svc unload jarvus/gatekeeper-app
+    hab svc unload "${HAB_ORIGIN}/gatekeeper-app"
 }
 
 echo "    * Use 'stop-http' to stop just http service"
@@ -176,7 +176,7 @@ stop-http() {
 
 echo "    * Use 'stop-composite' to stop all services via composite"
 stop-composite() {
-    hab stop jarvus/gatekeeper
+    hab stop "${HAB_ORIGIN}/gatekeeper"
 }
 
 echo "    * Use 'stop-all' to stop everything"

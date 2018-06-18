@@ -6,10 +6,10 @@ pkg_maintainer="Chris Alfano <chris@jarv.us>"
 pkg_license=("AGPL-3.0")
 
 pkg_services=(
-    jarvus/gatekeeper-app
+    "${pkg_origin}/gatekeeper-app"
     emergence/nginx
 )
 
 pkg_bind_map=(
-    [emergence/nginx]="app:jarvus/gatekeeper-app"
+    [emergence/nginx]="app:${pkg_origin}/gatekeeper-app"
 )
