@@ -4,5 +4,5 @@
 	branch = master
 [submodule "site"]
 	path = site
-	url = git@github.com:JarvusInnovations/gatekeeper-phila.git
+	url = git@github.com:CityOfPhiladelphia/gatekeeper-phila.git
 	branch = sites/gatekeeper.sandbox01.jarv.us
