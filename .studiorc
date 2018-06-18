@@ -12,6 +12,10 @@ composer g require \
     nikic/php-parser:^3 \
     psy/psysh:@stable
 
+pushd /src/core/ > /dev/null
+composer install
+popd > /dev/null
+
 sed -e "s#\#\!/usr/bin/env php#\#\!$(hab pkg path emergence/php5)/bin/php#" --in-place "/root/.composer/vendor/psy/psysh/bin/psysh"
 
 mkdir -p /root/.config/psysh
