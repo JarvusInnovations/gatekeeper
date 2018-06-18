@@ -27,6 +27,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
     ```bash
     curl -s https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
+    hab --version # should report 0.56.0
     ```
 
 1. **Configure the `hab` client for your user**
