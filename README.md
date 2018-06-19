@@ -11,6 +11,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 - [Quick Start](#quick-start)
 - [Running via Docker](#running-via-docker)
   - [Helpful Docker Commands](#helpful-docker-commands)
+- [Running directly under Linux](#running-directly-under-linux)
 - [Housekeeping](#housekeeping): Temporary scratch area, to be erased for first release
   - [TODO](#todo)
   - [Journal](#journal)
