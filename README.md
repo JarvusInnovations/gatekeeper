@@ -83,7 +83,7 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
     By convention, this script will install packages and define commands that are useful to working on the project, printing documentation along the way. Look for this documentation just above your shell prompt once it finally appears.
 
-1. **Build all applications**
+1. **Build `gatekeeper-app` package**
 
     This shortcut is defined by [`.studiorc`](./.studiorc):
 
@@ -91,9 +91,9 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
     build-app
     ```
 
-1. **Launch all applications**
+1. **Launch all services**
 
-    This shortcut is defined by [`.studiorc`](./.studiorc):
+    This shortcut is defined by [`.studiorc`](./.studiorc), it starts `${HAB_ORIGIN}/gatekeeper-app`, `emergence/nginx`, and `core/mysql` as services with needed bindings between them:
 
     ```bash
     start-all-local
