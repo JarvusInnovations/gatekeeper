@@ -18,6 +18,8 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
 ## Quick Start
 
+You can get a development instance of Gatekeeper running out of this repository on your local workstation, no matter what operating system you're running, without making any messy changes to your system.
+
 1. **Install Docker**
 
     On Mac and Windows workstations, Docker must be installed to use habitat. On Linux, Docker is optional.
