@@ -251,6 +251,26 @@ With Docker, you can run each service is its own container. Each container will 
              '
     ```
 
+- Fix `Waiting for service binds...` errors in `sup-log`
+
+  Having `docker-compose` clean up the network with the `down` command can fix this common issue. This will not erase persistent volumes or binds like `core/mysql`'s data.
+
+  - Local mysql:
+
+    ```bash
+    docker-compose \
+      -f docker-compose.mysql-local.yml \
+      down
+      ```
+
+  - Remote mysql:
+
+    ```bash
+    docker-compose \
+      -f docker-compose.mysql-remote.yml \
+      down
+    ```
+
 ## Housekeeping
 
 ### TODO
