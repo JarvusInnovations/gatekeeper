@@ -5,9 +5,9 @@ services:
     image: jarvus/mysql-remote
     environment:
       HAB_MYSQL_REMOTE: |
-        app_username = "desktopuser"
+        app_username = "myuser"
         app_password = "MAtJPBgRdV"
-        host = "desktop.chrisalfano.com"
+        host = "mysqlhost.example.org"
 
   app:
     depends_on:
