@@ -137,8 +137,10 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
     ```bash
     build-app
-    hab pkg export docker "${HAB_ORIGIN}/gatekeeper-app"
+    hab pkg export docker $(ls -1t /src/results/${HAB_ORIGIN}-gatekeeper-app-*.hart | head -n 1)
     ```
+
+    Due to [issue habitat#5218](https://github.com/habitat-sh/habitat/issues/5218), we must provide the path to the newest `.hart` build artifact instead of just a package identifier.
 
 1. Export http service docker container
 
