@@ -127,6 +127,8 @@ Eventually it will be split up further such that the Gatekeeper base and Philade
 
 ## Running via Docker
 
+With Docker, you can run each service is its own container. Each container will have its own habitat supervisor process, and each supervisor is given the IP/hostname of at least one of the other containers as a `--peer`. The formed *ring* of supervisors connect all the services to each other.
+
 1. Launch studio:
 
     ```bash
