@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: jarvus/gatekeeper-app
+    image: "${HAB_ORIGIN}/gatekeeper-app"
     command: --peer db --bind database:mysql.default
 
   http:
