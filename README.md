@@ -271,6 +271,87 @@ With Docker, you can run each service is its own container. Each container will 
       down
     ```
 
+
+## Running directly under Linux
+
+The habitat supervisor [can be run directly under **any** Linux system](https://www.habitat.sh/docs/best-practices/#running-habitat-servers) and run any number of services, either by itself or in a *ring* of supervisors it's `--peer`ed with.
+
+1. Create `hab` user and group
+
+    Unprivileged services will commonly try to run under the `hab` user and `hab` group. There are automatically created in generated studio and Docker environments, but must be initialized manually on your own Linux system:
+
+    ```bash
+    sudo groupadd hab
+    sudo useradd -g hab hab
+    ```
+
+1. Make `hab sup run` on startup
+
+    The details of how to do this vary by operating system, and you can employ any means to get `hab sup run` running. That command will start the supervisor and then it will handle the rest. Any peer supervisors should be supplied when it is run.
+
+    On Linux systems that use systemd like Ubuntu 15.04+, you might use a unit file like this to launch the supervisor on system startup:
+
+    ```systemd
+    [Unit]
+    Description=The Habitat Supervisor
+
+    [Service]
+    ExecStart=/bin/hab sup run
+
+    [Install]
+    WantedBy=default.target
+    ```
+
+1. Configure and load database service
+
+    - Local mysql:
+
+      ```bash
+      sudo hab svc load core/mysql
+      ```
+
+    - Remote mysql:
+
+      ```bash
+      sudo vim /hab/user/mysql-remote/config/user.toml
+      # configure app_username, app_password, host, and port
+
+      sudo hab svc load jarvus/mysql-remote
+      ```
+
+1. Install app package via local build artifact
+
+    ```bash
+    export HAB_ORIGIN="jarvus"
+    sudo hab pkg install results/${HAB_ORIGIN}-gatekeeper-app-0.1.0-20180619032909-x86_64-linux.hart
+    ```
+
+1. Load app service bound to mysql
+
+    - Local mysql:
+
+      ```bash
+      sudo hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
+          --bind=database:mysql.default
+      ```
+
+    - Remote mysql:
+
+      ```bash
+      sudo hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
+          --bind=database:mysql-remote.default
+      ```
+
+1. Load nginx service bound to app
+
+    ```bash
+    sudo vim /hab/user/nginx/config/user.toml
+    # configure http.listen.port if you don't want it to be 80
+
+    sudo hab svc load emergence/nginx \
+        --bind=app:gatekeeper-app.default
+    ```
+
 ## Housekeeping
 
 ### TODO
