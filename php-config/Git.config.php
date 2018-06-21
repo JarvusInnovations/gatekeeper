@@ -25,24 +25,6 @@ Git::$repositories['Gatekeeper'] = [
     ]
 ];
 
-Git::$repositories['symfony-yaml'] = [
-    'remote' => 'https://github.com/symfony/Yaml.git',
-    'originBranch' => 'master',
-    'workingBranch' => 'master',
-    'trees' => [
-        'php-classes/Symfony/Component/Yaml' => [
-            'path' => '.',
-            'exclude' => [
-                '#\\.gitignore$#',
-                '#^/Tests#',
-                '#\\.md$#',
-                '#composer\\.json#',
-                '#phpunit\\.xml\\.dist#'
-            ]
-        ]
-    ]
-];
-
 Git::$repositories['jarvus-highlighter'] = [
     'remote' => "https://github.com/JarvusInnovations/jarvus-highlighter.git",
     'originBranch' => 'master',
