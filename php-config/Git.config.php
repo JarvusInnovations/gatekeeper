@@ -1,18 +1,15 @@
 <?php
 
-Git::$repositories['Gatekeeper'] = [
+Git::$repositories['gatekeeper'] = [
     'remote' => 'git@github.com:JarvusInnovations/Gatekeeper.git',
-    'originBranch' => 'master',
-    'workingBranch' => 'instances/' . Site::getConfig('primary_hostname'),
-    'localOnly' => true,
+    'originBranch' => 'develop',
+    'workingBranch' => 'develop',
     'trees' => [
         'dwoo-plugins',
         'event-handlers',
         'html-templates',
         'php-classes',
-        'php-config' => [
-            'exclude' => '#^/Git\\.config\\.php$#' // don't sync this file
-        ],
+        'php-config',
         'php-migrations',
         'phpunit-tests',
         'sencha-workspace/pages',
