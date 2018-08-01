@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo -e "$(date +'%F %T')\t$0\t$@" >> "$(git rev-parse --show-toplevel)/git-projector/log"
+
+echo -e "RAN:\t$@\n"
