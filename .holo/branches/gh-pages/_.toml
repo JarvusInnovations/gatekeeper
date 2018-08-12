@@ -1,0 +1,6 @@
+cwd = "build/"
+src = "**"
+
+# assumed defaults:
+layer = "gh-pages" # assumed from filename+directory if not set
+dest = "." # additional path between context and matched file
