@@ -1,0 +1,8 @@
+src = "**"
+after = [ "skeleton-v2" ]
+
+# assumed defaults:
+source = "gatekeeper" # assumed from filename+directory if not set
+layer = "gatekeeper" # defaults to source
+cwd = "." # root in source for matching files
+dest = "." # additional path between context and matched file

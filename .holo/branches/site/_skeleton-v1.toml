@@ -1,0 +1,7 @@
+src = "**"
+
+# assumed defaults:
+source = "skeleton-v1" # assumed from filename+directory if not set
+layer = "skeleton-v1" # defaults to source
+cwd = "." # root in source for matching files
+dest = "." # additional path between context and matched file

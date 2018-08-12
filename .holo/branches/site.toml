@@ -1,0 +1,2 @@
+[holobranch]
+lens = false # default, no lens. otherwise a habitat package ident that provides a `project` hook
