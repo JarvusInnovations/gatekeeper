@@ -1,5 +1,1 @@
 [holobranch]
-lens = "jarvus/lens-builder-node"
-
-# assumed defaults:
-command = "npm run build"

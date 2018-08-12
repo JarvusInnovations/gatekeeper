@@ -1,3 +1,4 @@
+[holospec]
 src = "**"
 after = [ "skeleton-v1" ]
 
