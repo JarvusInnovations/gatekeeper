@@ -1,8 +1,3 @@
 [holospec]
 src = "**"
 after = [ "gatekeeper" ]
-
-# assumed defaults:
-layer = "jarvus-highlighter" # assumed from filename+directory if not set
-cwd = "." # root in source for matching files
-dest = "." # additional path between context and matched file
