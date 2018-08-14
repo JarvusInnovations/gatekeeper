@@ -1,0 +1,3 @@
+[holospec]
+src = "**"
+after = [ "gatekeeper" ]
