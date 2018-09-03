@@ -6,3 +6,7 @@
 	path = site
 	url = git@github.com:JarvusInnovations/Gatekeeper.git
 	branch = sites/gatekeeper.sandbox01.jarv.us
+[submodule "hologit"]
+	path = hologit
+	url = git@github.com:JarvusInnovations/hologit.git
+	branch = develop
