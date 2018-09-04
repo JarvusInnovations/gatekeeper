@@ -33,14 +33,14 @@ pushd /src/hologit/ > /dev/null
 npm install
 popd > /dev/null
 
-cat > /hab/bin/git-holo <<- END_OF_SCRIPT
+cat > /bin/git-holo <<- END_OF_SCRIPT
 #!/bin/sh
 
 exec node /src/hologit/bin/cli.js \$@
 
 END_OF_SCRIPT
 
-chmod +x /hab/bin/git-holo
+chmod +x /bin/git-holo
 
 
 echo
