@@ -2,9 +2,17 @@
 
 if [ $# -lt 2 ]; then
     echo "Usage:"
-    echo "  fcgi-exec request_method script_name [args...]"
-    echo "  fcgi-exec --web request_method \"/web_route?key=value\" [args...]"
+    echo "  fcgi-exec [--stdin] request_method script_name [args...]"
+    echo "  fcgi-exec [--stdin] --web request_method \"/web_route?key=value\" [args...]"
     exit 1
+fi
+
+
+if [ "$1" == '--stdin' ]; then
+    shift
+    STDIN="$(cat)"
+    export CONTENT_LENGTH="${#STDIN}"
+    echo "READ STDIN: ${STDIN}"
 fi
 
 
@@ -35,7 +43,7 @@ fi
 export SCRIPT_FILENAME="${SCRIPT_NAME}"
 
 
-exec {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
+echo "${STDIN}" | exec {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
     -bind \
     -connect {{ sys.ip }}:{{ cfg.network.port }} \
     $@
