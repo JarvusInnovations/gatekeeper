@@ -43,13 +43,13 @@ if (!$inputHash) {
 // ensure input is a tree hash
 $treeHash = exec("$git rev-parse --verify ${inputHash}^{tree}");
 
-echo "reading tree: '$treeHash'";
-echo shell_exec("$git read-tree $treeHash 2>&1");
 
+// load into working tree on disk
+echo "reading tree: $treeHash\n";
+passthru("$git read-tree $treeHash 2>&1");
 
-echo "checking out index";
-echo shell_exec("$git checkout-index -af 2>&1");
+echo "checking out index\n";
+passthru("$git checkout-index -af 2>&1");
 
-
-echo "cleaning tree";
-echo shell_exec("$git clean -df 2>&1");
+echo "cleaning tree\n";
+passthru("$git clean -df 2>&1");
