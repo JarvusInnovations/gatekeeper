@@ -9,6 +9,7 @@ pkg_build_deps=(
 pkg_deps=(
   emergence/php5
   jarvus/libfcgi
+  core/git
 )
 
 
