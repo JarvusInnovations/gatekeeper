@@ -3,7 +3,15 @@
 
 // determine root paths
 $coreRoot = '{{#if cfg.core.root}}{{ cfg.core.root }}{{else}}{{ pkg.path }}/core{{/if}}';
-$siteRoot = '{{#if cfg.site.root}}{{ cfg.site.root }}{{else}}{{ pkg.path }}/site{{/if}}';
+{{#if cfg.site.root ~}}
+    $siteRoot = '{{cfg.site.root }}';
+{{else ~}}
+    {{#if cfg.site.holo.repo ~}}
+        $siteRoot = '{{pkg.svc_var_path }}/site';
+    {{else ~}}
+        $siteRoot = '{{ pkg.path }}/site';
+    {{/if ~}}
+{{/if}}
 
 
 // determine hostname

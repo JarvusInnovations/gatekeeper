@@ -8,6 +8,10 @@ timezone = "America/New_York"
 primary_hostname = "localhost"
 hostnames = [ ]
 
+[site.holo]
+repo = ""
+branch = "site"
+
 [logger]
 dump = false
 

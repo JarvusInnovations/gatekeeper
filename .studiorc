@@ -87,8 +87,8 @@ init-user-config gatekeeper-app '
     [core]
     root = "/src/core"
 
-    [site]
-    root = "/src/site"
+    [site.holo]
+    repo = "/src/site/.git"
 '
 
 init-user-config nginx '
