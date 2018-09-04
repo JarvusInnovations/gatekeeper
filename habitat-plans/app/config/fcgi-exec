@@ -20,15 +20,19 @@ if [ "$1" == "--web" ]; then
     shift
 
     export SCRIPT_NAME="{{ pkg.svc_config_path }}/handle-web.php"
-    export SCRIPT_FILENAME="${SCRIPT_NAME}"
 else
     export REQUEST_METHOD="$1"
     shift
 
-    export SCRIPT_NAME="$1"
-    export SCRIPT_FILENAME="$1"
+    case "$1" in
+        /*) export SCRIPT_NAME="$1" ;;
+        *) export SCRIPT_NAME="{{ pkg.svc_config_path }}/$1" ;;
+    esac
     shift
 fi
+
+
+export SCRIPT_FILENAME="${SCRIPT_NAME}"
 
 
 exec {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
