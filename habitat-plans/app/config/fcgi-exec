@@ -1,16 +1,35 @@
 #!/bin/bash
 
 if [ $# -lt 2 ]; then
-    echo "Usage: fcgi-exec request_method script_name [args...]"
+    echo "Usage:"
+    echo "  fcgi-exec request_method script_name [args...]"
+    echo "  fcgi-exec --web request_method \"/web_route?key=value\" [args...]"
     exit 1
 fi
 
-export REQUEST_METHOD="$1"
-shift
 
-export SCRIPT_NAME="$1"
-export SCRIPT_FILENAME="$1"
-shift
+if [ "$1" == "--web" ]; then
+    shift
+
+    export REQUEST_METHOD="$1"
+    shift
+
+    export PATH_INFO="${1%\?*}"
+    export QUERY_STRING="${1#*\?}"
+    export REQUEST_URI="${PATH_INFO}?${QUERY_STRING}"
+    shift
+
+    export SCRIPT_NAME="{{ pkg.svc_config_path }}/handle-web.php"
+    export SCRIPT_FILENAME="${SCRIPT_NAME}"
+else
+    export REQUEST_METHOD="$1"
+    shift
+
+    export SCRIPT_NAME="$1"
+    export SCRIPT_FILENAME="$1"
+    shift
+fi
+
 
 exec {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
     -bind \
