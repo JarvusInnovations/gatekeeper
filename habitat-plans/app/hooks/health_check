@@ -4,7 +4,7 @@
 # test that php-fpm responds on path.ping
 
 {{#if cfg.path.ping}}
-    {{ pkg.svc_config_path }}/fcgi-exec GET "{{ cfg.path.ping }}" | grep pong
+    {{ pkg.svc_config_path }}/fpm-exec GET "{{ cfg.path.ping }}" | grep pong
 {{/if}}
 
 
