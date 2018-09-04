@@ -113,6 +113,15 @@ init-user-config mysql-remote '
 echo
 echo "--> Setting up development commands..."
 
+echo "    * Use 'update-site' to update the running site from "
+update-site() {
+    pushd /src/site > /dev/null
+
+    git holo project site | /hab/svc/gatekeeper-app/config/fpm-exec --stdin PUT load.php
+
+    popd > /dev/null
+}
+
 echo "    * Use 'build-app' to build just the app package"
 build-app() {
     pushd /src > /dev/null
