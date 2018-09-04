@@ -142,36 +142,42 @@ echo
 echo "    * Use 'start-mysql-local' to start local mysql service"
 start-mysql-local() {
     stop-mysql
-    hab svc load core/mysql
+    hab svc load core/mysql \
+        --strategy at-once
 }
 
 echo "    * Use 'start-mysql-remote' to start remote mysql service"
 start-mysql-remote() {
     stop-mysql
-    hab svc load jarvus/mysql-remote
+    hab svc load jarvus/mysql-remote \
+        --strategy at-once
 }
 
 echo "    * Use 'start-app-local' to start app service bound to local mysql"
 start-app-local() {
     hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
-        --bind=database:mysql.default
+        --bind=database:mysql.default \
+        --strategy at-once
 }
 
 echo "    * Use 'start-app-remote' to start app service bound to remote mysql"
 start-app-remote() {
     hab svc load "${HAB_ORIGIN}/gatekeeper-app" \
-        --bind=database:mysql-remote.default
+        --bind=database:mysql-remote.default \
+        --strategy at-once
 }
 
 echo "    * Use 'start-http' to start http service"
 start-http() {
     hab svc load emergence/nginx \
-        --bind=app:gatekeeper-app.default
+        --bind=app:gatekeeper-app.default \
+        --strategy at-once
 }
 
 echo "    * Use 'start-composite' to start app+http via composite"
 start-composite() {
-    hab svc load "${HAB_ORIGIN}/gatekeeper"
+    hab svc load "${HAB_ORIGIN}/gatekeeper" \
+        --strategy at-once
 }
 
 echo "    * Use 'start-all-local' to start all services individually with local mysql"
