@@ -1,9 +1,18 @@
 echo
-echo "--> Installing useful packages for development..."
-hab pkg install core/composer emergence/php5
+echo "--> Installing useful hab packages for development..."
+hab pkg install core/composer emergence/php5 core/node core/git
+
+
+echo
+echo "--> Binlinking useful commands for development..."
+hab pkg binlink core/node
+hab pkg binlink core/git
 hab pkg binlink core/composer composer
 hab pkg binlink emergence/php5 php
 
+
+echo
+echo "--> Preparing /src/core/ for development"
 export COMPOSER_ALLOW_SUPERUSER=1
 
 composer g require \
@@ -16,6 +25,26 @@ pushd /src/core/ > /dev/null
 composer install
 popd > /dev/null
 
+
+
+echo
+echo "--> Preparing /src/hologit/ for development"
+pushd /src/hologit/ > /dev/null
+npm install
+popd > /dev/null
+
+cat > /hab/bin/git-holo <<- END_OF_SCRIPT
+#!/bin/sh
+
+exec node /src/hologit/bin/cli.js \$@
+
+END_OF_SCRIPT
+
+chmod +x /hab/bin/git-holo
+
+
+echo
+echo "--> Configuring PsySH for application shell..."
 sed -e "s#\#\!/usr/bin/env php#\#\!$(hab pkg path emergence/php5)/bin/php#" --in-place "/root/.composer/vendor/psy/psysh/bin/psysh"
 
 mkdir -p /root/.config/psysh
