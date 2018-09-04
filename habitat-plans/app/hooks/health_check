@@ -4,13 +4,7 @@
 # test that php-fpm responds on path.ping
 
 {{#if cfg.path.ping}}
-    SCRIPT_NAME="{{ cfg.path.ping }}" \
-    SCRIPT_FILENAME="{{ cfg.path.ping }}" \
-    REQUEST_METHOD="GET" \
-        {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
-            -bind \
-            -connect {{ sys.ip }}:{{ cfg.network.port }} \
-        | grep pong
+    {{ pkg.svc_config_path }}/fcgi-exec GET "{{ cfg.path.ping }}" | grep pong
 {{/if}}
 
 

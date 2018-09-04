@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+    echo "Usage: fcgi-exec request_method script_name [args...]"
+    exit 1
+fi
+
+export REQUEST_METHOD="$1"
+shift
+
+export SCRIPT_NAME="$1"
+export SCRIPT_FILENAME="$1"
+shift
+
+exec {{pkgPathFor "jarvus/libfcgi"}}/bin/cgi-fcgi \
+    -bind \
+    -connect {{ sys.ip }}:{{ cfg.network.port }} \
+    $@
