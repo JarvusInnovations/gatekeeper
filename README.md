@@ -292,7 +292,7 @@ The habitat supervisor [can be run directly under **any** Linux system](https://
 
     The details of how to do this vary by operating system, and you can employ any means to get `hab sup run` running. That command will start the supervisor and then it will handle the rest. Any peer supervisors should be supplied when it is run.
 
-    On Linux systems that use systemd like Ubuntu 15.04+, you might use a unit file like this to launch the supervisor on system startup:
+    On Linux systems that use systemd like Ubuntu 15.04+, you might use a unit file like this save to somewhere like `/etc/systemd/system/hab-sup.service` to launch the supervisor on system startup:
 
     ```systemd
     [Unit]
