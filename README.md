@@ -374,6 +374,14 @@ The habitat supervisor [can be run directly under **any** Linux system](https://
 - [X] Clear ext frameworks from build
 - [X] Update README for 0.56.0 supervisor and emergence/nginx
 - [X] Add "quick start" to readme
+- [ ] Enable executing application from "loose" source repositories
+  - [X] Get hologit#develop into studio environment
+  - [X] Create load command that can execute a given tree within the app
+  - [ ] Create a way to "lens" the projection with build processes contributed from any source
+  - [ ] Have plan.sh build process project and use site holobranch
+  - [ ] Have `git holo project` automatically fetch any missing sources
+  - [ ] Implement `git holo sources fetch --all`
+  - [ ] Move source repos to under root .git like submodules (maybe exactly like submodules?)
 - [ ] Test and restore composite with local and remote mysql bind
 - [ ] Document habitat concepts:
   - [X] studio
@@ -385,6 +393,7 @@ The habitat supervisor [can be run directly under **any** Linux system](https://
 - [ ] Add postfix service
 - [ ] Add fcgi health check for status url if available
 - [ ] Add cron job for app heartbeat event
+- [ ] Remove hologit submodule and instead install stable hologit release from habitat depot
 
 ### Journal
 
