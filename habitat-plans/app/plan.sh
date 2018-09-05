@@ -5,6 +5,7 @@ pkg_maintainer="Chris Alfano <chris@jarv.us>"
 pkg_license=("AGPL-3.0")
 pkg_build_deps=(
   core/composer
+  core/curl
 )
 pkg_deps=(
   emergence/php5
@@ -27,15 +28,11 @@ do_build() {
 }
 
 do_install() {
-  build_line "Copying core (excluding vendor)"
+  build_line "Loading core"
 
   mkdir "${pkg_prefix}/core"
-  pushd "${PLAN_CONTEXT}/../../core" > /dev/null
-  find . \
-    -maxdepth 1 -mindepth 1 \
-    -not -name 'vendor' \
-    -not -name '.git*' \
-    -exec cp -r '{}' "${pkg_prefix}/core/{}" \;
+  pushd "${pkg_prefix}/core" > /dev/null
+  curl -L https://github.com/EmergencePlatform/php-core/tarball/master | tar xz --strip-components=1
   popd > /dev/null
 
 
