@@ -88,5 +88,46 @@
                 }
             }
         },
+        {
+            "identifier": "studio-debug-export-tree",
+            "label": "run export-tree within studio",
+            "dependsOn": ["studio-killall"],
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "exec",
+                "-w", "/src/site",
+                "-e", "DEBUG=1",
+                "-e", "GIT_WORK_TREE=/hab/cache/holo/src--.git--modules--site/site/compass",
+                "-e", "GIT_INDEX_FILE=/hab/cache/holo/src--.git--modules--site/site/compass.index",
+                "-e", "GIT_DIR=/src/.git/modules/site",
+                "hab-studio-gatekeeper", "/entrypoint.sh", "run",
+                "node --inspect=0.0.0.0:7092 --nolazy /src/hologit/bin/cli.js lens export-tree 7a62920e4b6a67a3258baf64b1966578b431a727"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+            },
+            "isBackground": true,
+            "group":{
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "javascript",
+                "pattern": {
+                    "regexp": "^(error|warning): (.*)$",
+                    "severity": 1,
+                    "message": 2
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^\\s*hab-studio:",
+                    "endsPattern": "^\\s*Debugger listening on ws"
+                }
+            }
+        },
     ]
 }
