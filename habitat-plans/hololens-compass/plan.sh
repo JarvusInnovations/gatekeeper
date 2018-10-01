@@ -1,4 +1,4 @@
-pkg_name=hololens-compass
+pkg_name=hololens-sass
 pkg_origin=emergence
 pkg_version="0.1.0"
 pkg_maintainer="Chris Alfano <chris@jarv.us>"
