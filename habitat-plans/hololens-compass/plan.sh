@@ -8,6 +8,7 @@ pkg_deps=(
   core/git
   core/bash
   jarvus/compass
+  jarvus/hologit
 )
 
 pkg_bin_dirs=(bin)
@@ -28,10 +29,8 @@ do_install() {
 
 # redirect all output to stderr
 {
-  # match disk to git tree
-  git read-tree "\${HOLOLENS_INPUT}"
-  git checkout-index --all --force
-  git clean -df
+  # export git tree to disk
+  git holo lens export-tree "\${HOLOLENS_INPUT}"
 
   # execute compilation
   pushd "\${GIT_WORK_TREE}/sass" > /dev/null
