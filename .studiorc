@@ -12,6 +12,17 @@ hab pkg binlink emergence/php5 php
 
 
 echo
+echo "--> Building local copies of development tools"
+pushd /src/ > /dev/null
+build hologit
+HAB_ORIGIN=emergence build habitat-plans/hololens-compass
+HAB_ORIGIN=emergence build habitat-plans/hololens-dwoo-templates
+HAB_ORIGIN=emergence build habitat-plans/hololens-extjs-pages
+HAB_ORIGIN=emergence build habitat-plans/hololens-php-classes
+popd > /dev/null
+
+
+echo
 echo "--> Preparing /src/core/ for development"
 export COMPOSER_ALLOW_SUPERUSER=1
 
@@ -24,7 +35,6 @@ composer g require \
 pushd /src/core/ > /dev/null
 composer install
 popd > /dev/null
-
 
 
 echo
