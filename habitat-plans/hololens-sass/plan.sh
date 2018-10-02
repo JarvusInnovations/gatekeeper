@@ -25,12 +25,12 @@ do_install() {
   cat > "bin/lens-tree" <<- EOM
 #!$(pkg_path_for bash)/bin/sh
 
-: \${HOLOLENS_INPUT?HOLOLENS_INPUT required}
+INPUT_TREE="\${1?<input> required}"
 
 # redirect all output to stderr
 {
   # export git tree to disk
-  git holo lens export-tree "\${HOLOLENS_INPUT}"
+  git holo lens export-tree "\${INPUT_TREE}"
 
   # execute compilation
   pushd "\${GIT_WORK_TREE}/sass" > /dev/null
