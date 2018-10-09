@@ -152,6 +152,32 @@
                 "fetch",
                 "skeleton-v1"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "outputCapture": "std",
+            "skipFiles": [
+                "<node_internals>/**/*.js"
+            ],
+
+            "env": {
+                "DEBUG": "1"
+            },
+            "cwd": "${workspaceFolder}/site",
+
+            "name": "merge trees",
+            "program": "${workspaceFolder}/hologit/bin/cli.js",
+            "args": [
+                "lens",
+                "merge-trees",
+
+                // base tree
+                "refs/sources/skeleton-v1/heads/develop",
+
+                // input tree
+                "refs/sources/skeleton-v2/heads/develop"
+            ]
         }
     ]
 }
