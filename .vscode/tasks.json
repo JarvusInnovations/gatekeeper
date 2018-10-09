@@ -81,7 +81,7 @@
             "args": [
                 "exec", "-w", "/src/site", "-e", "DEBUG=1",
                 "hab-studio-gatekeeper", "/entrypoint.sh", "run",
-                "node --inspect=0.0.0.0:7092 --nolazy /src/hologit/bin/cli.js project site site"
+                "node --inspect=0.0.0.0:7092 --nolazy /src/hologit/bin/cli.js project site"
             ],
             "presentation": {
                 "echo": true,
