@@ -16,9 +16,9 @@ echo "--> Building local copies of development tools"
 pushd /src/ > /dev/null
 build hologit
 HAB_ORIGIN=emergence build habitat-plans/hololens-sass
-HAB_ORIGIN=emergence build habitat-plans/hololens-dwoo-templates
-HAB_ORIGIN=emergence build habitat-plans/hololens-extjs-pages
-HAB_ORIGIN=emergence build habitat-plans/hololens-php-classes
+#HAB_ORIGIN=emergence build habitat-plans/hololens-dwoo-templates
+#HAB_ORIGIN=emergence build habitat-plans/hololens-extjs-pages
+#HAB_ORIGIN=emergence build habitat-plans/hololens-php-classes
 popd > /dev/null
 
 
