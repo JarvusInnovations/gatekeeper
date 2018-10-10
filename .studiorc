@@ -263,7 +263,7 @@ shell-app() {
 # overall instructions
 echo
 echo "    For a complete studio debug environment:"
-echo "      build-app && start-all-local"
+echo "      start-all-local && update-site"
 
 
 # final blank line
