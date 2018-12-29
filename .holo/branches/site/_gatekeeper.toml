@@ -1,3 +1,3 @@
-[holospec]
-src = "**"
+[holomapping]
+files = "*/**"
 after = [ "skeleton-v2" ]

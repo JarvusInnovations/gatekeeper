@@ -1,8 +1,0 @@
-[holospec]
-src = [
-    "**",
-    "!ext-library/**",
-    "!js-library/**",
-    "!site-root/css/**",
-    '!site-root/js/pages/**'
-]
