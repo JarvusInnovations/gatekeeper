@@ -12,7 +12,7 @@ init-user-config php-runtime '
     gitDir = "/src/.git"
 '
 
-echo "    * Use 'update-site' to update the running site from /src
+echo "    * Use 'update-site' to update the running site from /src"
 update-site() {
     pushd /src > /dev/null
 
@@ -21,7 +21,7 @@ update-site() {
     popd > /dev/null
 }
 
-echo "    * Use 'watch-site' to watch the running site in /src
+echo "    * Use 'watch-site' to watch the running site in /src"
 watch-site() {
     pushd /src > /dev/null
 
