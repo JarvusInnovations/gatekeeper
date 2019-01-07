@@ -15,14 +15,14 @@ init-user-config php-runtime '
 echo "    * Use 'update-site' to update the running site from /src"
 update-site() {
     pushd /src > /dev/null
-    git holo project site --working | emergence-php-load --stdin
+    git holo project emergence-site --working | emergence-php-load --stdin
     popd > /dev/null
 }
 
 echo "    * Use 'watch-site' to watch the running site in /src"
 watch-site() {
     pushd /src > /dev/null
-    git holo project site --working --watch | xargs -n 1 emergence-php-load
+    git holo project emergence-site --working --watch | xargs -n 1 emergence-php-load
     popd > /dev/null
 }
 
