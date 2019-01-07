@@ -1,37 +1,4 @@
-echo
-echo "--> Installing and loading emergence/studio..."
+#!/bin/bash
+
 hab pkg install emergence/studio
 source "$(hab pkg path emergence/studio)/studio.sh"
-
-
-echo
-echo "--> Setting up development commands..."
-
-init-user-config php-runtime '
-    [sites.default.holo]
-    gitDir = "/src/.git"
-'
-
-echo "    * Use 'update-site' to update the running site from /src"
-update-site() {
-    pushd /src > /dev/null
-    git holo project emergence-site --working | emergence-php-load --stdin
-    popd > /dev/null
-}
-
-echo "    * Use 'watch-site' to watch the running site in /src"
-watch-site() {
-    pushd /src > /dev/null
-    git holo project emergence-site --working --watch | xargs -n 1 emergence-php-load
-    popd > /dev/null
-}
-
-
-# overall instructions
-echo
-echo "    For a complete studio debug environment:"
-echo "      start-all-local && watch-site"
-
-
-# final blank line
-echo
