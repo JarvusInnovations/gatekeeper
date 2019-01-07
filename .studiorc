@@ -15,18 +15,14 @@ init-user-config php-runtime '
 echo "    * Use 'update-site' to update the running site from /src"
 update-site() {
     pushd /src > /dev/null
-
-    git holo project site --working | /hab/svc/php-runtime/config/fpm-exec --stdin PUT load.php
-
+    git holo project site --working | emergence-php-load --stdin
     popd > /dev/null
 }
 
 echo "    * Use 'watch-site' to watch the running site in /src"
 watch-site() {
     pushd /src > /dev/null
-
-    git holo project site --working --watch | xargs -n 1 /hab/svc/php-runtime/config/fpm-exec PUT load.php
-
+    git holo project site --working --watch | xargs -n 1 emergence-php-load
     popd > /dev/null
 }
 
