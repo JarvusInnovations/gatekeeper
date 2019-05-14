@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.tpl": "smarty"
+    },
+    "emergence.studio.name": "gatekeeper",
+    "emergence.studio.port.http": 7080,
+    "emergence.studio.port.mysql": 3306
+}
