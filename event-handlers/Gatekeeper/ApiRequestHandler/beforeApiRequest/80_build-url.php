@@ -4,7 +4,7 @@ namespace Gatekeeper;
 
 
 // build request URL from remaining path stack
-$path = '/' . implode('/', $_EVENT['request']->getPathStack());
+$path = '/' . implode('/', array_map('rawurlencode', $_EVENT['request']->getPathStack()));
 
 
 // pass query string through as-is
