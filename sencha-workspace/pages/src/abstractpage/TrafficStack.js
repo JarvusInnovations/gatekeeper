@@ -6,6 +6,7 @@ Ext.define('Site.abstractpage.TrafficStack', {
     requires: [
         'Site.Common',
         'Ext.util.Collection',
+        'Ext.util.SorterCollection',
         'Ext.Ajax',
         'Ext.util.Format',
         'Jarvus.util.Highlighter'
@@ -151,7 +152,7 @@ Ext.define('Site.abstractpage.TrafficStack', {
             rows.resumeEvent('sort');
         });
     },
-    
+
     onSort: function(rows) {
         var me = this,
             rowsCt = me.rowsCt,
