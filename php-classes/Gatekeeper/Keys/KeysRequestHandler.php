@@ -20,7 +20,7 @@ class KeysRequestHandler extends \RecordsRequestHandler
         'Status' => 'active'
     ];
 
-    public static function checkReadAccess(ActiveRecord $Record, $suppressLogin = false)
+    public static function checkReadAccess(ActiveRecord $Record = null, $suppressLogin = false)
     {
         if (parent::checkReadAccess($Record, $suppressLogin)) {
             return true;

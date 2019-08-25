@@ -1,0 +1,53 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "studio:reset",
+            "type": "shell",
+            "command": "docker kill ${config:emergence.studio.name} || true",
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "studio:launch",
+            "dependsOn": ["studio:reset"],
+            "type": "process",
+            "command": "hab",
+            "args": [
+                "studio",
+                "-D",
+                "enter"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "HAB_ORIGIN": "emergence",
+                    "HAB_DOCKER_OPTS": "-p ${config:emergence.studio.port.http}:7080 -p ${config:emergence.studio.port.mysql}:3306 -v hab-studio-${config:emergence.studio.name}:/hab -v ${workspaceFolder}/.data:/hab/svc/php-runtime/var/site-data --name hab-studio-${config:emergence.studio.name}"
+                }
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        }
+    ],
+    // "inputs": [
+    //     {
+    //         "id": "siteName",
+    //         "description": "Which site to execute",
+    //         "default": "ptw-2019",
+    //         "type": "pickString",
+    //         "options": ["ptw-2019"]
+    //     }
+    // ]
+}

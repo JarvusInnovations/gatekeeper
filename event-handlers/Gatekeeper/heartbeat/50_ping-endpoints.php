@@ -44,7 +44,7 @@ foreach ($endpoints AS $Endpoint) {
 
 
     // evaluate success
-    $testPassed = 
+    $testPassed =
         $response['info']['http_code'] == 200 &&
         (
             !$Endpoint->PingTestPattern ||
@@ -53,7 +53,7 @@ foreach ($endpoints AS $Endpoint) {
 
 
     // record transaction
-    list($path, $query) = explode('?', $Endpoint->PingURI);
+    list($path, $query) = array_pad(explode('?', $Endpoint->PingURI, 2), 2, null);
 
     $Transaction = PingTransaction::create([
         'Endpoint' => $Endpoint,

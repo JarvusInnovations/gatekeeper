@@ -3,6 +3,7 @@
 namespace Gatekeeper\Metrics;
 
 use DB;
+use TableNotFoundException;
 use Gatekeeper\Endpoints\Endpoint;
 use Gatekeeper\Keys\Key;
 
@@ -70,33 +71,39 @@ class MetricsRequestHandler extends \RequestHandler
             $metricPattern = '[^/]+';
         }
 
+        try {
+            $samples = DB::allRecords(
+                'SELECT'
+                .'  UNIX_TIMESTAMP(Timestamp) AS Timestamp,'
+                .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
+                .'  SUBSTRING(`Key`, LENGTH(@context) + 2) AS Metric,'
+                .'  Value'
+                .' FROM `%s`'
+                .' WHERE'
+                .'  `Timestamp` BETWEEN "%s" AND "%s" AND '
+                .'  `Key` LIKE "endpoints/%%" AND'
+                .'  `Key` REGEXP "^endpoints/[[:digit:]]+/%s$"'
+                .' ORDER BY ID DESC',
+                [
+                    MetricSample::$tableName,
+                    date('Y-m-d H:i:s', $timeMin),
+                    date('Y-m-d H:i:s', $timeMax),
+                    $metricPattern
+                ]
+            );
+        } catch (TableNotFoundException $e) {
+            $samples = [];
+        }
+
         return static::respond('historicEndpointMetrics', [
             'data' => array_map(
-                function($row) {
+                function ($row) {
                     $row['Timestamp'] = intval($row['Timestamp']);
                     $row['EndpointID'] = intval($row['EndpointID']);
                     $row['Value'] = intval($row['Value']);
                     return $row;
                 },
-                DB::allRecords(
-                    'SELECT'
-                    .'  UNIX_TIMESTAMP(Timestamp) AS Timestamp,'
-                    .'  SUBSTRING_INDEX(@context := SUBSTRING_INDEX(`Key`, "/", 2), "/", -1) AS EndpointID,'
-                    .'  SUBSTRING(`Key`, LENGTH(@context) + 2) AS Metric,'
-                    .'  Value'
-                    .' FROM `%s`'
-                    .' WHERE'
-                    .'  `Timestamp` BETWEEN "%s" AND "%s" AND '
-                    .'  `Key` LIKE "endpoints/%%" AND'
-                    .'  `Key` REGEXP "^endpoints/[[:digit:]]+/%s$"'
-                    .' ORDER BY ID DESC',
-                    [
-                        MetricSample::$tableName,
-                        date('Y-m-d H:i:s', $timeMin),
-                        date('Y-m-d H:i:s', $timeMax),
-                        $metricPattern
-                    ]
-                )
+                $samples
             )
         ]);
     }

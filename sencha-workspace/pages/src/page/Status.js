@@ -51,7 +51,7 @@ Ext.define('Site.page.Status', {
     },
 
 
-    // internal methods      
+    // internal methods
     bytes2megabytes: function(bytes) {
         return Math.round(bytes / 1024 / 1024);
     },
@@ -158,7 +158,7 @@ Ext.define('Site.page.Status', {
                     if (!(endpointId in endpointTotals)) {
                         endpointTotals[endpointId] = 0;
                     }
-                    
+
                     endpointTotals[endpointId] += value;
                 }
 
@@ -172,7 +172,7 @@ Ext.define('Site.page.Status', {
                     if (a == b) {
                         return 0;
                     }
-                    
+
                     return a < b ? 1 : -1;
                 });
                 topEndpoints = Ext.Array.slice(topEndpoints, 0, 5);
@@ -226,8 +226,7 @@ Ext.define('Site.page.Status', {
 
         Ext.Ajax.request({
             method: 'GET',
-//            url: '/metrics/endpoints-historic',
-            url: 'http://developer.phila.gov/metrics/endpoints-historic',
+            url: '/metrics/endpoints-historic',
             withCredentials: true,
             params: {
                 metrics: 'bytesExecuted',
@@ -264,7 +263,7 @@ Ext.define('Site.page.Status', {
                     if (!(endpointId in endpointTotals)) {
                         endpointTotals[endpointId] = 0;
                     }
-                    
+
                     endpointTotals[endpointId] += value;
                 }
 
@@ -278,7 +277,7 @@ Ext.define('Site.page.Status', {
                     if (a == b) {
                         return 0;
                     }
-                    
+
                     return a < b ? 1 : -1;
                 });
                 topEndpoints = Ext.Array.slice(topEndpoints, 0, 5);
@@ -332,8 +331,7 @@ Ext.define('Site.page.Status', {
 
         Ext.Ajax.request({
             method: 'GET',
-//            url: '/metrics/endpoints-historic',
-            url: 'http://developer.phila.gov/metrics/endpoints-historic',
+            url: '/metrics/endpoints-historic',
             withCredentials: true,
             params: {
                 metrics: 'responseTime',
@@ -370,7 +368,7 @@ Ext.define('Site.page.Status', {
                     if (!(endpointId in endpointTotals)) {
                         endpointTotals[endpointId] = 0;
                     }
-                    
+
                     endpointTotals[endpointId] += value;
                 }
 
@@ -384,7 +382,7 @@ Ext.define('Site.page.Status', {
                     if (a == b) {
                         return 0;
                     }
-                    
+
                     return a < b ? 1 : -1;
                 });
                 topEndpoints = Ext.Array.slice(topEndpoints, 0, 5);
