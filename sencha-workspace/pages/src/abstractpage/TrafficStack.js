@@ -99,8 +99,6 @@ Ext.define('Site.abstractpage.TrafficStack', {
                     }]
                 });
 
-            rowEl.setVisibilityMode(Ext.Element.DISPLAY);
-
             rows.add({
                 id: parseInt(rowEl.getAttribute('data-id'), 10),
                 el: rowEl,
@@ -194,7 +192,7 @@ Ext.define('Site.abstractpage.TrafficStack', {
             rowEl = row.el;
             match = query ? regexp.test(row.title) : true;
 
-            rowEl.setVisible(match);
+            rowEl.setStyle('display', match ? '' : 'none');
 
             Jarvus.util.Highlighter.removeHighlights(rowEl);
 

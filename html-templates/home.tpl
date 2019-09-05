@@ -5,14 +5,7 @@
 {block "js-bottom"}
     {$dwoo.parent}
 
-    {if $.get.jsdebug}
-        {sencha_bootstrap
-            patchLoader=false
-            packageRequirers=array('sencha-workspace/pages/src/page/Portal.js')
-        }
-    {else}
-        <script src="{Site::getVersionedRootUrl('js/pages/Portal.js')}"></script>
-    {/if}
+    {jsmin "pages/Portal.js"}
 
     <script>
         Ext.require('Site.page.Portal');
