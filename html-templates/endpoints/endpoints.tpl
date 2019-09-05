@@ -51,14 +51,7 @@
 {block "js-bottom"}
     {$dwoo.parent}
 
-    {if $.get.jsdebug}
-        {sencha_bootstrap
-            patchLoader=false
-            packageRequirers=array('sencha-workspace/pages/src/abstractpage/TrafficStack.js', 'sencha-workspace/pages/src/pages/Endpoints.js')
-        }
-    {else}
-        <script src="{Site::getVersionedRootUrl('js/pages/Endpoints.js')}"></script>
-    {/if}
+    {jsmin "pages/Endpoints.js"}
 
     <script>
         Ext.require('Site.page.Endpoints');
