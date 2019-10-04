@@ -1,0 +1,56 @@
+.keys {
+}
+
+.key {
+    &.key-in-use {
+        background-color: tint($link-color, 90%);
+        border-color: $link-color;
+    }
+
+    &.key-revoked {
+        background-color: transparent;
+    }
+}
+
+.key-string {
+    background: rgba(white, .5);
+    border: 1px solid rgba(black, .1);
+    display: inline-block;
+    font-family: $mono-font;
+    padding: .25em .25em 0;
+}
+
+.badge {
+    background-color: $link-color;
+    border-radius: .25em;
+    color: white;
+    display: inline-block;
+    font-size: smaller;
+    font-weight: bold;
+    padding: .125em .375em;
+    -webkit-font-smoothing: antialiased;
+
+    &.destructive { background-color: $destructive-color; text-transform: uppercase; }
+    &.success { background-color: $success-color; }
+}
+
+a.remove-link {
+    color: $destructive-color;
+    display: inline-block;
+    font-size: larger;
+    font-weight: bold;
+    line-height: 1;
+    margin-left: .25em;
+    opacity: 0;
+    text-decoration: none;
+
+    li:hover & {
+        opacity: 1;
+    }
+
+    &:hover,
+    &:focus {
+        color: lighten($destructive-color, 15);
+        text-decoration: none;
+    }
+}
