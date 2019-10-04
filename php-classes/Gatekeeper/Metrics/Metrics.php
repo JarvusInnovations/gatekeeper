@@ -90,7 +90,7 @@ class Metrics
 
         $previousSampleIndex = $currentSampleIndex - 1;
         $previousSampleValue = Cache::fetch("metrics/$averageKey/$previousSampleIndex");
-        
+
         if ($currentSampleValue === false && $previousSampleValue === false) {
             return null;
         } elseif ($currentSampleValue === false) {
@@ -100,7 +100,7 @@ class Metrics
         } else {
             $currentSampleWeight = Cache::fetch("metrics/$counterKey/$currentSampleIndex") * (1 - ($currentSampleSecondsRemaining / static::$sampleDuration));
             $previusSampleWeight = Cache::fetch("metrics/$counterKey/$previousSampleIndex") * ($currentSampleSecondsRemaining / static::$sampleDuration);
-            
+
             return round(
                 (
                     $currentSampleValue * $currentSampleWeight
@@ -111,5 +111,42 @@ class Metrics
                 ($currentSampleWeight + $previusSampleWeight)
             );
         }
+    }
+
+    public static function flushMetricSamples()
+    {
+        $cacheKeyPrefix = Cache::getKeyPrefix();
+        $currentSampleIndex = static::getCurrentSampleIndex();
+
+        $flushed = 0;
+        foreach (Cache::getIterator('|^metrics/|') AS $cacheEntry) {
+            if (!preg_match('|^'.preg_quote($cacheKeyPrefix).'(metrics/(.*)/(\d+))$|', $cacheEntry['key'], $matches)) {
+                continue;
+            }
+
+            $cacheKey = $matches[1];
+            $metricKey = $matches[2];
+            $sampleIndex = (int)$matches[3];
+
+            // skip active and previus samples
+            if ($sampleIndex >= $currentSampleIndex - 1) {
+                continue;
+            }
+
+            // delete sample from cache
+            Cache::delete($cacheKey);
+
+            // save metric to DB
+            $sample = MetricSample::create([
+                'Timestamp' => $sampleIndex * Metrics::$sampleDuration,
+                'Key' => $metricKey,
+                'Value' => $cacheEntry['value']
+            ], true);
+
+            // increment counter
+            $flushed++;
+        }
+
+        return $flushed;
     }
 }
