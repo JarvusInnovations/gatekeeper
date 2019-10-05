@@ -21,7 +21,7 @@ class Pinger
 
             if (
                 $lastPing === false
-                || $Endpoint->PingFrequency < time()-$lastPing['time'] // * 60
+                || $Endpoint->PingFrequency*60 < time()-$lastPing['time']
             ) {
                 static::pingEndpoint($Endpoint, $verbose);
             }
@@ -107,7 +107,7 @@ class Pinger
         Cache::store("endpoints/{$Endpoint->ID}/last-ping", [
             'time' => time(),
             'testPassed' => $testPassed
-        ], ($Endpoint->PingFrequency+5)); // * 60
+        ], ($Endpoint->PingFrequency+5)*60);
 
         return $testPassed;
     }
