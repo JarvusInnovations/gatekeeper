@@ -38,6 +38,7 @@ class Pinger
         $response = HttpProxy::relayRequest([
             'autoAppend' => false,
             'autoQuery' => false,
+            'method' => 'GET',
             'url' => rtrim($Endpoint->InternalEndpoint, '/') . '/' . ltrim($Endpoint->PingURI, '/'),
             'interface' => ApiRequestHandler::$sourceInterface,
             'timeout' => 15,
