@@ -2,6 +2,7 @@
 
 namespace Gatekeeper\Endpoints;
 
+use Site;
 use Cache;
 use HttpProxy;
 
@@ -43,7 +44,13 @@ class Pinger
             'interface' => ApiRequestHandler::$sourceInterface,
             'timeout' => 15,
             'timeoutConnect' => 5,
-            'returnResponse' => true
+            'returnResponse' => true,
+            'forwardHeaders' => [],
+            'headers' => [
+                'Accept: */*',
+                'Accept-Language: *',
+                'User-Agent: ' . (ApiRequestHandler::$poweredByHeader ?: Site::$title)
+            ]
         ]);
 
 
