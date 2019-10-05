@@ -19,12 +19,3 @@ jobs:
         ref: releases/v2
         holobranch: emergence-skeleton
         commit-to: emergence/skeleton/v2
-    - name: 'Update holobranch: emergence/vfs-site/v2'
-      uses: JarvusInnovations/hologit@actions/projector/v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        HAB_LICENSE: accept
-      with:
-        ref: releases/v2
-        holobranch: emergence-vfs-site
-        commit-to: emergence/vfs-site/v2
