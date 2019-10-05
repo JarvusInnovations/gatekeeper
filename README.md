@@ -48,7 +48,8 @@ This video walks through the complete process of installing emergence and then i
 -  Upload contents of git repository using WebDAV client (CyberDuck is the best open-source option)
 
 ### Install heartbeat cron script
+
 ```bash
-printf "*/5 *\t* * *\troot\techo \"Emergence\\\\EventBus::fireEvent('heartbeat', 'Gatekeeper');\" | /usr/local/bin/emergence-shell gatekeeper > /dev/null\n" | sudo tee /etc/cron.d/gatekeeper-heartbeat
+printf "*/5 *\t* * *\troot\temergence-fire-event gatekeeper-test heartbeat Gatekeeper > /dev/null\n" | sudo tee /etc/cron.d/gatekeeper-heartbeat
 ```
-###
+
