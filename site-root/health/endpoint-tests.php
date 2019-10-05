@@ -56,7 +56,13 @@ Site::$production = false;
                 'interface' => ApiRequestHandler::$sourceInterface,
                 'timeout' => 15,
                 'timeoutConnect' => 5,
-                'returnResponse' => true
+                'returnResponse' => true,
+                'forwardHeaders' => [],
+                'headers' => [
+                    'Accept: */*',
+                    'Accept-Language: *',
+                    'User-Agent: ' . (ApiRequestHandler::$poweredByHeader ?: Site::$title)
+                ]
             ]);
 
             // evaluate success
@@ -77,7 +83,7 @@ Site::$production = false;
             <td><?=$Endpoint->Path?></td>
             <td><?=$Endpoint->PingURI?></td>
             <td><?=$Endpoint->PingTestPattern?></td>
-            <td><?=($url || '')?></td>
+            <td><?=($url ?: '')?></td>
             <td><?=($response ? $response['info']['http_code'] : '')?></td>
             <td><?=($response ? (strlen($response['body']) . ' bytes') : '')?></td>
             <td><?=($testPassed === null ? '' : ($testPassed ? 'Y' : 'N'))?></td>

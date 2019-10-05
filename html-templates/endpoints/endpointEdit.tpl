@@ -37,7 +37,7 @@
             <h4>Routing</h4>
 
             {capture assign=pathInputHtml}{strip}
-                http://{tif Gatekeeper\Gatekeeper::$apiHostname ? Gatekeeper\Gatekeeper::$apiHostname : "$.server.HTTP_HOST/api"}/&thinsp;
+                {Gatekeeper\Gatekeeper::getApiBaseUrl()}/&thinsp;
                 <input type="text" size=20 name="Path" required value="{refill field=Path default=$Endpoint->Path}" placeholder="transitview/v1">
             {/strip}{/capture}
             {labeledField html=$pathInputHtml type=compound label='Public Path' error=$errors.Path required=true}

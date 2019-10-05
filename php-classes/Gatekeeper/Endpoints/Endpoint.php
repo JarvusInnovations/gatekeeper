@@ -375,13 +375,7 @@ class Endpoint extends ActiveRecord
 
     public function getExternalUrl()
     {
-        $url = 'http://';
-
-        if (Gatekeeper::$apiHostname) {
-            $url .= Gatekeeper::$apiHostname;
-        } else {
-            $url .= Site::getConfig('primary_hostname') . '/api';
-        }
+        $url = Gatekeeper::getApiBaseUrl();
 
         $url .= '/' . $this->Path;
 

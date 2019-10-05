@@ -2,6 +2,7 @@
 
 namespace Gatekeeper\Endpoints;
 
+use Site;
 use Cache;
 use HttpProxy;
 
@@ -21,7 +22,7 @@ class Pinger
 
             if (
                 $lastPing === false
-                || $Endpoint->PingFrequency < time()-$lastPing['time'] // * 60
+                || $Endpoint->PingFrequency*60 < time()-$lastPing['time']
             ) {
                 static::pingEndpoint($Endpoint, $verbose);
             }
@@ -38,11 +39,18 @@ class Pinger
         $response = HttpProxy::relayRequest([
             'autoAppend' => false,
             'autoQuery' => false,
+            'method' => 'GET',
             'url' => rtrim($Endpoint->InternalEndpoint, '/') . '/' . ltrim($Endpoint->PingURI, '/'),
             'interface' => ApiRequestHandler::$sourceInterface,
             'timeout' => 15,
             'timeoutConnect' => 5,
-            'returnResponse' => true
+            'returnResponse' => true,
+            'forwardHeaders' => [],
+            'headers' => [
+                'Accept: */*',
+                'Accept-Language: *',
+                'User-Agent: ' . (ApiRequestHandler::$poweredByHeader ?: Site::$title)
+            ]
         ]);
 
 
@@ -107,7 +115,7 @@ class Pinger
         Cache::store("endpoints/{$Endpoint->ID}/last-ping", [
             'time' => time(),
             'testPassed' => $testPassed
-        ], ($Endpoint->PingFrequency+5)); // * 60
+        ], ($Endpoint->PingFrequency+5)*60);
 
         return $testPassed;
     }
