@@ -10,6 +10,7 @@ use Gitonomy\Git\Admin AS GitAdmin;
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException AS GitProcessException;
 use Emergence\SSH\KeyPair;
+use Emergence\Site\Storage;
 
 
 class Source
@@ -49,7 +50,7 @@ class Source
 
     public static function getRepositoriesRootPath()
     {
-        $path = Site::$rootPath . '/site-data/git';
+        $path = Storage::getLocalStorageRoot() . '/git';
 
         if (!is_dir($path)) {
             mkdir($path, 0770, true);
@@ -402,14 +403,14 @@ class Source
         $output = trim($this->getRepository()->run('merge', ['--ff-only', '--no-stat', '@{upstream}']));
         $output = explode(PHP_EOL, $output);
 
-        if ($output[0] == 'Already up-to-date.') {
+        if ($output[0] == 'Already up-to-date.' || $output[0] == 'Already up to date.') {
             return false;
         }
 
         list ($status, $commits) = explode(' ', $output[0]);
 
         if ($status != 'Updating') {
-            throw new \Exception('Unexpected merge status output: ' . $status);
+            throw new \Exception("Unexpected merge status output '{$status}' from line: {$output[0]}");
         }
 
         list ($from, $to) = explode('..', $commits);

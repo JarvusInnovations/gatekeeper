@@ -4,7 +4,7 @@
  *
  * @package   php-markdown
  * @author    Michel Fortin <michel.fortin@michelf.com>
- * @copyright 2004-2018 Michel Fortin <https://michelf.com/projects/php-markdown/>
+ * @copyright 2004-2019 Michel Fortin <https://michelf.com/projects/php-markdown/>
  * @copyright (Original Markdown) 2004-2006 John Gruber <https://daringfireball.net/projects/markdown/>
  */
 
@@ -611,7 +611,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 				// Increase/decrease nested tag count.
 				if ($tag[1] === '/') {
 					$depth--;
-				} else if ($tag{strlen($tag)-2} !== '/') {
+				} else if ($tag[strlen($tag)-2] !== '/') {
 					$depth++;
 				}
 
@@ -734,7 +734,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 				if (preg_match('{^</?' . $base_tag_name_re . '\b}', $tag)) {
 					if ($tag[1] === '/') {
 						$depth--;
-					} else if ($tag{strlen($tag)-2} !== '/') {
+					} else if ($tag[strlen($tag)-2] !== '/') {
 						$depth++;
 					}
 				}
