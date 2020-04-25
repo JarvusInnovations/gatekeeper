@@ -8,7 +8,7 @@
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
-            "port": 7089,
+            "port": 9000,
             "pathMappings": {
                 "/hab/svc/php-runtime/var/site/php-classes/Emergence": "${workspaceFolder:emergence-skeleton-v1}/php-classes/Emergence",
                 "/hab/svc/php-runtime/var/site": "${workspaceFolder:gatekeeper}",
