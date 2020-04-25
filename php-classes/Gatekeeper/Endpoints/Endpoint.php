@@ -245,6 +245,10 @@ class Endpoint extends ActiveRecord
             return;
         }
 
+        if (!$Endpoint->isFieldDirty('Path')) {
+            return;
+        }
+
         $duplicateConditions = [
             'Path' => $Endpoint->Path
         ];
@@ -349,7 +353,7 @@ class Endpoint extends ActiveRecord
         $cacheKey = "endpoints/$this->ID/rewrites";
 
         // get ordered list of rewrites
-        if (false == ($rewriteIDs = Cache::fetch($cacheKey))) {
+        if (false === ($rewriteIDs = Cache::fetch($cacheKey))) {
             $rewriteIDs = array_map(function($Rewrite) {
                 return $Rewrite->ID;
             }, $this->Rewrites);
