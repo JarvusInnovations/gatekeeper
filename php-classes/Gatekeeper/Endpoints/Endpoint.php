@@ -245,6 +245,10 @@ class Endpoint extends ActiveRecord
             return;
         }
 
+        if (!$Endpoint->isFieldDirty('Path')) {
+            return;
+        }
+
         $duplicateConditions = [
             'Path' => $Endpoint->Path
         ];
