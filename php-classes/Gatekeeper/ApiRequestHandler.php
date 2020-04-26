@@ -67,7 +67,7 @@ class ApiRequestHandler extends \RequestHandler
 
 
                 // initialize log record
-                if (!Cache::fetch('flags/gatekeeper-skip-insert-transaction')) {
+                if (!Cache::fetch('flags/gatekeeper/skip-insert-transaction')) {
                     $Transaction = Transaction::create([
                         'Endpoint' => $request->getEndpoint()
                         ,'Key' => $request->getKey()
