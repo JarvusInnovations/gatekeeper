@@ -59,25 +59,27 @@ class ApiRequestHandler extends \RequestHandler
             ,'timeout' => static::$defaultTimeout
             ,'timeoutConnect' => static::$defaultTimeoutConnect
 #            ,'debug' => true // uncomment to debug proxy process and see output following response
-#            ,'afterResponseSync' => true // uncomment to debug afterResponse code from browser
-            ,'afterResponse' => function($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
+            // ,'afterResponseSync' => true // true to debug afterResponse code from browser
+            ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
 
                 $curlInfo = curl_getinfo($curlHandle);
                 list($path, $query) = explode('?', $request->getUrl());
 
 
                 // initialize log record
-                $Transaction = Transaction::create([
-                    'Endpoint' => $request->getEndpoint()
-                    ,'Key' => $request->getKey()
-                    ,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
-                    ,'Method' => $_SERVER['REQUEST_METHOD']
-                    ,'Path' => $path
-                    ,'Query' => $query
-                    ,'ResponseTime' => $curlInfo['starttransfer_time'] * 1000
-                    ,'ResponseCode' => $curlInfo['http_code']
-                    ,'ResponseBytes' => $curlInfo['size_download']
-                ]);
+                if (!Cache::fetch('flags/gatekeeper/skip-insert-transaction')) {
+                    $Transaction = Transaction::create([
+                        'Endpoint' => $request->getEndpoint()
+                        ,'Key' => $request->getKey()
+                        ,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
+                        ,'Method' => $_SERVER['REQUEST_METHOD']
+                        ,'Path' => $path
+                        ,'Query' => $query
+                        ,'ResponseTime' => $curlInfo['starttransfer_time'] * 1000
+                        ,'ResponseCode' => $curlInfo['http_code']
+                        ,'ResponseBytes' => $curlInfo['size_download']
+                    ]);
+                }
 
 
                 // fire afterApiRequest
