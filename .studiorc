@@ -1,3 +1,4 @@
 #!/bin/bash
-hab pkg install emergence/studio
+hab pkg install emergence/studio jarvus/mkdocs-studio
 source "$(hab pkg path emergence/studio)/studio.sh"
+source "$(hab pkg path jarvus/mkdocs-studio )/studio.sh"
