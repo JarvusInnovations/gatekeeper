@@ -8,10 +8,14 @@ use Gatekeeper\Alerts\RateLimitExceeded;
 
 
 $Endpoint = $_EVENT['request']->getEndpoint();
+$Key = $_EVENT['request']->getKey();
 
 
 // drip into endpoint requests bucket
-if ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount) {
+if (
+    (!$Key || !$Key->RateLimitExempt) &&
+    ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount)
+) {
     $flagKey = "alerts/endpoints/$Endpoint->ID/rate-flagged";
 
     $bucket = HitBuckets::drip("endpoints/$Endpoint->ID/requests", function() use ($Endpoint) {
