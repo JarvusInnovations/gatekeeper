@@ -5,10 +5,14 @@ namespace Gatekeeper;
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 $userIdentifier = $_EVENT['request']->getUserIdentifier();
+$Key = $_EVENT['request']->getKey();
 
 
 // drip into endpoint+user bucket first so that abusive users can't pollute the global bucket
-if ($Endpoint->UserRatePeriod && $Endpoint->UserRateCount) {
+if (
+    (!$Key || !$Key->RateLimitExempt) &&
+    ($Endpoint->UserRatePeriod && $Endpoint->UserRateCount)
+) {
     $bucket = HitBuckets::drip("endpoints/$Endpoint->ID/$userIdentifier", function() use ($Endpoint) {
         return array('seconds' => $Endpoint->UserRatePeriod, 'count' => $Endpoint->UserRateCount);
     });
