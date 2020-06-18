@@ -31,6 +31,8 @@
                         <h3 class="title">
                             {if $Ban->IP}
                                 IP Address: <strong>{$Ban->IP|long2ip}</strong>
+                            {elseif $Ban->IPPattern}
+                                IP Pattern: <strong>{$Ban->IPPattern}</strong>
                             {else}
                                 Key: <strong>{apiKey $Ban->Key}</strong>
                             {/if}

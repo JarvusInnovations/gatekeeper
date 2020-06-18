@@ -8,6 +8,7 @@
     <p class="lead">
         Ban on
         {if $Ban->IP}IP Address: <strong>{$Ban->IP|long2ip}</strong>
+        {elseif $Ban->IPPattern}IP Address Pattern: <strong>{$Ban->IPPattern}</strong>
         {else}Key: {apiKey $Ban->Key}
         {/if}
         {tif $Ban->isNew ? created : saved}.

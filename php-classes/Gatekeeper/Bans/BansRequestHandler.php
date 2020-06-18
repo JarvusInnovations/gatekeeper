@@ -17,7 +17,7 @@ class BansRequestHandler extends \RecordsRequestHandler
     protected static function applyRecordDelta(\ActiveRecord $Ban, $data)
     {
         if (isset($data['IP']) && !is_numeric($data['IP'])) {
-            $data['IP'] = ip2long($data['IP']);
+            $data['IPPattern'] = $data['IP'];
         }
 
         if (isset($data['KeyID']) && !is_numeric($data['KeyID'])) {
