@@ -19,19 +19,22 @@
     }{/literal}
 {/template}
 
-{"<?php"}
-
 {block closure-method}
+{"<?php"}
+{$ipPatterns = $data}
 {literal}return function($ipInput) {{/literal}
     $ipLong = ip2long($ipInput);
-    {foreach from=$data key=ipPattern item=type}
-        {if $ipPattern && $type === 'ip'}{exactMatch $ipPattern}
-        {elseif $ipPattern && $type === 'wildcard'}{wildcardMatch $ipPattern}
-        {elseif $ipPattern && $type === 'cidr'}{cidrMatch $ipPattern}
-        {/if}
+    {foreach from=$ipPatterns.ip item=ipPattern}
+        {if $ipPattern}{exactMatch $ipPattern}{/if}
     {/foreach}
+    {foreach from=$ipPatterns.cidr item=ipPattern}
+        {if $ipPattern}{cidrMatch $ipPattern}{/if}
+    {/foreach}
+    {foreach from=$ipPatterns.wildcard item=ipPattern}
+        {if $ipPattern}{wildcardMatch $ipPattern}{/if}
+    {/foreach}
+
     return false;
 {literal}}{/literal}
-{/block}
-
 {"?>"}
+{/block}

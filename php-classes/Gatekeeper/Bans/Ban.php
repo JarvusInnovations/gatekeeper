@@ -81,6 +81,7 @@ class Ban extends \ActiveRecord
 
         if ($this->isUpdated || $this->isNew) {
             Cache::delete('bans');
+            Cache::delete("ip-pattern:${static::getIPPatternSafe($this->IPPattern)}");
         }
     }
 
@@ -88,6 +89,7 @@ class Ban extends \ActiveRecord
     {
         $success = parent::destroy();
         Cache::delete('bans');
+        Cache::delete("ip-pattern:${static::getIPPatternSafe($this->IPPattern)}");
         return $success;
     }
 
@@ -99,6 +101,28 @@ class Ban extends \ActiveRecord
     public static function sortCreated($dir, $name)
     {
         return "ID $dir";
+    }
+
+
+    public static function parseIPPatterns($ipPattern, $returnType = null)
+    {
+        $bansByType = [
+            'ip' => [],
+            'cidr' => [],
+            'wildcard' => []
+        ];
+
+        foreach (preg_split("/[\s,]+/", $ipPattern) as $pattern) {
+            if (!empty($pattern)) {
+                $bansByType[static::getPatternType($pattern)][] = $pattern;
+            }
+        }
+
+        if (!empty($returnType)) {
+            return $bansByType[$returnType];
+        }
+
+        return $bansByType;
     }
 
     protected static $_activeBans;
@@ -114,12 +138,14 @@ class Ban extends \ActiveRecord
 
         static::$_activeBans = [
             'patterns' => [],
+            'ips' => [],
             'keys' => []
         ];
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
             if ($Ban->IPPattern) {
                 static::$_activeBans['patterns'][] = $Ban->IPPattern;
+                static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], static::parseIPPatterns($Ban, 'ip'));
             } elseif($Ban->KeyID) {
                 static::$_activeBans['keys'][] = $Ban->KeyID;
             }
@@ -130,51 +156,49 @@ class Ban extends \ActiveRecord
         return static::$_activeBans;
     }
 
-    public static function getIPPatternBanClosure($ipPattern)
+    public static function getIPPatternBanClosure($ipPattern, $ignoreCache = false)
     {
         static $ipPatternCaches = [];
 
+        // todo: confirm if this is needed
         $ipPatternSafe = static::getIPPatternSafe($ipPattern);
 
-        if (in_array($ipPatternSafe, $ipPatternCaches)) {
+        if (!$ignoreCache && !empty($ipPatternCaches[$ipPatternSafe])) {
             return $ipPatternCaches[$ipPatternSafe];
         }
 
-        if ($ipPatternCache = Cache::fetch("ip-pattern:{$ipPatternSafe}")) {
+        if (!$ignoreCache && $ipPatternCache = Cache::fetch("ip-pattern:{$ipPatternSafe}")) {
             return $ipPatternCache;
         }
 
-        // todo: use or remove?
-        //$localStorageRoot = Storage::getLocalStorageRoot();
-        $fileName = "/patterns/matchers/{$ipPatternSafe}.php";
+        $bucketId = 'ip-patterns';
+        $filesystem = Storage::getFileSystem($bucketId);
+        $fileName = "matchers/{$ipPatternSafe}.php";
+        $matcher = null;
 
-        try {
-            return Storage::getFileSystem('site-root')->read(ltrim($fileName, '/'));
-        } catch (\Exception $e) {
-            $ipPatternSplit = [];
-            foreach (preg_split("/[\s,]+/", $ipPattern) as $pattern) {
-                $ipPatternSplit[$pattern] = static::getPatternType($pattern);
-            }
-            $order = ['ip', 'cidr', 'wildcard'];
-            uasort($ipPatternSplit, function($a, $b) use ($order) {
-                if ($a === $b) {
-                    return 0;
-                } else {
-                    return (array_search($a, $order) - array_search($b, $order));
-                }
-            });
+        // try {
+        //     $matcher = $filesystem->read($fileName);
 
-            $phpScript =  DwooEngine::getSource('ip-patterns/ip-pattern', [
-                'data' => $ipPatternSplit
+        // } catch (\Exception $e) {
+        // }
+
+        if (!$filesystem->has($fileName)) {
+            $matcher = DwooEngine::getSource('ip-patterns/ip-pattern', [
+                'data' => static::parseIPPatterns($ipPattern)
             ]);
 
-            Storage::getFileSystem('site-root')->write(ltrim($fileName, '/'), $phpScript);
-
-            return $phpScript;
+            $filesystem->write($fileName, $matcher);
         }
 
-        return null;
+        $closure = require join('/', [Storage::getLocalStorageRoot(), $bucketId, $fileName]);
 
+        // cache matcher
+        $ipPatternCaches[$ipPatternSafe] = $closure;// $matcher;
+        // todo: confirm if we want to cache for a specific time period
+        Cache::store("ip-pattern:{$ipPatternSafe}", $closure); // $matcher
+
+        return $closure;
+        // return $matcher;
     }
 
     protected static function getIPPatternSafe($ipPattern)
@@ -193,17 +217,22 @@ class Ban extends \ActiveRecord
         }
     }
 
-    public static function isIPAddressBanned($ip)
+    public static function isIPAddressBanned($ip, $ignoreCache = false)
     {
         $bannedPatterns = static::getActiveBansTable()['patterns'];
 
+        // check for explicit IP ban
         if (in_array($ip, $bannedPatterns)) {
             return true;
         }
 
+        // check IP Patterns individually
         $isBanned = false;
         foreach($bannedPatterns as $ipPattern) {
-            $closure = eval( '?>' . static::getIPPatternBanClosure($ipPattern));
+            $matcher = static::getIPPatternBanClosure($ipPattern, $ignoreCache);
+            \MICS::dump(trim($matcher), 'matcher', !empty($_REQUEST['debug']));
+            $closure = eval($matcher . " ?>");
+            \MICS::dump($closure, 'matcher', isset($_REQUEST['debug']));
             if (call_user_func($closure, $ip)) {
                 $isBanned = true;
                 break;
