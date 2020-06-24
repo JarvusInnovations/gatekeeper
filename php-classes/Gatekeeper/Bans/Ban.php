@@ -167,38 +167,24 @@ class Ban extends \ActiveRecord
             return $ipPatternCaches[$ipPatternSafe];
         }
 
-        if (!$ignoreCache && $ipPatternCache = Cache::fetch("ip-pattern:{$ipPatternSafe}")) {
-            return $ipPatternCache;
-        }
-
         $bucketId = 'ip-patterns';
         $filesystem = Storage::getFileSystem($bucketId);
         $fileName = "matchers/{$ipPatternSafe}.php";
-        $matcher = null;
 
-        // try {
-        //     $matcher = $filesystem->read($fileName);
+        try {
+            $closure = include join('/', [Storage::getLocalStorageRoot(), $bucketId, $fileName]);
+        } catch (\Exception $e) {
+            $filesystem->write(
+                $fileName,
+                DwooEngine::getSource('ip-patterns/ip-pattern', [
+                    'data' => static::parseIPPatterns($ipPattern)
+                ])
+            );
 
-        // } catch (\Exception $e) {
-        // }
-
-        if (!$filesystem->has($fileName)) {
-            $matcher = DwooEngine::getSource('ip-patterns/ip-pattern', [
-                'data' => static::parseIPPatterns($ipPattern)
-            ]);
-
-            $filesystem->write($fileName, $matcher);
+            return static::getIPPatternBanClosure($ipPattern);
         }
 
-        $closure = require join('/', [Storage::getLocalStorageRoot(), $bucketId, $fileName]);
-
-        // cache matcher
-        $ipPatternCaches[$ipPatternSafe] = $closure;// $matcher;
-        // todo: confirm if we want to cache for a specific time period
-        Cache::store("ip-pattern:{$ipPatternSafe}", $closure); // $matcher
-
-        return $closure;
-        // return $matcher;
+        return $ipPatternCaches[$ipPatternSafe] = $closure;
     }
 
     protected static function getIPPatternSafe($ipPattern)
@@ -230,10 +216,7 @@ class Ban extends \ActiveRecord
         $isBanned = false;
         foreach($bannedPatterns as $ipPattern) {
             $matcher = static::getIPPatternBanClosure($ipPattern, $ignoreCache);
-            \MICS::dump(trim($matcher), 'matcher', !empty($_REQUEST['debug']));
-            $closure = eval($matcher . " ?>");
-            \MICS::dump($closure, 'matcher', isset($_REQUEST['debug']));
-            if (call_user_func($closure, $ip)) {
+            if (call_user_func($matcher, $ip)) {
                 $isBanned = true;
                 break;
             }
