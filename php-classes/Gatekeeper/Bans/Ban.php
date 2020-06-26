@@ -3,9 +3,9 @@
 namespace Gatekeeper\Bans;
 
 use Cache;
-use Emergence\Dwoo\Engine as DwooEngine;
 use Emergence\Site\Storage;
 use Gatekeeper\Keys\Key;
+use Gatekeeper\Utils\IPPattern;
 
 class Ban extends \ActiveRecord
 {
@@ -20,10 +20,6 @@ class Ban extends \ActiveRecord
 
     public static $fields = [
         'KeyID' => [
-            'type' => 'uint',
-            'notnull' => false
-        ],
-        'IP' => [
             'type' => 'uint',
             'notnull' => false
         ],
@@ -68,8 +64,8 @@ class Ban extends \ActiveRecord
     {
         parent::validate($deep);
 
-        if (!$this->KeyID == !($this->IP || $this->IPPattern)) { // todo: replace when column is migrated
-            $this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
+        if (!$this->KeyID == !$this->IPPattern) {
+            $this->_validator->addError('Ban', 'Ban must specify either a API key or an IP address');
         }
 
         return $this->finishValidation();
@@ -81,7 +77,6 @@ class Ban extends \ActiveRecord
 
         if ($this->isUpdated || $this->isNew) {
             Cache::delete('bans');
-            Cache::delete("ip-pattern:${static::getIPPatternSafe($this->IPPattern)}");
         }
     }
 
@@ -89,7 +84,6 @@ class Ban extends \ActiveRecord
     {
         $success = parent::destroy();
         Cache::delete('bans');
-        Cache::delete("ip-pattern:${static::getIPPatternSafe($this->IPPattern)}");
         return $success;
     }
 
@@ -103,27 +97,6 @@ class Ban extends \ActiveRecord
         return "ID $dir";
     }
 
-
-    public static function parseIPPatterns($ipPattern, $returnType = null)
-    {
-        $bansByType = [
-            'ip' => [],
-            'cidr' => [],
-            'wildcard' => []
-        ];
-
-        foreach (preg_split("/[\s,]+/", $ipPattern) as $pattern) {
-            if (!empty($pattern)) {
-                $bansByType[static::getPatternType($pattern)][] = $pattern;
-            }
-        }
-
-        if (!empty($returnType)) {
-            return $bansByType[$returnType];
-        }
-
-        return $bansByType;
-    }
 
     protected static $_activeBans;
     public static function getActiveBansTable()
@@ -143,9 +116,12 @@ class Ban extends \ActiveRecord
         ];
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
-            if ($Ban->IPPattern) {
-                static::$_activeBans['patterns'][] = $Ban->IPPattern;
-                static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], static::parseIPPatterns($Ban, 'ip'));
+            if (!empty($Ban->IPPattern)) {
+                if (is_array(static::getIPPatternBanClosure($Ban->IPPattern))) { // ip pattern ONLY contains static IPs
+                    static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], static::getIPPatternBanClosure($Ban->IPPattern));
+                } else {
+                    static::$_activeBans['patterns'][] = $Ban->IPPattern;
+                }
             } elseif($Ban->KeyID) {
                 static::$_activeBans['keys'][] = $Ban->KeyID;
             }
@@ -160,69 +136,45 @@ class Ban extends \ActiveRecord
     {
         static $ipPatternCaches = [];
 
-        // todo: confirm if this is needed
-        $ipPatternSafe = static::getIPPatternSafe($ipPattern);
+        $ipPatternHash = sha1($ipPattern);
 
-        if (!$ignoreCache && !empty($ipPatternCaches[$ipPatternSafe])) {
-            return $ipPatternCaches[$ipPatternSafe];
+        if (!$ignoreCache && !empty($ipPatternCaches[$ipPatternHash])) {
+            return $ipPatternCaches[$ipPatternHash];
         }
-
-        $bucketId = 'ip-patterns';
-        $filesystem = Storage::getFileSystem($bucketId);
-        $fileName = "matchers/{$ipPatternSafe}.php";
 
         try {
-            $closure = include join('/', [Storage::getLocalStorageRoot(), $bucketId, $fileName]);
-        } catch (\Exception $e) {
-            $filesystem->write(
-                $fileName,
-                DwooEngine::getSource('ip-patterns/ip-pattern', [
-                    'data' => static::parseIPPatterns($ipPattern)
-                ])
+            $closure = include join('/',
+                [
+                    Storage::getLocalStorageRoot(),
+                    IPPattern::$fsRootDir,
+                    $ipPatternHash . '.php'
+                ]
             );
-
-            return static::getIPPatternBanClosure($ipPattern);
+        } catch (\Exception $e) {
+            $closure = IPPattern::parse($ipPattern, $ipPatternHash);
         }
 
-        return $ipPatternCaches[$ipPatternSafe] = $closure;
-    }
-
-    protected static function getIPPatternSafe($ipPattern)
-    {
-        return str_replace(['/', '*', ',', ' '], ['-', 'x', '_', '_'], $ipPattern);
-    }
-
-    protected static function getPatternType($ipPattern)
-    {
-        if (preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2}/', $ipPattern)) {
-            return 'cidr';
-        } elseif (preg_match('/(\d{1,3})\.(\d{1,3})\.([0-9]{1,3}|\*)\.(\*)/', $ipPattern)) {
-            return 'wildcard';
-        } elseif (preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $ipPattern)) {
-            return 'ip';
-        }
+        return $ipPatternCaches[$ipPatternHash] = $closure;
     }
 
     public static function isIPAddressBanned($ip, $ignoreCache = false)
     {
-        $bannedPatterns = static::getActiveBansTable()['patterns'];
+        $activeBans = static::getActiveBansTable();
 
         // check for explicit IP ban
-        if (in_array($ip, $bannedPatterns)) {
+        if (in_array($ip, $activeBans['ips'])) {
             return true;
         }
 
         // check IP Patterns individually
-        $isBanned = false;
-        foreach($bannedPatterns as $ipPattern) {
+        foreach($activeBans['patterns'] as $ipPattern) {
             $matcher = static::getIPPatternBanClosure($ipPattern, $ignoreCache);
-            if (call_user_func($matcher, $ip)) {
-                $isBanned = true;
-                break;
+            if (call_user_func($matcher, $ip) === true) {
+                return true;
             }
         }
 
-        return $isBanned;
+        return false;
     }
 
     public static function isKeyBanned(Key $Key)
