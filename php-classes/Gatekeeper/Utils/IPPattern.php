@@ -11,8 +11,7 @@ use UnexpectedValueException;
 class IPPattern {
 
     public static $fsRootDir = 'ip-patterns/matchers';
-    // tODO: returns either a closure (containing pattern checks -- including static IPs) or array (of integers)
-    /**
+   /**
     *
     * Parse IP pattens by splitting them by spaces or commas and grouping them
     * in the available groups: ip, cidr, or wildcard.
@@ -53,19 +52,20 @@ class IPPattern {
         return static::generateClosure($subPatternsByType, $uid);
     }
 
-    /**
-     *
-     * Generate Closure function and write to filesystem with the name of the pattern hashed
-     *
-     * @param array $patterns Multi-dimensional array of sub-patterns, keyed by pattern type.
-     * @param string $patternHash Original Pattern hashed.
-     *
-     * @return closure Closure function
-     */
+   /**
+    *
+    * Generate Closure function and write to filesystem with the name of the pattern hashed
+    *
+    * @param array $patterns Multi-dimensional array of sub-patterns, keyed by pattern type.
+    * @param string $patternHash Original Pattern hashed.
+    *
+    * @return closure Closure function
+    */
     protected static function generateClosure(array $patterns, $patternHash)
     {
 
-        $closureFunctionString = <<<DOC
+        $closureFunctionString =
+<<<DOC
             <?php
 
             return function(\$ipInput) {
@@ -89,7 +89,7 @@ DOC;
 DOC;
 
         $filesystem = Storage::getFileSystem(static::$fsRootDir);
-        $fileName = "{$patternHash}.php"; // todo: test moving matchers/ to fsRootDir
+        $fileName = "{$patternHash}.php";
 
         $filesystem->write(
             $fileName,
