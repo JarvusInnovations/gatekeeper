@@ -65,7 +65,7 @@ class Ban extends \ActiveRecord
         parent::validate($deep);
 
         if (!$this->KeyID == !$this->IPPattern) {
-            $this->_validator->addError('Ban', 'Ban must specify either a API key or an IP address');
+            $this->_validator->addError('Ban', 'Ban must specify either a API key or an IP pattern');
         }
 
         return $this->finishValidation();
