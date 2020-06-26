@@ -29,4 +29,28 @@ $updatedTable = DB::nonQuery(
     ]
 );
 
+$deprecatedColumn = 'IP';
+
+printf("Migrating values for deprecated column: `%s` -> `%s`", $deprecatedColumn, $columnName);
+DB::nonQuery(
+    '
+        UPDATE `%1$s` SET %2$s = %3$s
+         WHERE %3$s IS NOT NULL
+    ',
+    [
+        Ban::$tableName,
+        $columnName,
+        $deprecatedColumn
+    ]
+);
+
+printf("Removing deprecated column: IP");
+DB::nonQuery(
+    'ALTER TABLE `%s` DROP COLUMN %s',
+    [
+        Ban::$tableName,
+        $deprecatedColumn
+    ]
+);
+
 return static::STATUS_EXECUTED;
