@@ -30,9 +30,7 @@
                 <div class="details">
                     <header>
                         <h3 class="title">
-                            {if $Ban->IP}
-                                IP Address: <strong>{$Ban->IP|long2ip}</strong>
-                            {elseif $Ban->IPPattern}
+                            {if $Ban->IPPattern}
                                 IP Pattern: <strong>{$Ban->IPPattern}</strong>
                             {else}
                                 Key: <strong>{apiKey $Ban->Key}</strong>
