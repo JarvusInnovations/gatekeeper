@@ -51,7 +51,7 @@ class ApiRequestHandler extends \RequestHandler
             ,'url' => rtrim($request->getEndpoint()->InternalEndpoint, '/') . $request->getUrl()
             ,'interface' => static::$sourceInterface
             ,'headers' => [
-                'X-Forwarded-For' => $_SERVER['REMOTE_ADDR']
+                "X-Forwarded-For: {$_SERVER['REMOTE_ADDR']}"
             ]
             ,'passthruHeaders' => static::$passthruHeaders
             ,'forwardHeaders' => array_merge(HttpProxy::$defaultForwardHeaders, static::$forwardHeaders)
