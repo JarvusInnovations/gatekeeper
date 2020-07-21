@@ -6,6 +6,8 @@ use Site;
 use Cache;
 use HttpProxy;
 
+use Psr\Log\LoggerInterface;
+
 use Gatekeeper\ApiRequestHandler;
 use Gatekeeper\Alerts\TestFailed;
 use Gatekeeper\Transactions\PingTransaction;
@@ -13,7 +15,7 @@ use Gatekeeper\Transactions\PingTransaction;
 
 class Pinger
 {
-    public static function pingOverdueEndpoints($verbose = false)
+    public static function pingOverdueEndpoints(LoggerInterface $logger = null)
     {
         $endpoints = Endpoint::getAllByWhere('PingFrequency IS NOT NULL');
 
@@ -24,14 +26,16 @@ class Pinger
                 $lastPing === false
                 || $Endpoint->PingFrequency*60 < time()-$lastPing['time']
             ) {
-                static::pingEndpoint($Endpoint, $verbose);
+                static::pingEndpoint($Endpoint, $logger);
             }
         }
+
+        return count($endpoints);
     }
 
-    public static function pingEndpoint(Endpoint $Endpoint, $verbose = false)
+    public static function pingEndpoint(Endpoint $Endpoint, LoggerInterface $logger = null)
     {
-        $verbose && printf('Testing endpoint: /%s...', $Endpoint->Path) && flush();
+        $logger && $logger->info("/{$Endpoint->Path} is being pinged");
 
 
         // execute and capture request
@@ -108,7 +112,7 @@ class Pinger
         }
 
 
-        $verbose && printf("%s\n", $testPassed ? 'passed' : 'failed') && flush();
+        $logger && $logger->info("/{$Endpoint->Path} ". ($testPassed ? 'passed' : 'failed'));
 
 
         // cache result and timestamp
