@@ -5,3 +5,7 @@
 # exclude built files from source control
 /site-root/js/pages/
 /site-root/css/
+
+# ignore habitat build results
+results/
+.env

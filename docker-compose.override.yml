@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    environment:
+
+      # assign any username/password--both app and db will pick it up and initialize
+      HAB_MYSQL: |
+        # these can be made up:
+        app_username = '${MYSQL_USERNAME}'
+        app_password = '${MYSQL_PASSWORD}'
+        bind = '0.0.0.0'
+
+    ports:
+      - 127.0.0.1:3306:3306 # expose mysql on localhost
