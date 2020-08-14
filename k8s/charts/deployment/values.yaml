@@ -1,0 +1,2 @@
+# Default values for deployment
+replicaCount: 1
