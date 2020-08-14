@@ -68,7 +68,7 @@ jobs:
     - name: Build & Publish Docker image
       uses: whoan/docker-build-with-cache-action@v5
       with:
-        dockerfile: docker/php73/Dockerfile
+        dockerfile: Dockerfile
         username: ${{ github.actor }}
         password: ${{ env.GITHUB_TOKEN }}
         registry: ${{ env.PACKAGE_REGISTRY }}
