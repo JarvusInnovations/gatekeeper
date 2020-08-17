@@ -17,6 +17,11 @@ env:
   PR_NAME: pr-${{ github.event.number }}
   KUBE_HOSTNAME: ${{ secrets.kube_hostname }}
 
+  HAB_LICENSE: accept-no-persist
+
+  MYSQL_USERNAME: gatekeeper # ${{ secrets.mysql_username }}
+  MYSQL_PASSWORD: zyxw1234! # ${{ secrets.mysql_password }}
+
 jobs:
   kubernetes-deploy:
 
@@ -77,6 +82,7 @@ jobs:
         build_extra_args: |
           --build-arg=SOURCE_COMMIT=${{ github.sha }}
           --build-arg=SOURCE_TAG=${{ env.PR_NAME }}
+          --build-arg=HAB_LICENSE=${{ env.HAB_LICENSE }}
 
     - name: Add kubeconfig to environment
       run: |
@@ -98,14 +104,18 @@ jobs:
 
         kubectl config set-context --current --namespace=${KUBE_NAMESPACE}
 
-        # uninstall any existing deployment first to force image to re-pull without changing tag
-        helm uninstall ${PR_NAME}
+        # delete any existing pod first to force image to re-pull without changing tag
+        kubectl delete pod -l app.kubernetes.io/instance="${PR_NAME}"
 
-        helm install ${PR_NAME} ./k8s/charts/deployment \
-          --set name={$PR_NAME} \
-          --set namespace=${KUBE_NAMESPACE } \
+        helm install ${{ env.PR_NAME }} ./k8s/charts/deployment \
+          --set name=${{ env.PR_NAME }} \
+          --set namespace=${{ env.KUBE_NAMESPACE }} \
           --set image=${image_url} \
           --set host=${hostname}
+
+    - name: Setup tmate session
+      if: always()
+      uses: mxschmitt/action-tmate@v2
 
     - name: Wait for Deployment to be Ready
       run: |
