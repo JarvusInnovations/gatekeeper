@@ -1,14 +1,7 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: {{ .Values.namespace }}
-
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
@@ -22,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
+        {{- include "gatekeeper-deployment.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
       - name: regcred
@@ -31,8 +24,26 @@ spec:
 
       containers:
       - image: {{ .Values.image }}
-        name: {{ .Values.name }}-app
+        name: {{ .Release.Name }}-app
         imagePullPolicy: Always
+
+        env:
+          - name: HAB_GATEKEEPER_COMPOSITE
+            value: |
+            {{- if .Values.hab.gatekeeper_composite.mysql }}
+              [services.mysql]
+              {{- range $key, $value := .Values.hab.gatekeeper_composite.mysql }}
+              {{ $key }} = {{ $value | quote }}
+              {{- end }}
+            {{- end }}
+
+          - name: HAB_MYSQL
+            value: |
+            {{- if .Values.hab.mysql }}
+              {{- range $key, $value := .Values.hab.mysql }}
+              {{ $key }} = {{ $value | quote }}
+              {{- end }}
+            {{- end }}
 
         ports:
         - containerPort: 80
@@ -43,15 +54,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
-    app: {{ .Values.name }}
-    name: {{ .Values.name }}-app
+    app: {{ .Release.Name }}
+    name: {{ .Release.Name }}-app
 spec:
   selector:
-    {{- include "gatekeeper-deployment.selectorLabels" . | nindent 8 }}
+    {{- include "gatekeeper-deployment.selectorLabels" . | nindent 4 }}
   ports:
   - name: http
     port: 80
@@ -62,7 +73,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
@@ -74,9 +85,9 @@ spec:
   tls:
   - hosts:
     - {{ .Values.hostname }}
-    secretName: {{ .Values.name }}-tls
+    secretName: {{ .Release.Name }}-tls
   backend:
-    serviceName: {{ .Values.name }}
+    serviceName: {{ .Release.Name }}
     servicePort: 80
   rules:
   - host: {{ .Values.hostname }}
@@ -84,5 +95,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ .Values.name }}
+          serviceName: {{ .Release.Name }}
           servicePort: 80

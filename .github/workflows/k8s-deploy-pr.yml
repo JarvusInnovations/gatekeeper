@@ -70,19 +70,19 @@ jobs:
         echo ::set-env name=COMMIT_MSG::$(git log --format=%B -n 1 ${{ github.event.after }})
         echo ::set-env name=REPO_NAME::$(echo ${GITHUB_REPOSITORY,,})
 
-    - name: Build & Publish Docker image
-      uses: whoan/docker-build-with-cache-action@v5
-      with:
-        dockerfile: Dockerfile
-        username: ${{ github.actor }}
-        password: ${{ env.GITHUB_TOKEN }}
-        registry: ${{ env.PACKAGE_REGISTRY }}
-        image_name: ${{ env.REPO_NAME }}/${{ env.PACKAGE_NAME }}
-        image_tag: ${{ env.PR_NAME }}
-        build_extra_args: |
-          --build-arg=SOURCE_COMMIT=${{ github.sha }}
-          --build-arg=SOURCE_TAG=${{ env.PR_NAME }}
-          --build-arg=HAB_LICENSE=${{ env.HAB_LICENSE }}
+    # - name: Build & Publish Docker image
+    #   uses: whoan/docker-build-with-cache-action@v5
+    #   with:
+    #     dockerfile: Dockerfile
+    #     username: ${{ github.actor }}
+    #     password: ${{ env.GITHUB_TOKEN }}
+    #     registry: ${{ env.PACKAGE_REGISTRY }}
+    #     image_name: ${{ env.REPO_NAME }}/${{ env.PACKAGE_NAME }}
+    #     image_tag: ${{ env.PR_NAME }}
+    #     build_extra_args: |
+    #       --build-arg=SOURCE_COMMIT=${{ github.sha }}
+    #       --build-arg=SOURCE_TAG=${{ env.PR_NAME }}
+    #       --build-arg=HAB_LICENSE=${{ env.HAB_LICENSE }}
 
     - name: Add kubeconfig to environment
       run: |
@@ -105,17 +105,16 @@ jobs:
         kubectl config set-context --current --namespace=${KUBE_NAMESPACE}
 
         # delete any existing pod first to force image to re-pull without changing tag
-        kubectl delete pod -l app.kubernetes.io/instance="${PR_NAME}"
+        # kubectl delete pod -l app.kubernetes.io/instance="${PR_NAME}"
+        # helm uninstall ${{ env.PR_NAME }} -n ${{ env.KUBE_NAMESPACE }}
 
-        helm install ${{ env.PR_NAME }} ./k8s/charts/deployment \
+        helm upgrade ${{ env.PR_NAME }} ./k8s/charts/deployment \
+          --install \
           --set name=${{ env.PR_NAME }} \
           --set namespace=${{ env.KUBE_NAMESPACE }} \
           --set image=${image_url} \
-          --set host=${hostname}
+          --set hostname=${hostname}
 
-    - name: Setup tmate session
-      if: always()
-      uses: mxschmitt/action-tmate@v2
 
     - name: Wait for Deployment to be Ready
       run: |
@@ -124,7 +123,7 @@ jobs:
 
     - name: Retrieve/Store Pod Name
       run: |
-        echo ::set-env name=POD_NAME::$(kubectl get pod -l pr="${PR_NAME}" -o jsonpath='{.items[0].metadata.name}')
+        echo ::set-env name=POD_NAME::$(kubectl get pod -l app.kubernetes.io/instance="${PR_NAME}" -o jsonpath='{.items[0].metadata.name}')
 
     - name: Wait For Pod to be Ready
       run: |
