@@ -67,19 +67,19 @@ jobs:
         echo ::set-env name=COMMIT_MSG::$(git log --format=%B -n 1 ${{ github.event.after }})
         echo ::set-env name=REPO_NAME::$(echo ${GITHUB_REPOSITORY,,})
 
-    # - name: Build & Publish Docker image
-    #   uses: whoan/docker-build-with-cache-action@v5
-    #   with:
-    #     dockerfile: Dockerfile
-    #     username: ${{ github.actor }}
-    #     password: ${{ env.GITHUB_TOKEN }}
-    #     registry: ${{ env.PACKAGE_REGISTRY }}
-    #     image_name: ${{ env.REPO_NAME }}/${{ env.PACKAGE_NAME }}
-    #     image_tag: ${{ env.PR_NAME }}
-    #     build_extra_args: |
-    #       --build-arg=SOURCE_COMMIT=${{ github.sha }}
-    #       --build-arg=SOURCE_TAG=${{ env.PR_NAME }}
-    #       --build-arg=HAB_LICENSE=${{ env.HAB_LICENSE }}
+    - name: Build & Publish Docker image
+      uses: whoan/docker-build-with-cache-action@v5
+      with:
+        dockerfile: Dockerfile
+        username: ${{ github.actor }}
+        password: ${{ env.GITHUB_TOKEN }}
+        registry: ${{ env.PACKAGE_REGISTRY }}
+        image_name: ${{ env.REPO_NAME }}/${{ env.PACKAGE_NAME }}
+        image_tag: ${{ env.PR_NAME }}
+        build_extra_args: |
+          --build-arg=SOURCE_COMMIT=${{ github.sha }}
+          --build-arg=SOURCE_TAG=${{ env.PR_NAME }}
+          --build-arg=HAB_LICENSE=${{ env.HAB_LICENSE }}
 
     - name: Add kubeconfig to environment
       run: |
