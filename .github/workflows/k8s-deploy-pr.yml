@@ -19,9 +19,6 @@ env:
 
   HAB_LICENSE: accept-no-persist
 
-  MYSQL_USERNAME: gatekeeper # ${{ secrets.mysql_username }}
-  MYSQL_PASSWORD: zyxw1234! # ${{ secrets.mysql_password }}
-
 jobs:
   kubernetes-deploy:
 
