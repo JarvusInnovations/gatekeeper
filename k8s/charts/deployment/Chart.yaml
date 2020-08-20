@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gatekeeper-deployment
-description: A Helm chart for Gatekeeper Kubernetes PR Deployments
+description: A Helm chart for Gatekeeper Deployments
 
 # A chart can be either an 'application' or a 'library' chart.
 #

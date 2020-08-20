@@ -21,7 +21,6 @@ spec:
       - name: regcred
       restartPolicy: Always
 
-
       containers:
       - image: {{ .Values.image }}
         name: {{ .Release.Name }}-app
@@ -30,12 +29,8 @@ spec:
         env:
           - name: HAB_GATEKEEPER_COMPOSITE
             value: |
-            {{- if .Values.hab.gatekeeper_composite.mysql }}
               [services.mysql]
-              {{- range $key, $value := .Values.hab.gatekeeper_composite.mysql }}
-              {{ $key }} = {{ $value | quote }}
-              {{- end }}
-            {{- end }}
+              pkg_ident: {{ .Values.hab.gatekeeper_composite.mysql.pkg_ident | quote }}
 
           - name: HAB_MYSQL
             value: |
@@ -79,8 +74,8 @@ metadata:
     {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
     ingress.kubernetes.io/rewrite-target: /
+    {{- include "gatekeeper-deployment.cert-manager-annotations" . | nindent 4 }}
 spec:
   tls:
   - hosts:

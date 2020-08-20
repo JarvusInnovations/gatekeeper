@@ -32,3 +32,10 @@ Selector labels
 app.kubernetes.io/name: {{ include "gatekeeper-deployment.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Cert Manager Annotations
+*/}}
+{{- define "gatekeeper-deployment.cert-manager-annotations" -}}
+cert-manager.io/cluster-issuer: {{ .Values.cert_manager.annotations.cluster_issuer }}
+{{- end }}

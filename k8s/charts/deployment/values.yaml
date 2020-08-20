@@ -11,3 +11,7 @@ hab:
     app_username: admin
     app_password: xTw9wYFe70
     bind: '0.0.0.0'
+
+cert_manager:
+  annotations:
+    cluster_issuer: letsencrypt-prod
