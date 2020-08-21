@@ -30,7 +30,7 @@ spec:
           - name: HAB_GATEKEEPER_COMPOSITE
             value: |
               [services.mysql]
-              pkg_ident: {{ .Values.hab.gatekeeper_composite.mysql.pkg_ident | quote }}
+              pkg_ident = {{ .Values.hab.gatekeeper_composite.mysql.pkg_ident | quote }}
 
           - name: HAB_MYSQL
             value: |
