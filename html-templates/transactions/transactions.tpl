@@ -75,6 +75,7 @@
     <table>
         <thead>
             <tr>
+                <th class="col-endpoint">Endpoint</th>
                 <th class="col-request">Request</th>
                 <th class="col-timestamp">Timestamp</th>
                 <th class="col-response-code"><small>Response</small> Code</th>
@@ -88,6 +89,7 @@
         <tbody>
         {foreach item=Request from=$data}
             <tr>
+                <td class="col-endpoint">{contextLink $Request->Endpoint}</td>
                 <td class="col-request">{$Request->Method} <small>{$Request->Path|default:/}{tif $Request->Query ? "?$Request->Query"|query_string}</small></td>
                 <td class="col-timestamp">{$Request->Created|date_format:'%Y-%m-%d %H:%M:%S'}</td>
                 <td class="col-response-code">{$Request->ResponseCode}</td>
