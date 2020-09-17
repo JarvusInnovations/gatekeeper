@@ -15,16 +15,11 @@ class ApiRequestHandler extends \RequestHandler
     public static $defaultTimeout = 30;
     public static $defaultTimeoutConnect = 5;
     public static $passthruHeaders = [
-        '/^HTTP\//'
-        ,'/^Content-Type:/i'
-        ,'/^Date:/i'
-        ,'/^Set-Cookie:/i'
-        ,'/^Location:/i'
-        ,'/^ETag:/i'
-        ,'/^Last-Modified:/i'
-        ,'/^Cache-Control:/i'
-        ,'/^Pragma:/i'
-        ,'/^Expires:/i'
+        '/.*/'
+    ];
+
+    public static $forwardHeaders = [
+        'Authorization'
     ];
 
     public static $responseMode = 'json'; // override RequestHandler::$responseMode
@@ -57,10 +52,14 @@ class ApiRequestHandler extends \RequestHandler
             ,'autoQuery' => false
             ,'url' => rtrim($request->getEndpoint()->InternalEndpoint, '/') . $request->getUrl()
             ,'interface' => static::$sourceInterface
+            ,'headers' => [
+                "X-Forwarded-For: {$_SERVER['REMOTE_ADDR']}"
+            ]
             ,'passthruHeaders' => static::$passthruHeaders
+            ,'forwardHeaders' => array_merge(HttpProxy::$defaultForwardHeaders, static::$forwardHeaders)
             ,'timeout' => static::$defaultTimeout
             ,'timeoutConnect' => static::$defaultTimeoutConnect
-#            ,'debug' => true // uncomment to debug proxy process and see output following response
+            // ,'debug' => true // uncomment to debug proxy process and see output following response
             // ,'afterResponseSync' => true // true to debug afterResponse code from browser
             ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
 
