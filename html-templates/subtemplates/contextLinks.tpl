@@ -18,8 +18,8 @@
         <a href="/bans/{$Context->Handle}" class="{$class}">
             {$prefix}Ban #{$Context->ID}
             &mdash;
-            {if $Context->IP}
-                IP Address: <strong>{$Context->IP|long2ip}</strong>
+            {if $Context->IPPattern}
+                IP Pattern: <strong>{$Context->IPPattern}</strong>
             {else}
                 Key: <strong>{$Context->Key->OwnerName|escape} <small class="muted key-string">{$Context->Key->Key}</small></strong>
             {/if}{$suffix}

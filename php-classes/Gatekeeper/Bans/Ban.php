@@ -3,7 +3,9 @@
 namespace Gatekeeper\Bans;
 
 use Cache;
+use Emergence\Site\Storage;
 use Gatekeeper\Keys\Key;
+use Gatekeeper\Utils\IPPattern;
 
 class Ban extends \ActiveRecord
 {
@@ -21,8 +23,7 @@ class Ban extends \ActiveRecord
             'type' => 'uint',
             'notnull' => false
         ],
-        'IP' => [
-            'type' => 'uint',
+        'IPPattern' => [
             'notnull' => false
         ],
         'ExpirationDate' => [
@@ -63,8 +64,8 @@ class Ban extends \ActiveRecord
     {
         parent::validate($deep);
 
-        if (!$this->KeyID == !$this->IP) {
-            $this->_validator->addError('Ban', 'Ban must specifiy either a API key or an IP address');
+        if (!$this->KeyID == !$this->IPPattern) {
+            $this->_validator->addError('Ban', 'Ban must specify either a API key or an IP pattern');
         }
 
         return $this->finishValidation();
@@ -96,7 +97,8 @@ class Ban extends \ActiveRecord
         return "ID $dir";
     }
 
-    protected static $_activeBans; 
+
+    protected static $_activeBans;
     public static function getActiveBansTable()
     {
         if (isset(static::$_activeBans)) {
@@ -108,13 +110,18 @@ class Ban extends \ActiveRecord
         }
 
         static::$_activeBans = [
-            'ips' => []
-            ,'keys' => []
+            'patterns' => [],
+            'ips' => [],
+            'keys' => []
         ];
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
-            if ($Ban->IP) {
-                static::$_activeBans['ips'][] = long2ip($Ban->IP);
+            if (!empty($Ban->IPPattern)) {
+                if (is_array(static::getIPPatternBanClosure($Ban->IPPattern))) { // ip pattern ONLY contains static IPs
+                    static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], static::getIPPatternBanClosure($Ban->IPPattern));
+                } else {
+                    static::$_activeBans['patterns'][] = $Ban->IPPattern;
+                }
             } elseif($Ban->KeyID) {
                 static::$_activeBans['keys'][] = $Ban->KeyID;
             }
@@ -125,9 +132,44 @@ class Ban extends \ActiveRecord
         return static::$_activeBans;
     }
 
+    public static function getIPPatternBanClosure($ipPattern)
+    {
+        static $ipPatternCaches = [];
+
+        $ipPatternHash = sha1($ipPattern);
+
+        if (!empty($ipPatternCaches[$ipPatternHash])) {
+            return $ipPatternCaches[$ipPatternHash];
+        }
+
+        try {
+            $closure = include IPPattern::getFilenameFromHash($ipPatternHash);
+            );
+        } catch (\Exception $e) {
+            $closure = IPPattern::parse($ipPattern, $ipPatternHash);
+        }
+
+        return $ipPatternCaches[$ipPatternHash] = $closure;
+    }
+
     public static function isIPAddressBanned($ip)
     {
-        return in_array($ip, static::getActiveBansTable()['ips']);
+        $activeBans = static::getActiveBansTable();
+
+        // check for explicit IP ban
+        if (in_array($ip, $activeBans['ips'])) {
+            return true;
+        }
+
+        // check IP Patterns individually
+        foreach($activeBans['patterns'] as $ipPattern) {
+            $matcher = static::getIPPatternBanClosure($ipPattern);
+            if (call_user_func($matcher, $ip) === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static function isKeyBanned(Key $Key)

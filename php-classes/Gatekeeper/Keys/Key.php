@@ -46,6 +46,10 @@ class Key extends \ActiveRecord
         'AllEndpoints' => [
             'type' => 'boolean',
             'default' => false
+        ],
+        'RateLimitExempt' => [
+            'type' => 'boolean',
+            'default' => false
         ]
     ];
 

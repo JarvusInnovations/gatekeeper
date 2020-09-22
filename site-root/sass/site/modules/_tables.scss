@@ -16,7 +16,7 @@
     vertical-align: -.2em;
     white-space: nowrap;
     width: 16px;
-    
+
     // gimme crisp pixels
     image-rendering:optimizeSpeed;              /* Legal fallback                 */
     image-rendering:-moz-crisp-edges;           /* Firefox                        */
@@ -24,12 +24,12 @@
     image-rendering:-webkit-optimize-contrast;  /* Chrome (and eventually Safari) */
     image-rendering:crisp-edges;                /* CSS3 Proposed                  */
     -ms-interpolation-mode:bicubic;             /* IE8+                           */
-    
+
     &:hover,
     &:focus {
         border-color: rgba($text-color, .2);
     }
-    
+
     &:active,
     &.selected {
         background-color: rgba($text-color, .1);
@@ -56,6 +56,10 @@
 .col-response-time,
 .col-response-size {
 	text-align: right;
+}
+
+.col-endpoint {
+    width: 200px
 }
 
 .col-key {
