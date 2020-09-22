@@ -52,6 +52,24 @@ class IPPattern {
         return static::generateClosure($subPatternsByType, $uid);
     }
 
+    /**
+     *
+     * Get IPPattern filename (containing closure method) from the hashed IP Pattern
+     * @param string $patternHash The hashed IP Pattern
+     *
+     * @return string Returns a string containing the full path of the ip pattern file
+     */
+    public static function getFilenameFromHash($patternHash)
+    {
+        return join('/',
+            [
+                Storage::getLocalStorageRoot(),
+                static::$fsRootDir,
+                $patternHash . '.php'
+            ]
+        );
+    }
+
    /**
     *
     * Generate Closure function and write to filesystem with the name of the pattern hashed
