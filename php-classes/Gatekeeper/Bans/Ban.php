@@ -132,13 +132,13 @@ class Ban extends \ActiveRecord
         return static::$_activeBans;
     }
 
-    public static function getIPPatternBanClosure($ipPattern, $ignoreCache = false)
+    public static function getIPPatternBanClosure($ipPattern)
     {
         static $ipPatternCaches = [];
 
         $ipPatternHash = sha1($ipPattern);
 
-        if (!$ignoreCache && !empty($ipPatternCaches[$ipPatternHash])) {
+        if (!empty($ipPatternCaches[$ipPatternHash])) {
             return $ipPatternCaches[$ipPatternHash];
         }
 
@@ -157,7 +157,7 @@ class Ban extends \ActiveRecord
         return $ipPatternCaches[$ipPatternHash] = $closure;
     }
 
-    public static function isIPAddressBanned($ip, $ignoreCache = false)
+    public static function isIPAddressBanned($ip)
     {
         $activeBans = static::getActiveBansTable();
 
@@ -168,7 +168,7 @@ class Ban extends \ActiveRecord
 
         // check IP Patterns individually
         foreach($activeBans['patterns'] as $ipPattern) {
-            $matcher = static::getIPPatternBanClosure($ipPattern, $ignoreCache);
+            $matcher = static::getIPPatternBanClosure($ipPattern);
             if (call_user_func($matcher, $ip) === true) {
                 return true;
             }
