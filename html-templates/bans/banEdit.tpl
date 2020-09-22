@@ -27,7 +27,7 @@
         <fieldset class="shrink">
 
             <div class="inline-fields">
-                {field inputName=IP label='IP Address' error=$errors.IP default=tif($Ban->IP, long2ip($Ban->IP))}
+                {field inputName=IPPattern label='IP Pattern' error=$errors.IPPattern default=$Ban->IPPattern hint="192.168.1.1,192.168.1.*,192.168.1.1/24"}
                 <div class="or">&mdash;or&mdash;</div>
                 {field inputName=KeyID label='API Key' error=$errors.KeyID default=$Ban->Key->Key}
             </div>
