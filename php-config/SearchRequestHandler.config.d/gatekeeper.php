@@ -51,9 +51,8 @@ if ($GLOBALS['Session']->hasAccountLevel('Staff')) {
                 'method' => 'like'
             ],
             [
-                'field' => 'IP',
-                'method' => 'sql',
-                'sql' => 'INET_NTOA(IP) LIKE "%%%s%%"'
+                'field' => 'IPPattern',
+                'method' => 'like'
             ]
         ]
     ];

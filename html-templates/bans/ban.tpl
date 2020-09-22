@@ -9,8 +9,8 @@
         <div class="details">
             <header class="page-header">
                 <h3 class="header-title">
-                    {if $Ban->IP}
-                        IP Address: <strong>{$Ban->IP|long2ip}</strong>
+                    {if $Ban->IPPattern}
+                        IP Pattern: <strong>{$Ban->IPPattern}</strong>
                     {else}
                         Key: <strong>{apiKey $Ban->Key}</strong>
                     {/if}

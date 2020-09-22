@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    # create via `hab pkg export docker --multi-layer ./gatekeeper-composite.hart`:
+    image: jarvus/gatekeeper-composite:latest
+    volumes:
+      # persist uploaded media:
+      - gatekeeper-app-data:/hab/svc/gatekeeper/data
+      # persist uploaded SSL certificates:
+      - ./nginx-files:/hab/svc/nginx/files
+    ports:
+      - 80:80
+    environment:
+      HAB_LICENSE: ${HAB_LICENSE}
+volumes:
+  gatekeeper-app-data:
+    driver: local
+  gatekeeper-nginx-files:
+    driver: local

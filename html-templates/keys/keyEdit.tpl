@@ -35,6 +35,7 @@
 
             {field inputName=ExpirationDate label='Expiration Date' type=date default=tif($Key->ExpirationDate, date('Y-m-d', $Key->ExpirationDate)) hint="Leave blank if none"}
 
+            {checkbox inputName=RateLimitExempt value=1 unsetValue=0 label='Exempt from Rate Limits?' default=$Key->RateLimitExempt hint="Check this option to exempt this key from rate limit thresholds and impacting other consumers of the API."}
             {checkbox inputName=AllEndpoints value=1 unsetValue=0 label='Allow all endpoints?' default=$Key->AllEndpoints hint="Uncheck this option to allow more fine-grained access control to endpoints on the key page."}
 
             {checkbox inputName=Status value=revoked unsetValue=active label='Revoked' default=$Key->Status}
