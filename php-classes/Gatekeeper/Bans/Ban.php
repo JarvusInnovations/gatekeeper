@@ -122,7 +122,7 @@ class Ban extends \ActiveRecord
                 } else {
                     static::$_activeBans['patterns'][] = $Ban->IPPattern;
                 }
-            } elseif($Ban->KeyID) {
+            } elseif ($Ban->KeyID) {
                 static::$_activeBans['keys'][] = $Ban->KeyID;
             }
         }
@@ -161,7 +161,7 @@ class Ban extends \ActiveRecord
         }
 
         // check IP Patterns individually
-        foreach($activeBans['patterns'] as $ipPattern) {
+        foreach ($activeBans['patterns'] as $ipPattern) {
             $matcher = static::getIPPatternBanClosure($ipPattern);
             if (call_user_func($matcher, $ip) === true) {
                 return true;
