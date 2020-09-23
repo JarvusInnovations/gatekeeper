@@ -143,8 +143,7 @@ class Ban extends \ActiveRecord
         }
 
         try {
-            $closure = include IPPattern::getFilenameFromHash($ipPatternHash);
-            );
+            $closure = include(IPPattern::getFilenameFromHash($ipPatternHash));
         } catch (\Exception $e) {
             $closure = IPPattern::parse($ipPattern, $ipPatternHash);
         }
