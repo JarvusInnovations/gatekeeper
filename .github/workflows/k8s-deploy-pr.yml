@@ -64,7 +64,6 @@ jobs:
 
     - name: Update Environment
       run: |
-        echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
         echo "REPO_NAME=$(echo ${GITHUB_REPOSITORY,,})" >> $GITHUB_ENV
 
     - name: Build & Publish Docker image
