@@ -113,6 +113,7 @@ jobs:
 
 
     - name: Wait for Deployment to be Ready
+      timeout-minutes: 10
       run: |
         set -e
         until kubectl rollout status deployment "${PR_NAME}" 2>/dev/null >/dev/null; do echo -n "."; sleep .5; done;
