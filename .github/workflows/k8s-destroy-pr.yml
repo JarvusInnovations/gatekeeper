@@ -33,4 +33,4 @@ jobs:
       run: |
         set -e
         kubectl config set-context --current --namespace=$KUBE_NAMESPACE
-        kubectl delete all,ing -l pr=$PR_NAME
+        kubectl delete deployment,service,ingress -l pr=$PR_NAME
