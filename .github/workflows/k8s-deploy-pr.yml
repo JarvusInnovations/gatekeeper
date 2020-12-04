@@ -20,7 +20,7 @@ env:
   HAB_LICENSE: accept-no-persist
 
 jobs:
-  kubernetes-deploy:
+  k8s-deploy:
 
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +44,7 @@ jobs:
         EOF) > /tmp/deployment.json
 
         DEPLOYMENT_ID=$(jq .id < /tmp/deployment.json)
-        echo ::set-env name=GH_DEPLOYMENT_ID::$(echo $DEPLOYMENT_ID)
+        echo "GH_DEPLOYMENT_ID=$(echo $DEPLOYMENT_ID)" >> $GITHUB_ENV
 
     - name: Update GH Deployment Status
       run: |
@@ -64,8 +64,7 @@ jobs:
 
     - name: Update Environment
       run: |
-        echo ::set-env name=COMMIT_MSG::$(git log --format=%B -n 1 ${{ github.event.after }})
-        echo ::set-env name=REPO_NAME::$(echo ${GITHUB_REPOSITORY,,})
+        echo "REPO_NAME=$(echo ${GITHUB_REPOSITORY,,})" >> $GITHUB_ENV
 
     - name: Build & Publish Docker image
       uses: whoan/docker-build-with-cache-action@v5
@@ -105,7 +104,7 @@ jobs:
         # kubectl delete pod -l app.kubernetes.io/instance="${PR_NAME}"
         # helm uninstall ${{ env.PR_NAME }} -n ${{ env.KUBE_NAMESPACE }}
 
-        helm upgrade ${{ env.PR_NAME }} ./k8s/charts/deployment \
+        helm upgrade ${{ env.PR_NAME }} ./helm-chart \
           --install \
           --set name=${{ env.PR_NAME }} \
           --set namespace=${{ env.KUBE_NAMESPACE }} \
@@ -114,13 +113,14 @@ jobs:
 
 
     - name: Wait for Deployment to be Ready
+      timeout-minutes: 10
       run: |
         set -e
         until kubectl rollout status deployment "${PR_NAME}" 2>/dev/null >/dev/null; do echo -n "."; sleep .5; done;
 
     - name: Retrieve/Store Pod Name
       run: |
-        echo ::set-env name=POD_NAME::$(kubectl get pod -l app.kubernetes.io/instance="${PR_NAME}" -o jsonpath='{.items[0].metadata.name}')
+        echo "POD_NAME=$(kubectl get pod -l app.kubernetes.io/instance="${PR_NAME}" -o jsonpath='{.items[0].metadata.name}')" >> $GITHUB_ENV
 
     - name: Wait For Pod to be Ready
       run: |
