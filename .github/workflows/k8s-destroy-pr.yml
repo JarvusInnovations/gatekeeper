@@ -32,5 +32,6 @@ jobs:
     - name: Delete PR Deployment
       run: |
         set -e
-        kubectl config set-context --current --namespace=$KUBE_NAMESPACE
-        kubectl delete deployment,service,ingress -l pr=$PR_NAME
+        kubectl config set-context --current --namespace="${KUBE_NAMESPACE}"
+        kubectl delete all,ingress -l "app.kubernetes.io/instance=${PR_NAME}"
+        kubectl delete secret "${PR_NAME}-tls"
