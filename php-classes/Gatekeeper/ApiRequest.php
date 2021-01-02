@@ -5,6 +5,7 @@ namespace Gatekeeper;
 use Gatekeeper\Endpoints\Endpoint;
 use Gatekeeper\Keys\Key;
 use Gatekeeper\Transactions\Transaction;
+use Emergence\Site\Client;
 
 class ApiRequest
 {
@@ -96,6 +97,6 @@ class ApiRequest
 
     public function getUserIdentifier()
     {
-        return $this->key ? 'key:' . $this->key->ID : 'ip:' . $_SERVER['REMOTE_ADDR'];
+        return $this->key ? 'key:' . $this->key->ID : 'ip:' . Client::getAddress();
     }
 }

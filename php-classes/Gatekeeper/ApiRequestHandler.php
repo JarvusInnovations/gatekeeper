@@ -6,6 +6,7 @@ use Cache;
 use Exception;
 use HttpProxy;
 use Emergence\EventBus;
+use Emergence\Site\Client;
 use Gatekeeper\Transactions\Transaction;
 
 class ApiRequestHandler extends \RequestHandler
@@ -46,6 +47,10 @@ class ApiRequestHandler extends \RequestHandler
         }
 
 
+        // get client IP
+        $clientIp = Client::getAddress();
+
+
         // execute request against internal API
         HttpProxy::relayRequest([
             'autoAppend' => false
@@ -53,7 +58,7 @@ class ApiRequestHandler extends \RequestHandler
             ,'url' => rtrim($request->getEndpoint()->InternalEndpoint, '/') . $request->getUrl()
             ,'interface' => static::$sourceInterface
             ,'headers' => [
-                "X-Forwarded-For: {$_SERVER['REMOTE_ADDR']}"
+                "X-Forwarded-For: {$clientIp}"
             ]
             ,'passthruHeaders' => static::$passthruHeaders
             ,'forwardHeaders' => array_merge(HttpProxy::$defaultForwardHeaders, static::$forwardHeaders)
@@ -61,7 +66,7 @@ class ApiRequestHandler extends \RequestHandler
             ,'timeoutConnect' => static::$defaultTimeoutConnect
             // ,'debug' => true // uncomment to debug proxy process and see output following response
             // ,'afterResponseSync' => true // true to debug afterResponse code from browser
-            ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
+            ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, $clientIp, &$metrics, &$beforeEvent) {
 
                 $curlInfo = curl_getinfo($curlHandle);
                 list($path, $query) = explode('?', $request->getUrl());
@@ -73,7 +78,7 @@ class ApiRequestHandler extends \RequestHandler
                         $Transaction = Transaction::create([
                             'Endpoint' => $request->getEndpoint()
                             ,'Key' => $request->getKey()
-                            ,'ClientIP' => ip2long($_SERVER['REMOTE_ADDR'])
+                            ,'ClientIP' => ip2long($clientIp)
                             ,'Method' => $_SERVER['REQUEST_METHOD']
                             ,'Path' => $path
                             ,'Query' => $query

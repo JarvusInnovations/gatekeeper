@@ -4,6 +4,7 @@ namespace Gatekeeper;
 
 use Site;
 use JSON;
+use Emergence\Site\Client;
 
 class Gatekeeper
 {
@@ -30,9 +31,11 @@ class Gatekeeper
 
     public static function authorizeTestApiAccess()
     {
+        $clientIp = Client::getAddress();
+
         if (
-            $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'] &&
-            $_SERVER['REMOTE_ADDR'] != gethostbyname($_SERVER['HTTP_HOST'])
+            $clientIp != $_SERVER['SERVER_ADDR'] &&
+            $clientIp != gethostbyname($_SERVER['HTTP_HOST'])
         ) {
             JSON::error('Access to test API denied', 403);
             exit();
