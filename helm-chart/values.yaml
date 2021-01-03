@@ -2,6 +2,10 @@
 replicaCount: 1
 
 hab:
+  runtime:
+    env_name: HAB_GATEKEEPER
+    error:
+      display: false
   composite:
     env_name: HAB_GATEKEEPER_COMPOSITE
     mysql:

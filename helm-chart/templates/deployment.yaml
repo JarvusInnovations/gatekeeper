@@ -32,6 +32,13 @@ spec:
               [services.mysql]
               pkg_ident = {{ .Values.hab.composite.mysql.pkg_ident | quote }}
 
+          - name: {{ .Values.hab.runtime.env_name }}
+            value: |
+              [error]
+              {{- if .Values.hab.runtime.error.display }}
+                display = true
+              {{- end }}
+
           - name: HAB_MYSQL
             value: |
             {{- if .Values.hab.mysql }}
