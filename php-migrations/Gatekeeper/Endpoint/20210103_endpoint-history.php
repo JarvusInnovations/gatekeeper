@@ -19,14 +19,6 @@ if (!static::tableExists(Endpoint::$tableName)) {
 }
 
 
-// create history table if needed
-if (!static::tableExists($historyTableName)) {
-    printf("Creating history table `%s`\n", $historyTableName);
-    DB::multiQuery(SQL::getCreateTable(Endpoint::class));
-    $skipped = false;
-}
-
-
 // add modified/modifier columns
 if (!static::columnExists($tableName, 'Modified')) {
     printf("Adding `Modified` column to `%s` table\n", $tableName);
@@ -38,6 +30,23 @@ if (!static::columnExists($tableName, 'ModifierID')) {
     printf("Adding `ModifierID` column to `%s` table\n", $tableName);
     DB::nonQuery('ALTER TABLE `%s` ADD `ModifierID` int unsigned NULL default NULL AFTER `Modified`', $tableName);
     $skipped = false;
+}
+
+
+// create history table if needed
+if (!static::tableExists($historyTableName)) {
+    printf("Creating history table `%s`\n", $historyTableName);
+    DB::multiQuery(SQL::getCreateTable(Endpoint::class));
+    $skipped = false;
+
+    printf("Backfilling history table `%s` from `%s`\n", $historyTableName, $tableName);
+    DB::nonQuery(
+        'INSERT INTO `%2$s` SELECT NULL AS RevisionID, `%1$s`.* FROM `%1$s`',
+        [
+            $tableName,
+            $historyTableName
+        ]
+    );
 }
 
 
