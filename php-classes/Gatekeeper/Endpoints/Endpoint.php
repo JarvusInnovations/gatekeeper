@@ -4,7 +4,6 @@ namespace Gatekeeper\Endpoints;
 
 use Site;
 use Cache;
-use ActiveRecord;
 use HandleBehavior;
 use RecordValidator;
 use TableNotFoundException;
@@ -14,7 +13,7 @@ use Gatekeeper\Metrics\Metrics;
 use Gatekeeper\Alerts\AbstractAlert;
 use Symfony\Component\Yaml\Yaml;
 
-class Endpoint extends ActiveRecord
+class Endpoint extends \VersionedRecord
 {
     public static $metricTTL = 60;
     public static $validPathRegex = '/^[a-zA-Z][a-zA-Z0-9_\\-\\.]*(\\/[a-zA-Z][a-zA-Z0-9_\\-\\.]*)*$/';
