@@ -27,10 +27,10 @@ spec:
         imagePullPolicy: Always
 
         env:
-          - name: HAB_GATEKEEPER_COMPOSITE
+          - name: {{ .Values.hab.composite.env_name }}
             value: |
               [services.mysql]
-              pkg_ident = {{ .Values.hab.gatekeeper_composite.mysql.pkg_ident | quote }}
+              pkg_ident = {{ .Values.hab.composite.mysql.pkg_ident | quote }}
 
           - name: HAB_MYSQL
             value: |

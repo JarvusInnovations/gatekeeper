@@ -2,7 +2,8 @@
 replicaCount: 1
 
 hab:
-  gatekeeper_composite:
+  composite:
+    env_name: HAB_GATEKEEPER_COMPOSITE
     mysql:
       pkg_ident: 'core/mysql'
 
