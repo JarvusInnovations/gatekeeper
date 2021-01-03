@@ -32,6 +32,11 @@ CREATE TABLE `endpoints` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Handle` (`Handle`),
   UNIQUE KEY `Path` (`Path`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `endpoints` VALUES (1,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'TODOs v1','todos-v1','todos/v1','https://jsonplaceholder.typicode.com/todos',NULL,NULL,1,NULL,NULL,10,60,1,1,NULL,NULL,0,0,1,0,NULL,NULL,NULL,NULL);
+INSERT INTO `endpoints` VALUES (2,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'Test: Cacheable','test-cacheable','test/cacheable','http://localhost/test-api/cachable',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1,NULL,NULL,NULL,NULL);
+INSERT INTO `endpoints` VALUES (3,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'Test: Cookies','test-cookies','test/cookies','http://localhost/test-api/cookies',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1,NULL,NULL,NULL,NULL);
+INSERT INTO `endpoints` VALUES (4,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'Test: Slow','test-slow','test/slow','http://localhost/test-api/slow',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1,NULL,NULL,NULL,NULL);
+INSERT INTO `endpoints` VALUES (5,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'Test: Status','test-status','test/status','http://localhost/test-api/status',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1,NULL,NULL,NULL,NULL);
+INSERT INTO `endpoints` VALUES (6,'Gatekeeper\\Endpoints\\Endpoint','2019-01-02 03:04:05',1,'Test: Client IP','test-client','test/client','http://localhost/test-api/client',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1,NULL,NULL,NULL,NULL);
