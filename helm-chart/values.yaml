@@ -2,7 +2,12 @@
 replicaCount: 1
 
 hab:
-  gatekeeper_composite:
+  runtime:
+    env_name: HAB_GATEKEEPER
+    error:
+      display: false
+  composite:
+    env_name: HAB_GATEKEEPER_COMPOSITE
     mysql:
       pkg_ident: 'core/mysql'
 
