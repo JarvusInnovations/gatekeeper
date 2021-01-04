@@ -145,8 +145,7 @@ class Ban extends \ActiveRecord
 
         // check IP Patterns individually
         foreach ($activeBans['patterns'] as $ipPattern) {
-            $matcher = IPPattern::parse($ipPattern);
-            if (call_user_func($matcher, $ip) === true) {
+            if (IPPattern::match($ipPattern, $ip)) {
                 return true;
             }
         }

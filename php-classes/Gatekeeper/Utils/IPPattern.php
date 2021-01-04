@@ -11,6 +11,13 @@ use UnexpectedValueException;
 class IPPattern {
 
     public static $fsRootDir = 'ip-patterns/matchers';
+
+    public static function match($pattern, $ip)
+    {
+        $matcher = static::parse($pattern);
+        return call_user_func($matcher, $ip) === true;
+    }
+
    /**
     *
     * Parse IP pattens by splitting them by spaces or commas and grouping them
