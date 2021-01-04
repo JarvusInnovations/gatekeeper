@@ -3,7 +3,6 @@
 namespace Gatekeeper\Bans;
 
 use Cache;
-use Emergence\Site\Storage;
 use Gatekeeper\Keys\Key;
 use Gatekeeper\Utils\IPPattern;
 
