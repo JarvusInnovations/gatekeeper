@@ -9,12 +9,14 @@ use Gatekeeper\Alerts\RateLimitExceeded;
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 $Key = $_EVENT['request']->getKey();
+$Exemption = $_EVENT['request']->getExemption();
 
 
 // drip into endpoint requests bucket
 if (
-    (!$Key || !$Key->RateLimitExempt) &&
-    ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount)
+    (!$Exemption || !$Exemption->BypassEndpointLimits)
+    && (!$Key || !$Key->RateLimitExempt)
+    && ($Endpoint->GlobalRatePeriod && $Endpoint->GlobalRateCount)
 ) {
     $flagKey = "alerts/endpoints/$Endpoint->ID/rate-flagged";
 
