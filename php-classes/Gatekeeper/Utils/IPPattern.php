@@ -16,15 +16,42 @@ class IPPattern {
     * Parse IP pattens by splitting them by spaces or commas and grouping them
     * in the available groups: ip, cidr, or wildcard.
     *
-    * @param string $ipPattern The IP Pattern string to parse (ex. 10.0.0.1/24,192.168.1.1*)
-    * @param string $returnType The type of IP patterns to return ONLY. (ex. ip)
+    * @param string $pattern The IP Pattern string to parse (ex. 10.0.0.1/24,192.168.1.1*)
     *
     * @return array|closure Returns an array if pattern contains ONLY static IPs, or returns a closure function
     * that can be used to compare if an IP matches the pattern.
     *
     */
-    public static function parse($pattern, $uid)
+    public static function parse($pattern)
     {
+        // maintain results in a static cache
+        static $cache = [];
+
+        // return from statci cache early if available
+        $patternHash = sha1($pattern);
+
+        if (!empty($cache[$patternHash])) {
+            return $cache[$patternHash];
+        }
+
+        // try to load from filesystem cache
+        $cacheFilePath = join('/', [
+            Storage::getLocalStorageRoot(),
+            static::$fsRootDir,
+            $patternHash . '.php'
+        ]);
+
+        try {
+            $closure = include($cacheFilePath);
+
+            if ($closure) {
+                return $cache[$patternHash] = $closure;
+            }
+        } catch (\Exception $e) {
+            // continue...
+        }
+
+        // parse patterns and organize by type
         $subPatternsByType = [
             'ip' => [],
             'cidr' => [],
@@ -40,81 +67,42 @@ class IPPattern {
             }
         }
 
-
         if ($count === 0) {
             throw new InvalidArgumentException("Unable to parse IP pattern: $pattern");
         }
 
+        // fast path for static IP lists
         if (count($subPatternsByType['cidr']) === 0 && count($subPatternsByType['wildcard']) === 0) {
-            return $subPatternsByType['ip'];
+            // TODO: cache to a file?
+            return $cache[$patternHash] = $subPatternsByType['ip'];
         }
 
-        return static::generateClosure($subPatternsByType, $uid);
-    }
+        // generate source code for closure
+        $closureFunctionString = "<?php\n\n";
+        $closureFunctionString .= "return function(\$ipInput) {\n";
 
-    /**
-     *
-     * Get IPPattern filename (containing closure method) from the hashed IP Pattern
-     * @param string $patternHash The hashed IP Pattern
-     *
-     * @return string Returns a string containing the full path of the ip pattern file
-     */
-    public static function getFilenameFromHash($patternHash)
-    {
-        return join('/',
-            [
-                Storage::getLocalStorageRoot(),
-                static::$fsRootDir,
-                $patternHash . '.php'
-            ]
-        );
-    }
-
-   /**
-    *
-    * Generate Closure function and write to filesystem with the name of the pattern hashed
-    *
-    * @param array $patterns Multi-dimensional array of sub-patterns, keyed by pattern type.
-    * @param string $patternHash Original Pattern hashed.
-    *
-    * @return closure Closure function
-    */
-    protected static function generateClosure(array $patterns, $patternHash)
-    {
-
-        $closureFunctionString =
-<<<DOC
-            <?php
-
-            return function(\$ipInput) {
-
-DOC;
-
-        foreach ($patterns['ip'] as $ipPattern) {
-            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'ip');
+        if (count($subPatternsByType['ip']) || count($subPatternsByType['cidr'])) {
+            $closureFunctionString .= "    \$ipLong = ip2long(\$ipInput);\n\n";
         }
 
-        foreach ($patterns['cidr'] as $ipPattern) {
-            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'cidr');
+        foreach ($subPatternsByType['ip'] as $ipPattern) {
+            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'ip') . PHP_EOL;
         }
 
-        foreach ($patterns['wildcard'] as $ipPattern) {
-            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'wildcard');
+        foreach ($subPatternsByType['cidr'] as $ipPattern) {
+            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'cidr') . PHP_EOL;
         }
 
-        $closureFunctionString .= <<<DOC
-            };
-DOC;
+        foreach ($subPatternsByType['wildcard'] as $ipPattern) {
+            $closureFunctionString .= static::generateClosureCondition($ipPattern, 'wildcard') . PHP_EOL;
+        }
 
-        $filesystem = Storage::getFileSystem(static::$fsRootDir);
-        $fileName = "{$patternHash}.php";
+        $closureFunctionString .= "};\n";
 
-        $filesystem->write(
-            $fileName,
-            $closureFunctionString
-        );
+        // write to filesystem
+        file_put_contents($cacheFilePath, $closureFunctionString);
 
-        return include join('/', [Storage::getLocalStorageRoot(), static::$fsRootDir, $fileName]);
+        return $cache[$patternHash] = include($cacheFilePath);
     }
 
     /**
@@ -133,7 +121,7 @@ DOC;
                 $ipLong = ip2long($pattern);
                 $conditionString = <<<DOC
                     # IP Address = $pattern
-                    if (ip2long(\$ipInput) === $ipLong) {
+                    if (\$ipLong === $ipLong) {
                         return true;
                     }
 
@@ -148,7 +136,6 @@ DOC;
                 $conditionString = <<<DOC
                     # CIDR IP Range = $pattern
                     # Min: $minIp Max: {$maxIp}
-                    \$ipLong = ip2long(\$ipInput);
                     if (\$ipLong >= $min && \$ipLong <= $max) {
                         return true;
                     }
