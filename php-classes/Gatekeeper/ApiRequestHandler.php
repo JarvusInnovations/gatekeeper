@@ -47,10 +47,6 @@ class ApiRequestHandler extends \RequestHandler
         }
 
 
-        // get client IP
-        $clientIp = Client::getAddress();
-
-
         // execute request against internal API
         HttpProxy::relayRequest([
             'autoAppend' => false
@@ -58,7 +54,7 @@ class ApiRequestHandler extends \RequestHandler
             ,'url' => rtrim($request->getEndpoint()->InternalEndpoint, '/') . $request->getUrl()
             ,'interface' => static::$sourceInterface
             ,'headers' => [
-                "X-Forwarded-For: {$clientIp}"
+                "X-Forwarded-For: {$request->getClientAddress()}"
             ]
             ,'passthruHeaders' => static::$passthruHeaders
             ,'forwardHeaders' => array_merge(HttpProxy::$defaultForwardHeaders, static::$forwardHeaders)
@@ -66,7 +62,7 @@ class ApiRequestHandler extends \RequestHandler
             ,'timeoutConnect' => static::$defaultTimeoutConnect
             // ,'debug' => true // uncomment to debug proxy process and see output following response
             // ,'afterResponseSync' => true // true to debug afterResponse code from browser
-            ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, $clientIp, &$metrics, &$beforeEvent) {
+            ,'afterResponse' => function ($responseBody, $responseHeaders, $options, $curlHandle) use ($request, &$metrics, &$beforeEvent) {
 
                 $curlInfo = curl_getinfo($curlHandle);
                 list($path, $query) = explode('?', $request->getUrl());
@@ -78,7 +74,7 @@ class ApiRequestHandler extends \RequestHandler
                         $Transaction = Transaction::create([
                             'Endpoint' => $request->getEndpoint()
                             ,'Key' => $request->getKey()
-                            ,'ClientIP' => ip2long($clientIp)
+                            ,'ClientIP' => ip2long($request->getClientAddress())
                             ,'Method' => $_SERVER['REQUEST_METHOD']
                             ,'Path' => $path
                             ,'Query' => $query
