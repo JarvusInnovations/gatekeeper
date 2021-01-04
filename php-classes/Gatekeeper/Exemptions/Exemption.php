@@ -30,7 +30,7 @@ class Exemption extends \ActiveRecord
             'type' => 'timestamp',
             'default' => null
         ],
-        'BypassGlobalLimit' => [
+        'BypassEndpointLimits' => [
             'type' => 'boolean',
             'default' => false
         ],
