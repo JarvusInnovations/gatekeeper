@@ -34,6 +34,8 @@
 
             {field inputName=ExpirationDate label='Expiration Date' type=date default=tif($Exemption->ExpirationDate, date('Y-m-d', $Exemption->ExpirationDate)) hint="Leave blank for indefinate exemption"}
 
+            {checkbox inputName=BypassEndpointLimits value=1 unsetValue=0 label='Bypass endpoint rate limits?' default=$Exemption->BypassEndpointLimits hint="Check this option to always allow requests regardless of any endpoint-level aggregate rate limit, and to skip counting any hits against such rate limits."}
+
             {textarea inputName=Notes label='Notes' default=$Exemption->Notes}
 
             <div class="submit-area">
