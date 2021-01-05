@@ -13,9 +13,8 @@ CREATE TABLE `keys` (
   `ContactEmail` varchar(255) DEFAULT NULL,
   `ExpirationDate` timestamp NULL DEFAULT NULL,
   `AllEndpoints` tinyint(1) NOT NULL DEFAULT '0',
-  `RateLimitExempt` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Key` (`Key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `keys` VALUES (1,'Gatekeeper\\Keys\\Key','2019-01-02 03:04:05',1,'56e877567dc444c6a4e06e45f1560ee2','active','Keymaster','Key Master','keymaster@example.com',NULL,1,0);
+INSERT INTO `keys` VALUES (1,'Gatekeeper\\Keys\\Key','2019-01-02 03:04:05',1,'56e877567dc444c6a4e06e45f1560ee2','active','Keymaster','Key Master','keymaster@example.com',NULL,1);
