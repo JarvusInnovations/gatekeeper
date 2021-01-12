@@ -7,7 +7,6 @@ use Gatekeeper\Metrics\Metrics;
 
 $Endpoint = $_EVENT['request']->getEndpoint();
 $userIdentifier = $_EVENT['request']->getUserIdentifier();
-$Key = $_EVENT['request']->getKey();
 
 
 // append metrics
@@ -21,10 +20,7 @@ $_EVENT['metrics']['userResponseTime'] = Metrics::appendAverage("users/$userIden
 
 
 // drip bandwidth bucket
-if (
-    (!$Key || !$Key->RateLimitExempt) &&
-    ($Endpoint->GlobalBandwidthPeriod && $Endpoint->GlobalBandwidthCount)
-) {
+if ($Endpoint->GlobalBandwidthPeriod && $Endpoint->GlobalBandwidthCount) {
     HitBuckets::drip("endpoints/$Endpoint->ID/bandwidth", function() use ($Endpoint) {
         return [
             'seconds' => $Endpoint->GlobalBandwidthPeriod,

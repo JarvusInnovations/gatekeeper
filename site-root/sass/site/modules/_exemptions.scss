@@ -1,0 +1,16 @@
+.exemptions {
+}
+
+.exemption {
+    & > .details {
+        padding: .5em;
+    }
+}
+
+.exemption-notes {
+    margin: 1em 1em 0 0;
+}
+
+textarea[name=Notes] {
+    font-family: $mono-font;
+}
