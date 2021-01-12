@@ -29,8 +29,6 @@ jobs:
     steps:
 
     - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.head_ref }}
 
     - name: 'Initialize Chef Habitat environment'
       uses: JarvusInnovations/habitat-action@action/v1
