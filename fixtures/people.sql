@@ -25,7 +25,7 @@ CREATE TABLE `people` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Email` (`Email`),
   UNIQUE KEY `Username` (`Username`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `people` VALUES (1,'Emergence\\People\\User','2019-01-02 03:04:05',1,NULL,NULL,'Admin','Person',NULL,NULL,NULL,NULL,'admin@example.com',NULL,NULL,NULL,NULL,'admin','$2y$10$rAOnrPHjxdyr40NnSphAaOqMptte76N2BwmFeMlwulpjQNKHKZ1uK','Developer');
 

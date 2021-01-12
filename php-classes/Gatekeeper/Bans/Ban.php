@@ -3,7 +3,6 @@
 namespace Gatekeeper\Bans;
 
 use Cache;
-use Emergence\Site\Storage;
 use Gatekeeper\Keys\Key;
 use Gatekeeper\Utils\IPPattern;
 
@@ -117,8 +116,11 @@ class Ban extends \ActiveRecord
 
         foreach (Ban::getAllByWhere('ExpirationDate IS NULL OR ExpirationDate > CURRENT_TIMESTAMP') AS $Ban) {
             if (!empty($Ban->IPPattern)) {
-                if (is_array(static::getIPPatternBanClosure($Ban->IPPattern))) { // ip pattern ONLY contains static IPs
-                    static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], static::getIPPatternBanClosure($Ban->IPPattern));
+                $parsed = IPPattern::parse($Ban->IPPattern);
+
+                if (is_array($parsed)) {
+                    // ip pattern ONLY contains static IPs
+                    static::$_activeBans['ips'] = array_merge(static::$_activeBans['ips'], $parsed);
                 } else {
                     static::$_activeBans['patterns'][] = $Ban->IPPattern;
                 }
@@ -132,25 +134,6 @@ class Ban extends \ActiveRecord
         return static::$_activeBans;
     }
 
-    public static function getIPPatternBanClosure($ipPattern)
-    {
-        static $ipPatternCaches = [];
-
-        $ipPatternHash = sha1($ipPattern);
-
-        if (!empty($ipPatternCaches[$ipPatternHash])) {
-            return $ipPatternCaches[$ipPatternHash];
-        }
-
-        try {
-            $closure = include(IPPattern::getFilenameFromHash($ipPatternHash));
-        } catch (\Exception $e) {
-            $closure = IPPattern::parse($ipPattern, $ipPatternHash);
-        }
-
-        return $ipPatternCaches[$ipPatternHash] = $closure;
-    }
-
     public static function isIPAddressBanned($ip)
     {
         $activeBans = static::getActiveBansTable();
@@ -162,8 +145,7 @@ class Ban extends \ActiveRecord
 
         // check IP Patterns individually
         foreach ($activeBans['patterns'] as $ipPattern) {
-            $matcher = static::getIPPatternBanClosure($ipPattern);
-            if (call_user_func($matcher, $ip) === true) {
+            if (IPPattern::match($ipPattern, $ip)) {
                 return true;
             }
         }

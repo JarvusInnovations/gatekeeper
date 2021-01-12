@@ -1,6 +1,5 @@
 <?php
 
-use DB, SQL;
 use Gatekeeper\Bans\Ban;
 
 $columnName = 'IPPattern';

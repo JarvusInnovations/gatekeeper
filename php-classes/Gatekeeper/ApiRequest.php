@@ -4,6 +4,7 @@ namespace Gatekeeper;
 
 use Gatekeeper\Endpoints\Endpoint;
 use Gatekeeper\Keys\Key;
+use Gatekeeper\Exemptions\Exemption;
 use Gatekeeper\Transactions\Transaction;
 use Emergence\Site\Client;
 
@@ -14,6 +15,7 @@ class ApiRequest
     protected $endpoint;
     protected $clientAddress;
     protected $key;
+    protected $exemption;
     protected $url = '';
     protected $transaction;
 
@@ -79,6 +81,16 @@ class ApiRequest
     public function setKey(Key $Key)
     {
         $this->key = $Key;
+    }
+
+    public function getExemption()
+    {
+        return $this->exemption;
+    }
+
+    public function setExemption(Exemption $Exemption)
+    {
+        $this->exemption = $Exemption;
     }
 
     public function getUrl()
