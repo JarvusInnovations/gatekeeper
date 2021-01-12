@@ -5,12 +5,14 @@ namespace Gatekeeper;
 use Gatekeeper\Endpoints\Endpoint;
 use Gatekeeper\Keys\Key;
 use Gatekeeper\Transactions\Transaction;
+use Emergence\Site\Client;
 
 class ApiRequest
 {
     protected $startTime;
     protected $pathStack = [];
     protected $endpoint;
+    protected $clientAddress;
     protected $key;
     protected $url = '';
     protected $transaction;
@@ -59,6 +61,16 @@ class ApiRequest
         $this->endpoint = $Endpoint;
     }
 
+    public function getClientAddress()
+    {
+        return $this->clientAddress;
+    }
+
+    public function setClientAddress($clientAddress)
+    {
+        $this->clientAddress = $clientAddress;
+    }
+
     public function getKey()
     {
         return $this->key;
@@ -96,6 +108,8 @@ class ApiRequest
 
     public function getUserIdentifier()
     {
-        return $this->key ? 'key:' . $this->key->ID : 'ip:' . $_SERVER['REMOTE_ADDR'];
+        return $this->key
+            ? 'key:' . $this->key->ID
+            : 'ip:' . ($this->clientAddress ?: Client::getAddress());
     }
 }
