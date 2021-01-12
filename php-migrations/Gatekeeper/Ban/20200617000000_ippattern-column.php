@@ -1,6 +1,5 @@
 <?php
 
-use DB, SQL;
 use Gatekeeper\Bans\Ban;
 
 $columnName = 'IPPattern';
@@ -34,7 +33,7 @@ $deprecatedColumn = 'IP';
 printf("Migrating values for deprecated column: `%s` -> `%s`", $deprecatedColumn, $columnName);
 DB::nonQuery(
     '
-        UPDATE `%1$s` SET %2$s = %3$s
+        UPDATE `%1$s` SET %2$s = INET_NTOA(%3$s)
          WHERE %3$s IS NOT NULL
     ',
     [

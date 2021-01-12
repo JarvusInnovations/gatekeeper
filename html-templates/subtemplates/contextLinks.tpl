@@ -24,6 +24,16 @@
                 Key: <strong>{$Context->Key->OwnerName|escape} <small class="muted key-string">{$Context->Key->Key}</small></strong>
             {/if}{$suffix}
         </a>
+    {elseif is_a($Context, Gatekeeper\Exemptions\Exemption::class)}
+        <a href="/exemptions/{$Context->Handle}" class="{$class}">
+            {$prefix}Exemption #{$Context->ID}
+            &mdash;
+            {if $Context->IPPattern}
+                IP Pattern: <strong>{$Context->IPPattern}</strong>
+            {else}
+                Key: <strong>{$Context->Key->OwnerName|escape} <small class="muted key-string">{$Context->Key->Key}</small></strong>
+            {/if}{$suffix}
+        </a>
     {elseif is_a($Context, Gatekeeper\Keys\Key::class)}
         {$prefix}{apiKey $Context}{$suffix}
     {elseif is_a($Context, Gatekeeper\Endpoints\Endpoint::class)}

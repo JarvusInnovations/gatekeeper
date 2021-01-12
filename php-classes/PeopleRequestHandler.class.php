@@ -73,7 +73,7 @@ class PeopleRequestHandler extends RecordsRequestHandler
 
     public static function handleBrowseRequest($options = array(), $conditions = array(), $responseID = null, $responseData = array())
     {
-        if ($_REQUEST['q'] != 'all') {
+        if ($_REQUEST['q'] != 'all' && $_REQUEST['status'] != '*') {
             $conditions[] = 'AccountLevel != "Disabled"';
         }
 
@@ -140,6 +140,10 @@ class PeopleRequestHandler extends RecordsRequestHandler
             return static::throwNotFoundError('profile not found');
         }
 
-        return MediaRequestHandler::handleThumbnailRequest($Person->PrimaryPhoto ? $Person->PrimaryPhoto : Media::getBlank('person'));
+        try {
+            return MediaRequestHandler::handleThumbnailRequest($Person->PrimaryPhoto ? $Person->PrimaryPhoto : Media::getBlank('Person'));
+        } catch (OutOfBoundsException $e) {
+            return static::throwNotFoundError($e->getMessage());
+        }
     }
 }
