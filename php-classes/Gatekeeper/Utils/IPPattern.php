@@ -42,11 +42,8 @@ class IPPattern {
         }
 
         // try to load from filesystem cache
-        $cacheFilePath = join('/', [
-            Storage::getLocalStorageRoot(),
-            static::$fsRootDir,
-            $patternHash . '.php'
-        ]);
+        $cacheDirPath = Storage::getLocalStorageRoot() . '/' . static::$fsRootDir;
+        $cacheFilePath = "{$cacheDirPath}/{$patternHash}.php";
 
         try {
             $closure = include($cacheFilePath);
@@ -80,7 +77,6 @@ class IPPattern {
 
         // fast path for static IP lists
         if (count($subPatternsByType['cidr']) === 0 && count($subPatternsByType['wildcard']) === 0) {
-            // TODO: cache to a file?
             return $cache[$patternHash] = $subPatternsByType['ip'];
         }
 
@@ -107,6 +103,10 @@ class IPPattern {
         $closureFunctionString .= "};\n";
 
         // write to filesystem
+        if (!is_dir($cacheDirPath)) {
+            mkdir($cacheDirPath, 0777, true);
+        }
+
         file_put_contents($cacheFilePath, $closureFunctionString);
 
         return $cache[$patternHash] = include($cacheFilePath);
