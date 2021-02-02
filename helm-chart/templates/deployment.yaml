@@ -60,8 +60,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "gatekeeper-deployment.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}
-    name: {{ .Release.Name }}-app
 spec:
   selector:
     {{- include "gatekeeper-deployment.selectorLabels" . | nindent 4 }}
