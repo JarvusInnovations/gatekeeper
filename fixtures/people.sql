@@ -27,7 +27,7 @@ CREATE TABLE `people` (
   UNIQUE KEY `Username` (`Username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `people` VALUES (1,'Emergence\\People\\User','2019-01-02 03:04:05',1,NULL,NULL,'Admin','Person',NULL,NULL,NULL,NULL,'admin@example.com',NULL,NULL,NULL,NULL,'admin','$2y$10$rAOnrPHjxdyr40NnSphAaOqMptte76N2BwmFeMlwulpjQNKHKZ1uK','Developer');
+INSERT INTO `people` VALUES (1,'Emergence\\People\\User','2019-01-02 03:04:05',1,NULL,NULL,'Administrator','Person',NULL,NULL,NULL,NULL,'admin@example.com',NULL,NULL,NULL,NULL,'admin','$2y$10$rAOnrPHjxdyr40NnSphAaOqMptte76N2BwmFeMlwulpjQNKHKZ1uK','Developer');
 
 
 CREATE TABLE `history_people` (
