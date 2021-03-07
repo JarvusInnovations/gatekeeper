@@ -3,6 +3,7 @@
 namespace Gatekeeper\Endpoints;
 
 use Cache;
+use RecordValidator;
 
 class EndpointRewrite extends \ActiveRecord
 {
@@ -41,8 +42,7 @@ class EndpointRewrite extends \ActiveRecord
         'Endpoint' => 'require-relationship',
         'Pattern' => [
             'validator' => 'regexp',
-            'regexp' => '/^(.).+\1[a-zA-Z]*$/',
-            'errorMessage' => 'Pattern must include matching delimiters'
+            'validator' => [__CLASS__, 'validatePattern']
         ],
         'Priority' => [
             'required' => false,
@@ -66,5 +66,18 @@ class EndpointRewrite extends \ActiveRecord
         $success = parent::destroy();
         Cache::delete("endpoints/$this->EndpointID/rewrites");
         return $success;
+    }
+
+    public static function validatePattern(RecordValidator $validator, EndpointRewrite $EndpointRewrite)
+    {
+        if (!preg_match('/^(.).+\1[a-zA-Z]*$/', $EndpointRewrite->Pattern)) {
+            $validator->addError('Pattern', 'Pattern must include matching delimiters');
+            return;
+        }
+
+        if (@preg_match($EndpointRewrite->Pattern, null) === false) {
+            $validator->addError('Pattern', 'Pattern must valid PCRE regex');
+            return;
+        }
     }
 }
