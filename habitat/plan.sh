@@ -1,4 +1,4 @@
-pkg_name=gatekeeper
+pkg_name=site
 pkg_origin=jarvus
 pkg_maintainer="Jarvus Innovations <hello@jarv.us>"
 pkg_scaffolding=emergence/scaffolding-site

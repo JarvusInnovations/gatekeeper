@@ -1,4 +1,4 @@
-composite_app_pkg_name=gatekeeper
+composite_app_pkg_name=site
 pkg_name="${composite_app_pkg_name}-composite"
 pkg_origin=jarvus
 pkg_maintainer="Jarvus Innovations <hello@jarv.us>"

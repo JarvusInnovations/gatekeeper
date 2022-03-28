@@ -21,7 +21,7 @@ COPY habitat/composite/plan.sh /habitat/composite/plan.sh
 RUN hab pkg install \
     jarvus/habitat-compose \
     emergence/nginx \
-    $({ cat '/habitat/composite/plan.sh' && echo && echo 'echo "${pkg_deps[@]/$pkg_origin\/*/} ${composite_mysql_pkg}'; } | hab pkg exec core/bash bash) \
+    $({ cat '/habitat/composite/plan.sh' && echo && echo 'echo "${pkg_deps[@]/$pkg_origin\/*/} ${composite_mysql_pkg}"'; } | hab pkg exec core/bash bash) \
     && hab pkg exec core/coreutils rm -rf /hab/cache/{artifacts,src}/
 
 
@@ -54,13 +54,13 @@ RUN hab pkg exec core/hab-plan-build hab-plan-build /src/habitat/composite
 FROM habitat as runtime
 
 # configure persistent volumes
-RUN hab pkg exec core/coreutils mkdir -p '/hab/svc/mysql/data' '/hab/svc/gatekeeper/data' '/hab/svc/nginx/files' \
-    && hab pkg exec core/coreutils chown hab:hab -R '/hab/svc/mysql/data' '/hab/svc/gatekeeper/data' '/hab/svc/nginx/files'
+RUN hab pkg exec core/coreutils mkdir -p '/hab/svc/mysql/data' '/hab/svc/site/data' '/hab/svc/nginx/files' \
+    && hab pkg exec core/coreutils chown hab:hab -R '/hab/svc/mysql/data' '/hab/svc/site/data' '/hab/svc/nginx/files'
 
 # configure entrypoint
-VOLUME ["/hab/svc/mysql/data", "/hab/svc/gatekeeper/data", "/hab/svc/nginx/files"]
+VOLUME ["/hab/svc/mysql/data", "/hab/svc/site/data", "/hab/svc/nginx/files"]
 ENTRYPOINT ["hab", "sup", "run"]
-CMD ["jarvus/gatekeeper-composite"]
+CMD ["jarvus/site-composite"]
 
 # install .hart artifact from builder stage
 COPY --from=projector /hab/cache/artifacts/$HAB_ORIGIN-* /hab/cache/artifacts/
