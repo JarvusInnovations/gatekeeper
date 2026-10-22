@@ -1,7 +1,7 @@
 # forked from skeleton-v1 to add packages
 
 [hololens]
-package = "holo/lens-sencha-pages" # expanded to absolute ident in holospec
+container = "ghcr.io/hologit/lenses/sencha-pages:v2"
 
 [hololens.input]
 root = "sencha-workspace"
